@@ -91,6 +91,12 @@ jobs:
           cp Packages Packages.gz dists/stable/main/binary-arm64/
           apt-ftparchive release dists/stable > dists/stable/Release
 
+      - name: Stamp build time into homepage
+        run: |
+          set -euo pipefail
+          sed -i "s/__BUILD_STAMP__/$(date -u '+%Y-%m-%d %H:%M:%S') UTC/" _site/index.html
+          ! grep -q '__BUILD_STAMP__' _site/index.html
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
