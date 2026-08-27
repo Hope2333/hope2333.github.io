@@ -85,7 +85,7 @@ jobs:
           mkdir -p _site/repo/Termux/apt
           cp feed/apt/* _site/repo/Termux/apt/
           cd _site/repo/Termux/apt
-          dpkg-scanpackages --arch arm64 . > Packages
+          dpkg-scanpackages . > Packages
           gzip -9kc Packages > Packages.gz
           mkdir -p dists/stable/main/binary-arm64
           cp Packages Packages.gz dists/stable/main/binary-arm64/
