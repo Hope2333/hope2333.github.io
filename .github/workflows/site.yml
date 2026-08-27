@@ -1,0 +1,104 @@
+name: Build and deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "30 18 * * *"
+  repository_dispatch:
+    types: [site-rebuild]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  FEED_REPOS: Hope2333/codegraph-termux
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install packaging tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y apt-utils dpkg-dev
+
+      - name: Assemble _site
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          # Copy repo root content into _site, excluding git internals and the
+          # _site directory itself to avoid recursion.
+          find . -maxdepth 1 -mindepth 1 ! -name '.git' ! -name '_site' -exec cp -r {} _site/ \;
+
+      - name: Fetch release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p feed/pacman feed/apt
+          for repo in $FEED_REPOS; do
+            gh api "repos/$repo/releases/latest" --jq '.assets[] | "\(.id)\t\(.name)"' | while IFS=$'\t' read -r id name; do
+              case "$name" in
+                *.pkg.tar.xz)
+                  target="feed/pacman/$name"
+                  ;;
+                *.deb)
+                  target="feed/apt/$name"
+                  ;;
+                *)
+                  continue
+                  ;;
+              esac
+              if [ -e "$target" ]; then
+                echo "::warning ::duplicate asset name kept-first: $name"
+                printf '::warning ::duplicate asset name kept-first: %s\n' "$name" >> "$GITHUB_STEP_SUMMARY"
+                continue
+              fi
+              gh api -H "Accept: application/octet-stream" "repos/$repo/releases/assets/$id" > "$target"
+            done
+          done
+
+      - name: Build pacman repo
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          mkdir -p _site/repo/Termux/pacman
+          docker run --rm -v "$PWD/feed/pacman:/work" archlinux bash -c 'cd /work && repo-add hope.db.tar.gz *.pkg.tar.xz && cp hope.db.tar.gz hope.db'
+          cp feed/pacman/* _site/repo/Termux/pacman/
+
+      - name: Build apt repo
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          mkdir -p _site/repo/Termux/apt
+          cp feed/apt/* _site/repo/Termux/apt/
+          cd _site/repo/Termux/apt
+          dpkg-scanpackages --arch arm64 . > Packages
+          gzip -9kc Packages > Packages.gz
+          apt-ftparchive release . > Release
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
