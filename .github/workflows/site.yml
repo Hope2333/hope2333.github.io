@@ -75,7 +75,7 @@ jobs:
           set -euo pipefail
           shopt -s nullglob
           mkdir -p _site/repo/Termux/pacman
-          docker run --rm -v "$PWD/feed/pacman:/work" archlinux bash -c 'cd /work && repo-add hope.db.tar.gz *.pkg.tar.xz && cp hope.db.tar.gz hope.db'
+          docker run --rm -v "$PWD/feed/pacman:/work" archlinux bash -c 'cd /work && repo-add hope.db.tar.gz *.pkg.tar.xz'
           cp feed/pacman/* _site/repo/Termux/pacman/
 
       - name: Build apt repo
