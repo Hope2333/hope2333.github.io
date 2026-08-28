@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Termux 软件源 · Hope2333</title>
+<style>
+:root{
+  --base:#1e1e2e;--mantle:#181825;--crust:#11111b;
+  --text:#cdd6f4;--subtext0:#a6adc8;
+  --mauve:#cba6f7;--blue:#89b4fa;--green:#a6e3a1;--red:#f38ba8;--peach:#fab387;
+  --radius:12px;
+  --s1:.5rem;--s2:.75rem;--s3:1rem;--s4:1.5rem;--s5:2rem;--s6:3rem;
+  --mono:"JetBrains Mono","Fira Code",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--base);color:var(--text);font-family:var(--sans);line-height:1.6;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.wrap{max-width:34rem;margin:0 auto;padding:var(--s6) var(--s4);text-align:center}
+.kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--subtext0)}
+h1{font-family:var(--mono);font-size:clamp(1.4rem,4vw,2rem);font-weight:700;margin-top:var(--s2)}
+h1 .accent{color:var(--mauve)}
+.bar{height:2px;border:0;margin:var(--s4) auto;width:60%;background:linear-gradient(90deg,var(--mauve),var(--blue),var(--green),var(--peach));border-radius:1px}
+.note{color:var(--subtext0);margin-top:var(--s3);font-size:1.02rem}
+.links{display:flex;flex-direction:column;gap:var(--s3);margin-top:var(--s4);align-items:center}
+.link{display:inline-block;font-family:var(--mono);font-size:1.05rem;font-weight:700;color:var(--blue);text-decoration:none;border:1px solid color-mix(in srgb,var(--blue) 45%,transparent);border-radius:999px;padding:.55rem 1.4rem;transition:opacity .15s ease}
+.link:hover{opacity:.82}
+.muted{color:var(--subtext0);margin-top:var(--s4);font-size:.85rem;font-family:var(--mono)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">hope2333.github.io</p>
+  <h1>Termux 软件源 · <span class="accent">Hope2333</span></h1>
+  <hr class="bar">
+  <p class="note">本目录提供 codegraph 等软件包，两种客户端任选其一：</p>
+  <div class="links">
+    <a class="link" href="/repo/Termux/pacman/">Pacman 源配置 →</a>
+    <a class="link" href="/repo/Termux/apt/">APT 源配置 →</a>
+  </div>
+  <p class="muted">v1 源未签名（SigLevel = Optional TrustAll / trusted=yes）</p>
+</div>
+</body>
+</html>
