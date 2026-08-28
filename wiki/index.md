@@ -1,34 +1,32 @@
 # Wiki
 
-这里是 Hope2333 的 Wiki，收录软件源使用指引与各项目介绍。
+> hope2333 项目文档与使用指引
 
-## 指引
+## 使用指引
 
-- [软件源指引](guides/software-source.html)：如何添加 hope2333 软件源
-- [安装指引](guides/install.html)：如何安装各个项目
-- [更新指引](guides/update.html)：如何保持软件包为最新版本
+- [软件源](guides/software-source.html) — 一键安装与手动配置入口
+- [安装](guides/install.html) — pacman 优先与手动回退
+- [更新](guides/update.html) — 日常更新与源同步机制
 
-## 项目
+## Termux & Android
 
-### Termux & Android
+- [opencode-termux](projects/opencode-termux.html) — OpenCode on Termux/Android, the flagship project
+- [MiMoCode-Termux](projects/MiMoCode-Termux.html) — MiMoCode for Termux, based on opencode-termux
+- [codegraph-termux](projects/codegraph-termux.html) — Local-first code intelligence for AI agents (MCP)
+- [codebuff-termux](projects/codebuff-termux.html) — Codebuff AI coding assistant for Termux
+- [freebuff-termux](projects/freebuff-termux.html) — Freebuff AI coding assistant for Termux
+- [oh-my-tmux](projects/oh-my-tmux.html) — Lightweight Oh My Tmux configuration with performance tweaks
+- [bun-termux](projects/bun-termux.html) — Bun runtime for Termux
+- [exagear-obb](projects/exagear-obb.html) — ExaGear OBB builder scripts
 
-- [opencode-termux](projects/opencode-termux.html)
-- [MiMoCode-Termux](projects/MiMoCode-Termux.html)
-- [codegraph-termux](projects/codegraph-termux.html)
-- [codebuff-termux](projects/codebuff-termux.html)
-- [freebuff-termux](projects/freebuff-termux.html)
-- [oh-my-tmux](projects/oh-my-tmux.html)
-- [bun-termux](projects/bun-termux.html)
-- [exagear-obb](projects/exagear-obb.html)
+## AI & Tooling
 
-### AI & Tooling
+- [oh-my-litecode](projects/oh-my-litecode.html) — AI CLI toolchain manager (OML)
+- [AI-LTC](projects/AI-LTC.html) — Long-term AI coordination framework
 
-- [oh-my-litecode](projects/oh-my-litecode.html)
-- [AI-LTC](projects/AI-LTC.html)
+## Technical Art & Systems
 
-### Technical Art & Systems
-
-- [tsac-ng](projects/tsac-ng.html)
-- [MirrorGuard](projects/MirrorGuard.html)
-- [SMFCov](projects/SMFCov.html)
-- [enve](projects/enve.html)
+- [tsac-ng](projects/tsac-ng.html) — Multi-backend neural audio codec in C
+- [MirrorGuard](projects/MirrorGuard.html) — C-based file integrity checker with TUI
+- [SMFCov](projects/SMFCov.html) — Shell-based media converter
+- [enve](projects/enve.html) — 2D animation software (fork)
