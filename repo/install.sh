@@ -30,14 +30,18 @@ if command -v pacman >/dev/null 2>&1; then
   if grep -q '^\[hope2333\]' "$PREFIX/etc/pacman.conf"; then
     echo "hope2333 源已配置，跳过"
   else
-    printf '\n[hope2333]\nServer = https://hope2333.github.io/repo/Termux/pacman/\nSigLevel = Optional TrustAll\n' >> "$PREFIX/etc/pacman.conf"
+    printf '\n[hope2333]\nServer = https://hope2333.github.io/repo/Termux/pacman/\nServer = https://github.com/Hope2333/codegraph-termux/releases/latest/download/\nServer = https://github.com/Hope2333/opencode-termux/releases/latest/download/\nServer = https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/\nServer = https://github.com/Hope2333/freebuff-termux/releases/latest/download/\nServer = https://github.com/Hope2333/codebuff-termux/releases/latest/download/\nSigLevel = Optional TrustAll\n' >> "$PREFIX/etc/pacman.conf"
     echo "已添加 hope2333 源到 $PREFIX/etc/pacman.conf"
     pacman -Sy
   fi
 elif command -v apt >/dev/null 2>&1; then
-  echo "检测到 plain Termux (apt)。本仓库为 pacman 源，先迁移包管理器："
-  echo "  curl -fsSL https://github.com/Hope2333/opencode-termux/releases/download/EarlyEmergencyRelease0/init-pacmanV00fix18.sh | sh"
-  echo "迁移完成后重新运行本脚本"
+  echo "检测到 plain Termux (apt)。本仓库为 pacman 源，apt 客户端配置如下（flat 源，包走 Release CDN）："
+  echo "deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codegraph-termux/releases/latest/download/ ./"
+  echo "deb [trusted=yes arch=aarch64] https://github.com/Hope2333/opencode-termux/releases/latest/download/ ./"
+  echo "deb [trusted=yes arch=aarch64] https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/ ./"
+  echo "deb [trusted=yes arch=aarch64] https://github.com/Hope2333/freebuff-termux/releases/latest/download/ ./"
+  echo "deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codebuff-termux/releases/latest/download/ ./"
+  echo "生效依赖各源仓 release 提供 Packages.gz（termux-asset-update v7.2），落地前 flat 行 404"
   exit 0
 else
   echo "未找到 pacman 或 apt，无法继续"

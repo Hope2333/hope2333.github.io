@@ -25,8 +25,25 @@ curl -fsSL https://hope2333.github.io/repo/install.sh | sh
 ```ini
 [hope2333]
 Server = https://hope2333.github.io/repo/Termux/pacman/
+Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
+Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/
+Server = https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/
+Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/
+Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
 SigLevel = Optional TrustAll
 ```
+
+apt 客户端使用 flat 源，将以下 5 行写入 `$PREFIX/etc/apt/sources.list.d/hope2333.list`：
+
+```text
+deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codegraph-termux/releases/latest/download/ ./
+deb [trusted=yes arch=aarch64] https://github.com/Hope2333/opencode-termux/releases/latest/download/ ./
+deb [trusted=yes arch=aarch64] https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/ ./
+deb [trusted=yes arch=aarch64] https://github.com/Hope2333/freebuff-termux/releases/latest/download/ ./
+deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codebuff-termux/releases/latest/download/ ./
+```
+
+> 生效依赖各源仓 release 提供 Packages.gz（termux-asset-update v7.2），落地前 flat 行 404。
 
 ## 常用用法
 

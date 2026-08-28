@@ -33,13 +33,13 @@ footer nav{align-items:center}
     <pre><code>curl -fsSL https://hope2333.github.io/repo/install.sh | sh</code></pre>
     <ul>
       <li>自动检测 Termux 环境</li>
-      <li>配置 pacman 软件源（幂等，可重复执行）</li>
+      <li>配置 pacman 软件源（索引 db 在 io，包走 Release CDN，幂等可重复）</li>
       <li>手动配置见下方链接</li>
     </ul>
   </section>
   <section>
     <h2>手动配置</h2>
-    <p>适合不想跑脚本、或需要逐行审查每条命令的用户。</p>
+    <p>适合不想跑脚本、或需要逐行审查每条命令的用户。配置后索引（db）存放于本站，软件包经 GitHub Release CDN 分发。</p>
     <div class="cta"><a class="repo" href="/repo/Termux/">Termux 手动配置指引</a></div>
   </section>
   <section>
