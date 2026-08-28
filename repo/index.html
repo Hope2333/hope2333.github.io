@@ -3,37 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="refresh" content="0; url=/repo/Termux/">
+<meta name="description" content="Hope2333 软件源 — Termux pacman/APT 软件源一键安装与手动配置指引">
+<link rel="icon" type="image/png" href="/assets/avatar.png">
+<link rel="stylesheet" href="/assets/site.css">
 <title>软件源 · Hope2333</title>
 <style>
-:root{
-  --base:#1e1e2e;--mantle:#181825;--crust:#11111b;
-  --text:#cdd6f4;--subtext0:#a6adc8;
-  --mauve:#cba6f7;--blue:#89b4fa;--green:#a6e3a1;--red:#f38ba8;--peach:#fab387;
-  --radius:12px;
-  --s1:.5rem;--s2:.75rem;--s3:1rem;--s4:1.5rem;--s5:2rem;--s6:3rem;
-  --mono:"JetBrains Mono","Fira Code",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --sans:system-ui,-apple-system,"Segoe UI","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--base);color:var(--text);font-family:var(--sans);line-height:1.6;min-height:100vh;display:flex;align-items:center;justify-content:center}
-.wrap{max-width:34rem;margin:0 auto;padding:var(--s6) var(--s4);text-align:center}
-.kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--subtext0)}
-h1{font-family:var(--mono);font-size:clamp(1.4rem,4vw,2rem);font-weight:700;margin-top:var(--s2)}
-h1 .accent{color:var(--mauve)}
-.note{color:var(--subtext0);margin-top:var(--s3);font-size:1.02rem}
-.bar{height:2px;border:0;margin:var(--s4) auto;width:60%;background:linear-gradient(90deg,var(--mauve),var(--blue),var(--green),var(--peach));border-radius:1px}
-.link{display:inline-block;margin-top:var(--s3);font-family:var(--mono);font-size:.95rem;color:var(--blue);text-decoration:none;border:1px solid color-mix(in srgb,var(--blue) 45%,transparent);border-radius:999px;padding:.4rem 1.1rem;transition:opacity .15s ease}
-.link:hover{opacity:.82}
+/* /repo/ 页面专属布局规则 — 仅补充共享 site.css 未覆盖的部分；颜色全部走 var() 令牌 */
+main section{margin-top:var(--s5)}
+main h2{font-family:var(--mono);font-size:1.15rem;font-weight:600}
+main p{color:var(--subtext0);margin-top:var(--s2)}
+pre{background:var(--crust);border:1px solid color-mix(in srgb,var(--text) 9%,transparent);border-radius:var(--radius);padding:var(--s3);margin-top:var(--s3);overflow-x:auto}
+code{font-family:var(--mono);font-size:.9rem;color:var(--green)}
+ul{list-style:none;margin-top:var(--s3);color:var(--subtext0)}
+ul li{position:relative;padding-left:1.25rem;margin-top:var(--s1)}
+ul li::before{content:"·";position:absolute;left:.35rem;color:var(--blue)}
+footer nav{align-items:center}
 </style>
 </head>
 <body>
 <div class="wrap">
+<header>
   <p class="kicker">hope2333.github.io</p>
-  <h1>软件源 · <span class="accent">Repo</span></h1>
+  <h1>软件源 <span class="accent">Software Repo</span></h1>
   <hr class="bar">
-  <p class="note">正在进入 Termux 软件源页…</p>
-  <a class="link" href="/repo/Termux/">前往 /repo/Termux/</a>
+</header>
+<main>
+  <section>
+    <h2>一键安装</h2>
+    <pre><code>curl -fsSL https://hope2333.github.io/repo/install.sh | sh</code></pre>
+    <ul>
+      <li>自动检测 Termux 环境</li>
+      <li>配置 pacman 软件源（幂等，可重复执行）</li>
+      <li>手动配置见下方链接</li>
+    </ul>
+  </section>
+  <section>
+    <h2>手动配置</h2>
+    <p>适合不想跑脚本、或需要逐行审查每条命令的用户。</p>
+    <div class="cta"><a class="repo" href="/repo/Termux/">Termux 手动配置指引</a></div>
+  </section>
+  <section>
+    <h2>Roadmap</h2>
+    <p>未来将引入签名校验（repo-add -s / Release 签名），当前 v1 无签名。</p>
+  </section>
+</main>
+<footer>
+  <nav>
+    <a href="/">← 返回首页</a>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换阴阳主题">☯</button>
+  </nav>
+  <p class="colophon">Hope2333 · 幽零小喵 — Technical Artist · Animation Tooling · Linux Engineering</p>
+</footer>
 </div>
+<script src="/assets/theme.js"></script>
 </body>
 </html>
