@@ -4,6 +4,7 @@
  */
 
 /* == 重复 Repetition：设计令牌（色板/间距/圆角/字体）单点定义、全站复用，改一处即全局生效 == */
+/* 阴 v1.0 (catppuccin mocha) — 存档主题；主题命名规范：阴|阳 vX.Y-细分主题名；已存档：阴v1.0；当前：阳v1.1-latte */
 :root{
   --base:#1e1e2e;--mantle:#181825;--crust:#11111b;
   --text:#cdd6f4;--subtext0:#a6adc8;
@@ -14,10 +15,17 @@
   --sans:system-ui,-apple-system,"Segoe UI","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
 }
 
+/* == 对比 Contrast：阳 v1.1 (catppuccin latte) —— 仅覆盖十色 token，间距/圆角/字体沿用 :root == */
+[data-theme="yang-v1.1"]{
+  --base:#eff1f5;--mantle:#e6e9ef;--crust:#dce0e8;
+  --text:#4c4f69;--subtext0:#6c6f85;
+  --mauve:#8839ef;--blue:#1e66f5;--green:#40a02b;--red:#d20f39;--peach:#fe640b;
+}
+
 /* == 重复 Repetition：全局复位与正文基线，统一盒模型消除浏览器差异 == */
 *{box-sizing:border-box;margin:0;padding:0}
 ::selection{background:color-mix(in srgb,var(--red) 32%,transparent)}
-body{background:var(--base);color:var(--text);font-family:var(--sans);line-height:1.6;min-height:100vh}
+body{background:var(--base);color:var(--text);font-family:var(--sans);line-height:1.6;min-height:100vh;transition:background-color .25s ease,color .25s ease}
 
 /* == 对齐 Alignment：居中主容器，确立全页统一栅格起点与最大行宽 == */
 .wrap{max-width:66rem;margin:0 auto;padding:var(--s6) var(--s4) var(--s5)}
@@ -43,6 +51,11 @@ h1 .accent{color:var(--mauve)}
 .cta a.repo:hover{background:color-mix(in srgb,var(--blue) 14%,transparent);transform:translateY(-2px)}
 .cta a.gh{color:var(--mauve);border-color:color-mix(in srgb,var(--mauve) 45%,transparent)}
 .cta a.gh:hover{background:color-mix(in srgb,var(--mauve) 14%,transparent);transform:translateY(-2px)}
+
+/* == 亲密 Proximity：头像与主题切换 —— 头像紧邻主标题成组，☯ 按钮与 CTA 同排呼应 == */
+.avatar{border-radius:var(--radius);display:block}
+.theme-toggle{font-family:var(--mono);font-size:.88rem;padding:.4rem .8rem;border-radius:var(--radius);border:1px solid color-mix(in srgb,var(--text) 45%,transparent);background:transparent;color:var(--text);cursor:pointer;transition:background .15s ease}
+.theme-toggle:hover{background:color-mix(in srgb,var(--text) 10%,transparent)}
 
 /* == 亲密 Proximity：分组区块 —— 大间距分隔三大板块，组头与计数成对紧邻 == */
 main{margin-top:var(--s6)}
@@ -76,7 +89,7 @@ main{margin-top:var(--s6)}
 .card p{color:var(--subtext0);font-size:.86rem;margin-top:var(--s1)}
 
 /* == 对齐 + 亲密：页脚 —— 分隔线对齐主轴，导航与 colophon 依次聚拢 == */
-footer{border-top:1px solid color-mix(in srgb,var(--text) 9%,transparent);margin-top:var(--s6);padding-top:var(--s4)}
+footer{border-top:1px solid color-mix(in srgb,var(--text) 9%,transparent);margin-top:var(--s6);padding-top:var(--s4);transition:border-color .25s ease}
 footer nav{display:flex;gap:var(--s4);flex-wrap:wrap;font-family:var(--mono);font-size:.88rem}
 footer nav a{color:var(--subtext0);text-decoration:none;transition:color .15s ease}
 footer nav a:hover{color:var(--green)}
