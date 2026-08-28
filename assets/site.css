@@ -17,7 +17,7 @@
 
 /* == 对比 Contrast：阳 v1.1（白昼）—— 仅覆盖十色 token，间距/圆角/字体沿用 :root == */
 [data-theme="yang-v1.1"]{
-  --base:#ffffff;--mantle:#f5f5f7;--crust:#e9e9ee;
+  --base:#ffffff;--mantle:#fafafa;--crust:#f0f0f1;
   --text:#4c4f69;--subtext0:#6c6f85;
   --mauve:#8839ef;--blue:#1e66f5;--green:#40a02b;--red:#d20f39;--peach:#fe640b;
 }
