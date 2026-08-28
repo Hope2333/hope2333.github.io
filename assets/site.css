@@ -53,8 +53,12 @@ h1 .accent{color:var(--mauve)}
 .cta a.gh:hover{background:color-mix(in srgb,var(--mauve) 14%,transparent);transform:translateY(-2px)}
 
 /* == 亲密 Proximity：头像与主题切换 —— 头像紧邻主标题成组，☯ 按钮与 CTA 同排呼应 == */
-.head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:var(--s4);flex-wrap:wrap}
-.head-row .avatar{flex-shrink:0}
+.head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:var(--s4)}
+/* 窄布局不换行：文字列 z-index 压在头像之上，头像左缘 26% 渐隐 mask，重叠处文字靠浅阴影保持可读 */
+.head-txt{min-width:0;position:relative;z-index:1;text-shadow:0 1px 3px color-mix(in srgb,var(--crust) 70%,transparent)}
+.head-row .avatar{flex-shrink:0;z-index:0;margin-left:auto;
+	-webkit-mask-image:linear-gradient(to right,transparent 0,#000 26%);
+	mask-image:linear-gradient(to right,transparent 0,#000 26%)}
 .avatar{border-radius:var(--radius);display:block}
 .theme-toggle{font-family:var(--mono);font-size:.88rem;padding:.4rem .8rem;border-radius:var(--radius);border:1px solid color-mix(in srgb,var(--text) 45%,transparent);background:transparent;color:var(--text);cursor:pointer;transition:background .15s ease}
 .theme-toggle:hover{background:color-mix(in srgb,var(--text) 10%,transparent)}
