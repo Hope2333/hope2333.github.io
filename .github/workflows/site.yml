@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  FEED_REPOS: Hope2333/codegraph-termux Hope2333/opencode-termux
+  FEED_REPOS: Hope2333/codegraph-termux Hope2333/opencode-termux Hope2333/MiMoCode-Termux Hope2333/freebuff-termux Hope2333/codebuff-termux
 
 jobs:
   build:
@@ -57,19 +57,18 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          mkdir -p feed/pacman feed/apt
+          mkdir -p feed/pacman
           for repo in $FEED_REPOS; do
-            gh api "repos/$repo/releases/latest" --jq '.assets[] | "\(.id)\t\(.name)"' | while IFS=$'\t' read -r id name; do
+            if ! assets="$(gh api "repos/$repo/releases/latest" --jq '.assets[] | "\(.id)\t\(.name)"' 2>/dev/null)"; then
+              echo "::warning ::no stable release for $repo (skipping feed)"
+              printf '::warning ::no stable release for %s (skipping feed)\n' "$repo" >> "$GITHUB_STEP_SUMMARY"
+              continue
+            fi
+            printf '%s\n' "$assets" | while IFS=$'\t' read -r id name; do
+              [ -n "$id" ] || continue
               case "$name" in
-                *.pkg.tar.xz)
-                  target="feed/pacman/$name"
-                  ;;
-                *.deb)
-                  target="feed/apt/$name"
-                  ;;
-                *)
-                  continue
-                  ;;
+                *.pkg.tar.xz) target="feed/pacman/$name" ;;
+                *) continue ;;
               esac
               if [ -e "$target" ]; then
                 echo "::warning ::duplicate asset name kept-first: $name"
@@ -86,20 +85,7 @@ jobs:
           shopt -s nullglob
           mkdir -p _site/repo/Termux/pacman
           docker run --rm -v "$PWD/feed/pacman:/work" archlinux bash -c 'cd /work && repo-add hope2333.db.tar.gz *.pkg.tar.xz'
-          cp feed/pacman/* _site/repo/Termux/pacman/
-
-      - name: Build apt repo
-        run: |
-          set -euo pipefail
-          shopt -s nullglob
-          mkdir -p _site/repo/Termux/apt
-          cp feed/apt/* _site/repo/Termux/apt/
-          cd _site/repo/Termux/apt
-          dpkg-scanpackages . > Packages
-          gzip -9kc Packages > Packages.gz
-          mkdir -p dists/stable/main/binary-arm64
-          cp Packages Packages.gz dists/stable/main/binary-arm64/
-          apt-ftparchive release dists/stable > dists/stable/Release
+          cp feed/pacman/hope2333.db feed/pacman/hope2333.db.tar.gz _site/repo/Termux/pacman/
 
       - name: Stamp build time into homepage
         run: |
