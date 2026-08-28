@@ -1,0 +1,83 @@
+/* site.css — hope2333.github.io 全站共享样式
+ * 2026-08-28 自 index.html 内联 <style> 全量迁出：规则逐字节保留（重构非重设计，仅增分组注释）。
+ * 分组遵循 C.R.A.P 排版四原则：对齐 Alignment / 对比 Contrast / 重复 Repetition / 亲密 Proximity。
+ */
+
+/* == 重复 Repetition：设计令牌（色板/间距/圆角/字体）单点定义、全站复用，改一处即全局生效 == */
+:root{
+  --base:#1e1e2e;--mantle:#181825;--crust:#11111b;
+  --text:#cdd6f4;--subtext0:#a6adc8;
+  --mauve:#cba6f7;--blue:#89b4fa;--green:#a6e3a1;--red:#f38ba8;--peach:#fab387;
+  --radius:12px;
+  --s1:.5rem;--s2:.75rem;--s3:1rem;--s4:1.5rem;--s5:2rem;--s6:3rem;
+  --mono:"JetBrains Mono","Fira Code",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+
+/* == 重复 Repetition：全局复位与正文基线，统一盒模型消除浏览器差异 == */
+*{box-sizing:border-box;margin:0;padding:0}
+::selection{background:color-mix(in srgb,var(--red) 32%,transparent)}
+body{background:var(--base);color:var(--text);font-family:var(--sans);line-height:1.6;min-height:100vh}
+
+/* == 对齐 Alignment：居中主容器，确立全页统一栅格起点与最大行宽 == */
+.wrap{max-width:66rem;margin:0 auto;padding:var(--s6) var(--s4) var(--s5)}
+
+/* == 对比 Contrast：头部视觉层级 —— 小字距 kicker、主标题强调色、渐变分隔条建立焦点 == */
+.kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--subtext0)}
+h1{font-family:var(--mono);font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;margin-top:var(--s1)}
+h1 .accent{color:var(--mauve)}
+.tagline{color:var(--subtext0);margin-top:var(--s2);font-size:1.02rem}
+.bar{height:2px;border:0;margin-top:var(--s4);background:linear-gradient(90deg,var(--mauve),var(--blue),var(--green),var(--peach));border-radius:1px}
+
+/* == 亲密 Proximity：徽章组 —— 相关元素以小间距聚拢成组 == */
+.badges{display:flex;gap:var(--s2);margin-top:var(--s4);flex-wrap:wrap}
+.badges a{display:inline-flex;transition:opacity .15s ease}
+.badges a:hover{opacity:.82}
+.badges img{display:block;border-radius:6px}
+.support-label{align-self:center;color:var(--subtext0);font-family:var(--mono);font-size:.8rem}
+
+/* == 对比 Contrast：CTA 双按钮 —— 蓝/紫双色区分「软件源」与「GitHub」动作 == */
+.cta{display:flex;gap:var(--s2);margin-top:var(--s4);flex-wrap:wrap}
+.cta a{display:inline-flex;align-items:center;font-family:var(--mono);font-size:.88rem;text-decoration:none;padding:.4rem 1rem;border-radius:var(--radius);border:1px solid;transition:transform .15s ease,background .15s ease}
+.cta a.repo{color:var(--blue);border-color:color-mix(in srgb,var(--blue) 45%,transparent)}
+.cta a.repo:hover{background:color-mix(in srgb,var(--blue) 14%,transparent);transform:translateY(-2px)}
+.cta a.gh{color:var(--mauve);border-color:color-mix(in srgb,var(--mauve) 45%,transparent)}
+.cta a.gh:hover{background:color-mix(in srgb,var(--mauve) 14%,transparent);transform:translateY(-2px)}
+
+/* == 亲密 Proximity：分组区块 —— 大间距分隔三大板块，组头与计数成对紧邻 == */
+main{margin-top:var(--s6)}
+.group{margin-bottom:var(--s6)}
+.group-head{display:flex;align-items:baseline;gap:var(--s2);cursor:pointer;list-style:none}
+.group-head::-webkit-details-marker{display:none}
+.group-head h2{font-family:var(--mono);font-size:1.15rem;font-weight:600;transition:opacity .15s ease}
+.group-head:hover h2{opacity:.82}
+.count{font-family:var(--mono);font-size:.75rem;padding:.1rem .55rem;border-radius:999px;border:1px solid}
+
+/* == 对比 Contrast：分类色编码 —— Termux=蓝 / AI=紫 / TA=橙，标题与计数同色呼应 == */
+.g-termux h2{color:var(--blue)}
+.g-termux .count{color:var(--blue);border-color:color-mix(in srgb,var(--blue) 45%,transparent)}
+.g-ai h2{color:var(--mauve)}
+.g-ai .count{color:var(--mauve);border-color:color-mix(in srgb,var(--mauve) 45%,transparent)}
+.g-ta h2{color:var(--peach)}
+.g-ta .count{color:var(--peach);border-color:color-mix(in srgb,var(--peach) 45%,transparent)}
+
+/* == 亲密 Proximity：卡片网格 —— 网格间距与卡片内边距让同类项目成组；卡片本身为重复组件 == */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:var(--s3);margin-top:var(--s3)}
+.card{background:var(--mantle);border:1px solid color-mix(in srgb,var(--text) 9%,transparent);border-radius:var(--radius);padding:var(--s3);transition:transform .15s ease,border-color .15s ease}
+.card:hover{transform:translateY(-2px)}
+.g-termux .card:hover{border-color:var(--blue)}
+.g-ai .card:hover{border-color:var(--mauve)}
+.g-ta .card:hover{border-color:var(--peach)}
+.card h3{font-family:var(--mono);font-size:.95rem;font-weight:600}
+.card h3 a{color:var(--text);text-decoration:none}
+.g-termux .card h3 a:hover{color:var(--blue)}
+.g-ai .card h3 a:hover{color:var(--mauve)}
+.g-ta .card h3 a:hover{color:var(--peach)}
+.card p{color:var(--subtext0);font-size:.86rem;margin-top:var(--s1)}
+
+/* == 对齐 + 亲密：页脚 —— 分隔线对齐主轴，导航与 colophon 依次聚拢 == */
+footer{border-top:1px solid color-mix(in srgb,var(--text) 9%,transparent);margin-top:var(--s6);padding-top:var(--s4)}
+footer nav{display:flex;gap:var(--s4);flex-wrap:wrap;font-family:var(--mono);font-size:.88rem}
+footer nav a{color:var(--subtext0);text-decoration:none;transition:color .15s ease}
+footer nav a:hover{color:var(--green)}
+.colophon{color:var(--subtext0);font-size:.8rem;margin-top:var(--s3);font-family:var(--mono)}
