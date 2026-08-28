@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  FEED_REPOS: Hope2333/codegraph-termux
+  FEED_REPOS: Hope2333/codegraph-termux Hope2333/opencode-termux
 
 jobs:
   build:
