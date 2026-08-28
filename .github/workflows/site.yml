@@ -49,12 +49,7 @@ jobs:
           find wiki -name '*.md' -not -path 'wiki/tpl/*' | while read -r f; do
             out="_site/${f%.md}.html"
             mkdir -p "$(dirname "$out")"
-            pandoc "$f" -f gfm -t html5 \
-              --metadata title="$(basename "$f" .md)" \
-              -H wiki/tpl/head.html \
-              -B wiki/tpl/begin.html \
-              -A wiki/tpl/end.html \
-              -o "$out"
+            pandoc "$f" -f gfm -t html5 --template wiki/tpl/doc.html --metadata lang=zh-CN --metadata title="$(basename "$f" .md)" -o "$out"
           done
 
       - name: Fetch release assets
