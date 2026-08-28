@@ -42,4 +42,33 @@
       document.documentElement.dataset.theme = next;
     });
   }
+  /* C9 首页交互：折叠动效 + aria-expanded 同步（无框架，原生 JS）
+   * reduced-motion 用户：跳过动画，原生直接切换；其余：拦截折叠 → 网格 200ms 淡出 → 再切 open。 */
+  Array.prototype.forEach.call(document.querySelectorAll('main details'), function (details) {
+    var summary = details.querySelector('summary');
+    var grid = details.querySelector('.grid');
+    if (!summary) return;
+
+    summary.setAttribute('aria-expanded', String(details.open));
+
+    /* toggle 事件覆盖所有路径（原生开/关、JS 延迟关），统一同步 aria-expanded */
+    details.addEventListener('toggle', function () {
+      summary.setAttribute('aria-expanded', String(details.open));
+    });
+
+    summary.addEventListener('click', function (e) {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return; /* reduced-motion：放行原生切换，aria 由 toggle 事件同步 */
+      }
+      if (!grid || !details.hasAttribute('open')) {
+        return; /* 即将展开或无网格：放行原生行为，堆叠条经 CSS 过渡淡入 */
+      }
+      e.preventDefault();
+      grid.classList.add('is-collapsing');
+      window.setTimeout(function () {
+        details.removeAttribute('open');
+        grid.classList.remove('is-collapsing');
+      }, 200);
+    });
+  });
 })();
