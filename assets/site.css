@@ -4,7 +4,7 @@
  */
 
 /* == 重复 Repetition：设计令牌（色板/间距/圆角/字体）单点定义、全站复用，改一处即全局生效 == */
-/* 阴 v1.0 (catppuccin mocha) — 存档主题；主题命名规范：阴|阳 vX.Y-细分主题名；已存档：阴v1.0；当前：阳v1.1-latte */
+/* 阴 v1.0 (catppuccin mocha) — 存档主题；主题命名规范：阴|阳 vX.Y-细分主题名；已存档：阴v1.0；当前：阳v1.1（白昼） */
 :root{
   --base:#1e1e2e;--mantle:#181825;--crust:#11111b;
   --text:#cdd6f4;--subtext0:#a6adc8;
@@ -15,9 +15,9 @@
   --sans:system-ui,-apple-system,"Segoe UI","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
 }
 
-/* == 对比 Contrast：阳 v1.1 (catppuccin latte) —— 仅覆盖十色 token，间距/圆角/字体沿用 :root == */
+/* == 对比 Contrast：阳 v1.1（白昼）—— 仅覆盖十色 token，间距/圆角/字体沿用 :root == */
 [data-theme="yang-v1.1"]{
-  --base:#eff1f5;--mantle:#e6e9ef;--crust:#dce0e8;
+  --base:#ffffff;--mantle:#f5f5f7;--crust:#e9e9ee;
   --text:#4c4f69;--subtext0:#6c6f85;
   --mauve:#8839ef;--blue:#1e66f5;--green:#40a02b;--red:#d20f39;--peach:#fe640b;
 }
@@ -53,6 +53,8 @@ h1 .accent{color:var(--mauve)}
 .cta a.gh:hover{background:color-mix(in srgb,var(--mauve) 14%,transparent);transform:translateY(-2px)}
 
 /* == 亲密 Proximity：头像与主题切换 —— 头像紧邻主标题成组，☯ 按钮与 CTA 同排呼应 == */
+.head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:var(--s4);flex-wrap:wrap}
+.head-row .avatar{flex-shrink:0}
 .avatar{border-radius:var(--radius);display:block}
 .theme-toggle{font-family:var(--mono);font-size:.88rem;padding:.4rem .8rem;border-radius:var(--radius);border:1px solid color-mix(in srgb,var(--text) 45%,transparent);background:transparent;color:var(--text);cursor:pointer;transition:background .15s ease}
 .theme-toggle:hover{background:color-mix(in srgb,var(--text) 10%,transparent)}
