@@ -135,7 +135,7 @@ jobs:
             printf '}\n'
           } > build/mirrorlist/PKGBUILD
           # d. build pacman any-pkg in archlinux container (makepkg refuses root)
-          docker run --rm -v "$PWD/build/mirrorlist:/work" archlinux bash -c 'pacman -Sy --noconfirm base-devel >/dev/null && useradd -m builder && chown -R builder /work && su builder -c "cd /work && makepkg -f" && chmod 644 /work/*.pkg.tar.xz && ls -la /work'
+          docker run --rm -v "$PWD/build/mirrorlist:/work" archlinux bash -c 'pacman -Sy --noconfirm base-devel >/dev/null && useradd -m builder && chown -R builder /work && su builder -c "cd /work && echo PKGEXT=.pkg.tar.xz > /home/builder/.makepkg.conf && makepkg -f" && ls -la /work'
           # e. meta pool + repo-add
           PKG="$(find build/mirrorlist -maxdepth 1 -name 'hope2333-mirrorlist-*.pkg.tar.xz' | head -1)"
           [ -n "$PKG" ] || { echo "::error::mirrorlist pkg not found on host after makepkg"; ls -la build/mirrorlist || true; exit 1; }
