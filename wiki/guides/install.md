@@ -4,30 +4,45 @@
 
 ## 配置软件源
 
-安装前需先将 hope2333 软件源加入客户端。pacman 客户端将以下配置块追加到 `$PREFIX/etc/pacman.conf`：
+安装前需先配置 hope2333 软件源。推荐一键脚本（自动迁移旧配置）：
+
+```sh
+curl -fsSL https://hope2333.github.io/repo/install.sh | sh
+```
+
+或手动配置引导源 + mirrorlist 包。
+
+pacman 客户端将引导节追加到 `$PREFIX/etc/pacman.conf`：
 
 ```ini
-[hope2333]
+[hope2333-meta]
 Server = https://hope2333.github.io/repo/Termux/pacman/
-Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
-Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/
-Server = https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/
-Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/
-Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
 SigLevel = Optional TrustAll
 ```
 
-apt 客户端使用 flat 源，将以下 5 行写入 `$PREFIX/etc/apt/sources.list.d/hope2333.list`：
+再安装 mirrorlist 包：
 
-```text
-deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codegraph-termux/releases/latest/download/ ./
-deb [trusted=yes arch=aarch64] https://github.com/Hope2333/opencode-termux/releases/latest/download/ ./
-deb [trusted=yes arch=aarch64] https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/ ./
-deb [trusted=yes arch=aarch64] https://github.com/Hope2333/freebuff-termux/releases/latest/download/ ./
-deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codebuff-termux/releases/latest/download/ ./
+```sh
+pacman -Sy && pacman -S hope2333-mirrorlist
 ```
 
-> 生效依赖各源仓 release 提供 Packages.gz（termux-asset-update v7.2），落地前 flat 行 404。
+包内自动追加 `Include = /etc/pacman.d/hope2333-mirrorlist.conf`，此后源变更随包升级生效。
+
+apt 客户端将引导行写入 `$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list`：
+
+```text
+deb [trusted=yes arch=aarch64] https://hope2333.github.io/repo/Termux/apt/ ./
+```
+
+再安装 mirrorlist 包：
+
+```sh
+apt update && apt install hope2333-mirrorlist
+```
+
+包内写入 hope2333.list（5 行 flat，指向各仓 Release latest）。
+
+> 旧 `deb .../repo/Termux/apt/ stable main` 行已失效（io 不再托管 apt 仓），请移除或替换为引导行。已有旧版 `[hope2333]` pacman 块请整体替换为引导节，勿追加（重复注册会报 database already registered）。
 
 ## 已入源项目（pacman）
 

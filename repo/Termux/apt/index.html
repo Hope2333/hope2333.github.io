@@ -20,6 +20,8 @@ ol{padding-left:1.4rem;color:var(--subtext0)}
 ol li{margin:var(--s1) 0}
 ol code{color:var(--peach)}
 .note{margin-top:var(--s4);padding:var(--s2) var(--s3);border-left:3px solid var(--peach);background:color-mix(in srgb,var(--peach) 8%,transparent);border-radius:0 var(--radius) var(--radius) 0;color:var(--subtext0);font-size:.92rem}
+details{margin:var(--s3) 0;border:1px solid color-mix(in srgb,var(--text) 10%,transparent);border-radius:var(--radius);padding:var(--s2) var(--s3)}
+summary{cursor:pointer;color:var(--blue);font-family:var(--mono);font-size:.95rem}
 </style>
 </head>
 <body>
@@ -29,22 +31,30 @@ ol code{color:var(--peach)}
   <p class="kicker">hope2333.github.io / repo / Termux / apt</p>
   <h1>APT 软件源（Termux）</h1>
   <hr class="bar">
-  <p class="lead">通过自建 apt 源安装本站发布的 Termux 软件包。</p>
+  <p class="lead">通过引导源 + hope2333-mirrorlist 包安装本站发布的 Termux 软件包。</p>
 </header>
 <main>
-  <h2>客户端配置</h2>
-  <pre><code>deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codegraph-termux/releases/latest/download/ ./
+  <h2>推荐流程（引导源 + mirrorlist 包）</h2>
+  <ol>
+    <li>将引导行写入 <code>$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list</code>：</li>
+  </ol>
+  <pre><code>deb [trusted=yes arch=aarch64] https://hope2333.github.io/repo/Termux/apt/ ./</code></pre>
+  <ol start="2">
+    <li>安装 mirrorlist 包：<code>apt update &amp;&amp; apt install hope2333-mirrorlist</code>；</li>
+    <li>包内写入 <code>hope2333.list</code>（5 行 flat，指向各仓 Release latest），此后源变更随包升级生效。</li>
+  </ol>
+  <p>配置完成后即可安装软件包，例如 <code>apt install codegraph</code>。</p>
+  <p class="note">旧 <code>deb .../repo/Termux/apt/ stable main</code> 行已失效（io 不再托管 apt 仓），请移除或替换为引导行。</p>
+  <h2>手动配置（备用）</h2>
+  <details>
+    <summary>展开 5 行 flat 源（不装 hope2333-mirrorlist 包）</summary>
+    <pre><code>deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codegraph-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/opencode-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/freebuff-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codebuff-termux/releases/latest/download/ ./</code></pre>
-  <h2>使用步骤</h2>
-  <ol>
-    <li>将上面的行写入 <code>$PREFIX/etc/apt/sources.list.d/hope2333.list</code>；</li>
-    <li>运行 <code>apt update</code> 刷新软件源索引；</li>
-    <li>安装软件包，例如 <code>apt install codegraph</code>。</li>
-  </ol>
-  <p class="note">生效依赖各源仓 release 提供 Packages.gz（termux-asset-update v7.2），落地前 flat 行 404；本站（io）不再托管任何包文件。</p>
+    <p class="note">生效依赖各源仓 release 提供 Packages.gz（termux-asset-update v7.2），落地前 flat 行 404；本站（io）不再托管任何包文件。</p>
+  </details>
 </main>
 <footer>
   <nav><a href="../../../">返回首页</a></nav>

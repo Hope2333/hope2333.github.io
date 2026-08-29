@@ -29,11 +29,11 @@ footer nav{align-items:center}
 </header>
 <main>
   <section>
-    <h2>一键安装</h2>
+    <h2>配置或升级（引导源 + mirrorlist 包，自动迁移旧配置）</h2>
     <pre><code>curl -fsSL https://hope2333.github.io/repo/install.sh | sh</code></pre>
     <ul>
       <li>自动检测 Termux 环境</li>
-      <li>配置 pacman 软件源（索引 db 在 io，包走 Release CDN，幂等可重复）</li>
+      <li>写入引导源并安装 hope2333-mirrorlist 包（索引 db 在 io，包走 Release CDN，自动迁移旧配置，幂等可重复）</li>
       <li>手动配置见下方链接</li>
     </ul>
   </section>

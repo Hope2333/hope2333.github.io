@@ -20,6 +20,8 @@ ol{padding-left:1.4rem;color:var(--subtext0)}
 ol li{margin:var(--s1) 0}
 ol code{color:var(--peach)}
 .note{margin-top:var(--s4);padding:var(--s2) var(--s3);border-left:3px solid var(--peach);background:color-mix(in srgb,var(--peach) 8%,transparent);border-radius:0 var(--radius) var(--radius) 0;color:var(--subtext0);font-size:.92rem}
+details{margin:var(--s3) 0;border:1px solid color-mix(in srgb,var(--text) 10%,transparent);border-radius:var(--radius);padding:var(--s2) var(--s3)}
+summary{cursor:pointer;color:var(--blue);font-family:var(--mono);font-size:.95rem}
 </style>
 </head>
 <body>
@@ -29,25 +31,51 @@ ol code{color:var(--peach)}
   <p class="kicker">hope2333.github.io / repo / Termux / pacman</p>
   <h1>Pacman 软件源（Termux）</h1>
   <hr class="bar">
-  <p class="lead">通过自建 pacman 源安装本站发布的 Termux 软件包。</p>
+  <p class="lead">通过引导源 + hope2333-mirrorlist 包安装本站发布的 Termux 软件包。</p>
 </header>
 <main>
-  <h2>客户端配置</h2>
-  <pre><code>[hope2333]
+  <h2>推荐流程（引导源 + mirrorlist 包）</h2>
+  <ol>
+    <li>将引导节追加到 <code>$PREFIX/etc/pacman.conf</code> 末尾：</li>
+  </ol>
+  <pre><code>[hope2333-meta]
+Server = https://hope2333.github.io/repo/Termux/pacman/
+SigLevel = Optional TrustAll</code></pre>
+  <ol start="2">
+    <li>安装 mirrorlist 包：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>；</li>
+    <li>包内自动追加 <code>Include = /etc/pacman.d/hope2333-mirrorlist.conf</code>，此后源变更随包升级生效。</li>
+  </ol>
+  <p>配置完成后即可安装软件包，例如 <code>pacman -S codegraph</code>。</p>
+  <p class="note">已有旧版 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本引导节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
+  <h2>手动配置（备用）</h2>
+  <details>
+    <summary>展开 5 个独立源节（不装 hope2333-mirrorlist 包）</summary>
+    <pre><code>[codegraph-termux]
 Server = https://hope2333.github.io/repo/Termux/pacman/
 Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
+SigLevel = Optional TrustAll
+
+[opencode-termux]
+Server = https://hope2333.github.io/repo/Termux/pacman/
 Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/
+SigLevel = Optional TrustAll
+
+[MiMoCode-Termux]
+Server = https://hope2333.github.io/repo/Termux/pacman/
 Server = https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/
+SigLevel = Optional TrustAll
+
+[freebuff-termux]
+Server = https://hope2333.github.io/repo/Termux/pacman/
 Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/
+SigLevel = Optional TrustAll
+
+[codebuff-termux]
+Server = https://hope2333.github.io/repo/Termux/pacman/
 Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
 SigLevel = Optional TrustAll</code></pre>
-  <h2>使用步骤</h2>
-  <ol>
-    <li>将上面的配置块追加到 <code>$PREFIX/etc/pacman.conf</code> 末尾；</li>
-    <li>运行 <code>pacman -Syu</code> 同步软件源索引；</li>
-    <li>安装软件包，例如 <code>pacman -S codegraph</code>。</li>
-  </ol>
-  <p class="note">db 索引托管在本站（仅数百字节）；包文件按 Server 顺序逐文件回退，最终从 GitHub Release CDN 下载（302 自动跟随）。v1 源未签名，Optional TrustAll；后续 repo-add -s 升级。</p>
+    <p class="note">db 索引托管在本站（仅数百字节）；包文件按 Server 顺序逐文件回退，最终从 GitHub Release CDN 下载（302 自动跟随）。v1 源未签名，Optional TrustAll；后续 repo-add -s 升级。</p>
+  </details>
 </main>
 <footer>
   <nav><a href="../../../">返回首页</a></nav>
