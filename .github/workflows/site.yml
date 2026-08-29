@@ -10,7 +10,7 @@ on:
     types: [site-rebuild]
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -44,6 +44,7 @@ jobs:
 
       - name: Render wiki markdown
         run: |
+          set -euo pipefail
           sudo apt-get install -y pandoc
           mkdir -p _site/wiki/guides _site/wiki/projects
           find wiki -name '*.md' -not -path 'wiki/tpl/*' | while read -r f; do
@@ -57,8 +58,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          mkdir -p feed/pacman
           for repo in $FEED_REPOS; do
+            mkdir -p "feed/pacman/${repo##*/}"
             if ! assets="$(gh api "repos/$repo/releases/latest" --jq '.assets[] | "\(.id)\t\(.name)"' 2>/dev/null)"; then
               echo "::warning ::no stable release for $repo (skipping feed)"
               printf '::warning ::no stable release for %s (skipping feed)\n' "$repo" >> "$GITHUB_STEP_SUMMARY"
@@ -67,7 +68,7 @@ jobs:
             printf '%s\n' "$assets" | while IFS=$'\t' read -r id name; do
               [ -n "$id" ] || continue
               case "$name" in
-                *.pkg.tar.xz) target="feed/pacman/$name" ;;
+                *.pkg.tar.xz) target="feed/pacman/${repo##*/}/$name" ;;
                 *) continue ;;
               esac
               if [ -e "$target" ]; then
@@ -84,8 +85,97 @@ jobs:
           set -euo pipefail
           shopt -s nullglob
           mkdir -p _site/repo/Termux/pacman
-          docker run --rm -v "$PWD/feed/pacman:/work" archlinux bash -c 'cd /work && repo-add hope2333.db.tar.gz *.pkg.tar.xz'
-          cp feed/pacman/hope2333.db feed/pacman/hope2333.db.tar.gz _site/repo/Termux/pacman/
+          for pool in feed/pacman/*/; do
+            pool="${pool%/}"
+            base="${pool##*/}"
+            docker run --rm -v "$PWD/$pool:/work" archlinux bash -c "cd /work && repo-add $base.db.tar.gz *.pkg.tar.xz"
+            cp "$pool/$base.db" "$pool/$base.db.tar.gz" _site/repo/Termux/pacman/
+          done
+
+      - name: Build mirrorlist package
+        run: |
+          set -euo pipefail
+          VER="1.0.$(date -u +%Y%m%d)"
+          FULLVER="${VER}-1"
+          echo "MIRRORLIST_VER=$VER" >> "$GITHUB_ENV"
+          REPOS=(codegraph-termux opencode-termux MiMoCode-Termux freebuff-termux codebuff-termux)
+          mkdir -p build/mirrorlist/etc/pacman.d build/mirrorlist-deb/DEBIAN build/mirrorlist-deb/etc/apt/sources.list.d feed/pacman-meta _site/repo/Termux/apt
+          # a. pacman mirrorlist conf (5 sections)
+          : > build/mirrorlist/etc/pacman.d/hope2333-mirrorlist.conf
+          for r in "${REPOS[@]}"; do
+            {
+              printf '[%s]\n' "$r"
+              printf 'Server = https://hope2333.github.io/repo/Termux/pacman/\n'
+              printf 'Server = https://github.com/Hope2333/%s/releases/latest/download/\n' "$r"
+              printf 'SigLevel = Optional TrustAll\n'
+              printf '\n'
+            } >> build/mirrorlist/etc/pacman.d/hope2333-mirrorlist.conf
+          done
+          # b. install script (idempotent Include)
+          {
+            printf '%s\n' 'post_install() {'
+            printf "%s\n" "  grep -q 'hope2333-mirrorlist.conf' \"\$PREFIX/etc/pacman.conf\" 2>/dev/null || printf '\\nInclude = /etc/pacman.d/hope2333-mirrorlist.conf\\n' >> \"\$PREFIX/etc/pacman.conf\""
+            printf '%s\n' '}'
+            printf '%s\n' 'post_upgrade() {'
+            printf "%s\n" "  grep -q 'hope2333-mirrorlist.conf' \"\$PREFIX/etc/pacman.conf\" 2>/dev/null || printf '\\nInclude = /etc/pacman.d/hope2333-mirrorlist.conf\\n' >> \"\$PREFIX/etc/pacman.conf\""
+            printf '%s\n' '}'
+          } > build/mirrorlist/hope2333-mirrorlist.install
+          # c. PKGBUILD
+          {
+            printf 'pkgname=hope2333-mirrorlist\n'
+            printf 'pkgver=%s\n' "$VER"
+            printf 'pkgrel=1\n'
+            printf 'pkgdesc="hope2333 software source mirrorlist (managed config)"\n'
+            printf 'arch=(any)\n'
+            printf 'url="https://github.com/Hope2333/hope2333.github.io"\n'
+            printf 'license=(MIT)\n'
+            printf 'install=hope2333-mirrorlist.install\n'
+            printf 'package() {\n'
+            printf '  install -Dm644 hope2333-mirrorlist.conf "$pkgdir/etc/pacman.d/hope2333-mirrorlist.conf"\n'
+            printf '}\n'
+          } > build/mirrorlist/PKGBUILD
+          # d. build pacman any-pkg in archlinux container (makepkg refuses root)
+          docker run --rm -v "$PWD/build/mirrorlist:/work" archlinux bash -c 'pacman -Sy --noconfirm base-devel >/dev/null && useradd -m builder && chown -R builder /work && su builder -c "cd /work && makepkg -f"'
+          # e. meta pool + repo-add
+          cp "build/mirrorlist/hope2333-mirrorlist-${VER}-1-any.pkg.tar.xz" feed/pacman-meta/
+          cp "build/mirrorlist/hope2333-mirrorlist-${VER}-1-any.pkg.tar.xz" _site/repo/Termux/pacman/
+          docker run --rm -v "$PWD/feed/pacman-meta:/work" archlinux bash -c 'cd /work && repo-add hope2333-meta.db.tar.gz *.pkg.tar.xz'
+          cp feed/pacman-meta/hope2333-meta.db feed/pacman-meta/hope2333-meta.db.tar.gz _site/repo/Termux/pacman/
+          # f. deb aarch64
+          {
+            printf 'Package: hope2333-mirrorlist\n'
+            printf 'Version: %s\n' "$FULLVER"
+            printf 'Section: misc\n'
+            printf 'Priority: optional\n'
+            printf 'Architecture: aarch64\n'
+            printf 'Maintainer: Hope2333 <hope2333@users.noreply.github.com>\n'
+            printf 'Description: hope2333 apt source list (managed config)\n'
+          } > build/mirrorlist-deb/DEBIAN/control
+          {
+            printf '#!/bin/sh\n'
+            printf '# data file etc/apt/sources.list.d/hope2333.list is unpacked by dpkg before this runs\n'
+            printf 'test -f "$PREFIX/etc/apt/sources.list.d/hope2333.list" && chmod 0644 "$PREFIX/etc/apt/sources.list.d/hope2333.list" || true\n'
+          } > build/mirrorlist-deb/DEBIAN/postinst
+          chmod 0755 build/mirrorlist-deb/DEBIAN/postinst
+          : > build/mirrorlist-deb/etc/apt/sources.list.d/hope2333.list
+          for r in "${REPOS[@]}"; do
+            printf 'deb [trusted=yes arch=aarch64] https://github.com/Hope2333/%s/releases/latest/download/ ./\n' "$r" >> build/mirrorlist-deb/etc/apt/sources.list.d/hope2333.list
+          done
+          dpkg-deb --build --root-owner-group build/mirrorlist-deb "hope2333-mirrorlist_${FULLVER}_aarch64.deb"
+          # g. apt flat bootstrap on io
+          cp "hope2333-mirrorlist_${FULLVER}_aarch64.deb" _site/repo/Termux/apt/
+          ( cd _site/repo/Termux/apt && dpkg-scanpackages . /dev/null > Packages && gzip -9kc Packages > Packages.gz && apt-ftparchive release . > Release )
+
+      - name: Upload mirrorlist release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VER="$MIRRORLIST_VER"
+          PKG="feed/pacman-meta/hope2333-mirrorlist-${VER}-1-any.pkg.tar.xz"
+          DEB="_site/repo/Termux/apt/hope2333-mirrorlist_${VER}-1_aarch64.deb"
+          gh release view mirrorlist -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 || gh release create mirrorlist -R "$GITHUB_REPOSITORY" --title "hope2333-mirrorlist" --notes "rolling mirrorlist package (latest-only)"
+          gh release upload mirrorlist -R "$GITHUB_REPOSITORY" "$PKG" "$DEB" --clobber
 
       - name: Stamp build time into homepage
         run: |
