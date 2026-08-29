@@ -124,13 +124,20 @@ jobs:
               printf '\n'
             } >> build/mirrorlist/mirrorlist.conf
           done
-          # b. install script (idempotent Include, staged via usr/share)
+          # b. install script (RootDir-safe, no nested pacman, no $PREFIX)
           {
             printf '%s\n' 'post_install() { _apply; }'
             printf '%s\n' 'post_upgrade() { _apply; }'
+            printf '%s\n' 'pre_remove() { _remove; }'
+            printf '%s\n' 'post_remove() { _remove; }'
             printf '%s\n' '_apply() {'
-            printf '%s\n' '  install -Dm644 "$PREFIX/usr/share/hope2333-mirrorlist/mirrorlist.conf" "$PREFIX/etc/pacman.d/hope2333-mirrorlist.conf"'
-            printf "%s\n" "  grep -q 'hope2333-mirrorlist.conf' \"\$PREFIX/etc/pacman.conf\" 2>/dev/null || printf '\\nInclude = /etc/pacman.d/hope2333-mirrorlist.conf\\n' >> \"\$PREFIX/etc/pacman.conf\""
+            printf '%s\n' '  mkdir -p etc/pacman.d'
+            printf '%s\n' '  install -Dm644 usr/share/hope2333-mirrorlist/mirrorlist.conf etc/pacman.d/hope2333-mirrorlist.conf'
+            printf "%s\n" "  grep -q 'etc/pacman.d/hope2333-mirrorlist.conf' etc/pacman.conf || printf '\\nInclude = /etc/pacman.d/hope2333-mirrorlist.conf\\n' >> etc/pacman.conf"
+            printf '%s\n' '}'
+            printf '%s\n' '_remove() {'
+            printf "%s\n" "  sed -i '/etc\\/pacman.d\\/hope2333-mirrorlist.conf/d' etc/pacman.conf 2>/dev/null || true"
+            printf '%s\n' '  rm -f etc/pacman.d/hope2333-mirrorlist.conf 2>/dev/null || true'
             printf '%s\n' '}'
           } > build/mirrorlist/hope2333-mirrorlist.install
           # c. PKGBUILD
