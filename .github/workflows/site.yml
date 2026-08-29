@@ -99,9 +99,9 @@ jobs:
           FULLVER="${VER}-1"
           echo "MIRRORLIST_VER=$VER" >> "$GITHUB_ENV"
           REPOS=(codegraph-termux opencode-termux MiMoCode-Termux freebuff-termux codebuff-termux)
-          mkdir -p build/mirrorlist/etc/pacman.d build/mirrorlist-deb/DEBIAN build/mirrorlist-deb/etc/apt/sources.list.d feed/pacman-meta _site/repo/Termux/apt
+          mkdir -p build/mirrorlist build/mirrorlist-deb/DEBIAN build/mirrorlist-deb/etc/apt/sources.list.d feed/pacman-meta _site/repo/Termux/apt
           # a. pacman mirrorlist conf (5 sections)
-          : > build/mirrorlist/etc/pacman.d/hope2333-mirrorlist.conf
+          : > build/mirrorlist/mirrorlist.conf
           for r in "${REPOS[@]}"; do
             {
               printf '[%s]\n' "$r"
@@ -109,14 +109,14 @@ jobs:
               printf 'Server = https://github.com/Hope2333/%s/releases/latest/download/\n' "$r"
               printf 'SigLevel = Optional TrustAll\n'
               printf '\n'
-            } >> build/mirrorlist/etc/pacman.d/hope2333-mirrorlist.conf
+            } >> build/mirrorlist/mirrorlist.conf
           done
-          # b. install script (idempotent Include)
+          # b. install script (idempotent Include, staged via usr/share)
           {
-            printf '%s\n' 'post_install() {'
-            printf "%s\n" "  grep -q 'hope2333-mirrorlist.conf' \"\$PREFIX/etc/pacman.conf\" 2>/dev/null || printf '\\nInclude = /etc/pacman.d/hope2333-mirrorlist.conf\\n' >> \"\$PREFIX/etc/pacman.conf\""
-            printf '%s\n' '}'
-            printf '%s\n' 'post_upgrade() {'
+            printf '%s\n' 'post_install() { _apply; }'
+            printf '%s\n' 'post_upgrade() { _apply; }'
+            printf '%s\n' '_apply() {'
+            printf '%s\n' '  install -Dm644 "$PREFIX/usr/share/hope2333-mirrorlist/mirrorlist.conf" "$PREFIX/etc/pacman.d/hope2333-mirrorlist.conf"'
             printf "%s\n" "  grep -q 'hope2333-mirrorlist.conf' \"\$PREFIX/etc/pacman.conf\" 2>/dev/null || printf '\\nInclude = /etc/pacman.d/hope2333-mirrorlist.conf\\n' >> \"\$PREFIX/etc/pacman.conf\""
             printf '%s\n' '}'
           } > build/mirrorlist/hope2333-mirrorlist.install
@@ -131,7 +131,7 @@ jobs:
             printf 'license=(MIT)\n'
             printf 'install=hope2333-mirrorlist.install\n'
             printf 'package() {\n'
-            printf '  install -Dm644 /work/etc/pacman.d/hope2333-mirrorlist.conf "$pkgdir/etc/pacman.d/hope2333-mirrorlist.conf"\n'
+            printf '  install -Dm644 /work/mirrorlist.conf "$pkgdir/usr/share/hope2333-mirrorlist/mirrorlist.conf"\n'
             printf '}\n'
           } > build/mirrorlist/PKGBUILD
           # d. build pacman any-pkg in archlinux container (makepkg refuses root)
