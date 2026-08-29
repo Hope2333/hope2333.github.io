@@ -135,10 +135,13 @@ jobs:
             printf '}\n'
           } > build/mirrorlist/PKGBUILD
           # d. build pacman any-pkg in archlinux container (makepkg refuses root)
-          docker run --rm -v "$PWD/build/mirrorlist:/work" archlinux bash -c 'pacman -Sy --noconfirm base-devel >/dev/null && useradd -m builder && chown -R builder /work && su builder -c "cd /work && makepkg -f"'
+          docker run --rm -v "$PWD/build/mirrorlist:/work" archlinux bash -c 'pacman -Sy --noconfirm base-devel >/dev/null && useradd -m builder && chown -R builder /work && su builder -c "cd /work && makepkg -f" && chmod 644 /work/*.pkg.tar.xz && ls -la /work'
           # e. meta pool + repo-add
-          cp "build/mirrorlist/hope2333-mirrorlist-${VER}-1-any.pkg.tar.xz" feed/pacman-meta/
-          cp "build/mirrorlist/hope2333-mirrorlist-${VER}-1-any.pkg.tar.xz" _site/repo/Termux/pacman/
+          PKG="$(find build/mirrorlist -maxdepth 1 -name 'hope2333-mirrorlist-*.pkg.tar.xz' | head -1)"
+          [ -n "$PKG" ] || { echo "::error::mirrorlist pkg not found on host after makepkg"; ls -la build/mirrorlist || true; exit 1; }
+          echo "mirrorlist pkg resolved: $PKG"
+          cp "$PKG" feed/pacman-meta/
+          cp "$PKG" _site/repo/Termux/pacman/
           docker run --rm -v "$PWD/feed/pacman-meta:/work" archlinux bash -c 'cd /work && repo-add hope2333-meta.db.tar.gz *.pkg.tar.xz'
           cp feed/pacman-meta/hope2333-meta.db feed/pacman-meta/hope2333-meta.db.tar.gz _site/repo/Termux/pacman/
           # f. deb aarch64
