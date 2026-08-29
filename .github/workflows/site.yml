@@ -131,7 +131,7 @@ jobs:
             printf 'license=(MIT)\n'
             printf 'install=hope2333-mirrorlist.install\n'
             printf 'package() {\n'
-            printf '  install -Dm644 etc/pacman.d/hope2333-mirrorlist.conf "$pkgdir/etc/pacman.d/hope2333-mirrorlist.conf"\n'
+            printf '  install -Dm644 /work/etc/pacman.d/hope2333-mirrorlist.conf "$pkgdir/etc/pacman.d/hope2333-mirrorlist.conf"\n'
             printf '}\n'
           } > build/mirrorlist/PKGBUILD
           # d. build pacman any-pkg in archlinux container (makepkg refuses root)
