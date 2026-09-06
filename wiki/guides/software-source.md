@@ -17,6 +17,12 @@ curl -fsSL https://hope2333.github.io/repo/install.sh | sh
 - 自动迁移旧版 `[hope2333]` / 旧 apt 源配置
 - 幂等：已配置过时跳过，不会重复写入
 
+脚本支持参数：`--install <包名>`（配置完成后直接安装指定包）、`--help`（帮助与可用包列表）。例如一行完成配置 + 安装：
+
+```sh
+curl -fsSL https://hope2333.github.io/repo/install.sh | sh -s -- --install opencode
+```
+
 ## 引导源 + mirrorlist 包（手动）
 
 不想跑脚本的话，按客户端手动配置引导源，再安装 mirrorlist 包。
@@ -47,38 +53,24 @@ apt update && apt install hope2333-mirrorlist
 
 包内写入 hope2333.list（5 行 flat，指向各仓 Release latest）。
 
-> 旧 `deb .../repo/Termux/apt/ stable main` 行已失效（io 不再托管 apt 仓），请移除或替换为引导行。
+> 旧 `deb .../repo/Termux/apt/ stable main` 行已失效（io 不再托管 apt 仓），请移除或替换为引导行。已有旧版 `[hope2333]` pacman 块请整体替换为引导节，勿追加（重复注册会报 database already registered）。
 
 ## 手动配置（不装 mirrorlist 包）
 
-前往 [/repo/Termux/](https://hope2333.github.io/repo/Termux/) 查看完整说明。pacman 客户端为 5 个独立源节（每节含本站 db 与对应仓 Release CDN 两个 Server）：
+前往 [/repo/Termux/](https://hope2333.github.io/repo/Termux/) 查看完整说明。pacman 客户端推荐按 mirrorlist 包内的统一写法（单节多 Server，库存优先、页面兜底）：
 
 ```ini
-[codegraph-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
+[hope2333]
 Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[opencode-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
 Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[MiMoCode-Termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
-Server = https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[freebuff-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
+Server = https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/
 Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[codebuff-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
 Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
+Server = https://hope2333.github.io/repo/Termux/pacman/
 SigLevel = Optional TrustAll
 ```
+
+mirrorlist 包即该节的持久化文件（`/etc/pacman.d/hope2333-mirrorlist.conf`），随包更新；手动写入等价于固定快照。
 
 apt 客户端使用 flat 源，将以下 5 行写入 `$PREFIX/etc/apt/sources.list.d/hope2333.list`：
 
@@ -90,7 +82,7 @@ deb [trusted=yes arch=aarch64] https://github.com/Hope2333/freebuff-termux/relea
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codebuff-termux/releases/latest/download/ ./
 ```
 
-> 生效依赖各源仓 release 提供 Packages.gz（termux-asset-update v7.2），落地前 flat 行 404。
+Packages 已在各仓 release 提供，flat 行可直接使用。
 
 ## 常用用法
 
@@ -112,6 +104,8 @@ apt install <包名>      # 安装软件包
 apt upgrade             # 升级全部软件包
 apt search <关键词>     # 搜索软件包
 ```
+
+日常升级见 [更新指引](update.html)。
 
 ## Roadmap
 

@@ -4,6 +4,54 @@ set -eu
 # 软件源安装脚本（POSIX sh，可经 curl -fsSL ... | sh 直接运行）
 # 目标：Termux (aarch64)。自动探测环境，幂等写入 hope2333 源。
 # 注意：本脚本绝不自动迁移包管理器；plain Termux (apt) 仅打印迁移指引。
+#
+# 用法：
+#   install.sh                     仅配置软件源（默认行为）
+#   install.sh --install <pkg>     配置软件源并安装指定包
+#   install.sh --help              显示本帮助
+# 一行命令（远程执行时参数经 sh -s -- 传递）：
+#   curl -fsSL https://hope2333.github.io/repo/install.sh | sh
+#   curl -fsSL https://hope2333.github.io/repo/install.sh | sh -s -- --install opencode
+
+usage() {
+  cat <<EOF
+hope2333 软件源安装脚本（Termux, aarch64）
+
+用法:
+  install.sh                 仅配置软件源（默认行为，与无参一致）
+  install.sh --install <pkg> 配置软件源并安装指定包
+                             （入源包: opencode / opencode-compressed / opencode-glibc /
+                               mimocode / mimocode-glibc / codegraph / freebuff / codebuff）
+  install.sh --help          显示本帮助
+
+一行命令:
+  curl -fsSL https://hope2333.github.io/repo/install.sh | sh
+  curl -fsSL https://hope2333.github.io/repo/install.sh | sh -s -- --install opencode
+EOF
+}
+
+INSTALL_PKG=""
+case "${1-}" in
+  "") ;;
+  -h|--help)
+    usage
+    exit 0
+    ;;
+  --install)
+    [ $# -ge 2 ] || {
+      echo "错误: --install 需要一个包名参数（如 --install opencode）" >&2
+      usage >&2
+      exit 1
+    }
+    INSTALL_PKG="$2"
+    shift 2
+    ;;
+  *)
+    echo "错误: 未知参数: $1" >&2
+    usage >&2
+    exit 1
+    ;;
+esac
 
 # 1. Termux 探测
 if [ -n "${PREFIX:-}" ] && [ -d "$PREFIX" ]; then
@@ -74,4 +122,15 @@ elif command -v apt >/dev/null 2>&1; then
 else
   echo "未找到 pacman 或 apt，无法继续"
   exit 1
+fi
+
+# 4. 可选：--install <pkg>（配置完成后追加安装步骤）
+if [ -n "$INSTALL_PKG" ]; then
+  echo "=== 安装 $INSTALL_PKG ==="
+  if command -v pacman >/dev/null 2>&1; then
+    pacman -Sy
+    pacman -S --noconfirm "$INSTALL_PKG"
+  else
+    apt install -y "$INSTALL_PKG"
+  fi
 fi

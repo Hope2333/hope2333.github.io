@@ -2,17 +2,23 @@
 
 ## 日常更新
 
-pacman 客户端用一条命令完成刷新源与升级：
+pacman 客户端：
 
 ```sh
 pacman -Syu
 ```
 
-建议定期执行，保持软件包为最新版本。
+apt 客户端：
 
-## Rolling Push tag 机制
+```sh
+apt update && apt upgrade
+```
 
-本站软件源采用 rolling Push tag 机制：新版本直接追加到既有 tag 上，不另开新 tag。因此无需关心版本号变化，`pacman -Syu` 拉到的就是当前最新构建。
+`apt upgrade` 会连带升级 hope2333-mirrorlist（源列表随包更新）；pacman 客户端同理。建议定期执行，保持软件包为最新版本。
+
+## 版本发布机制
+
+各仓以 Push tag 形式发布（如 Push260906），`releases/latest/download` 始终指向最新正式批次；统一源与页面包由 site-rebuild 流程在发版后自动同步。因此无需关心 tag 名称，`pacman -Syu` / `apt upgrade` 拉到的就是当前最新构建。
 
 ## 源同步
 

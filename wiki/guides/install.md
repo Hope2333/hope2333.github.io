@@ -10,6 +10,12 @@
 curl -fsSL https://hope2333.github.io/repo/install.sh | sh
 ```
 
+或一行命令直接配置并安装（`--install <包名>`，可用包列表见脚本 `--help`）：
+
+```sh
+curl -fsSL https://hope2333.github.io/repo/install.sh | sh -s -- --install opencode
+```
+
 或手动配置引导源 + mirrorlist 包。
 
 pacman 客户端将引导节追加到 `$PREFIX/etc/pacman.conf`：
@@ -50,6 +56,12 @@ apt update && apt install hope2333-mirrorlist
 
 ```sh
 pacman -Sy codegraph
+```
+
+也可用一键脚本一步到位（配置 + 安装）：
+
+```sh
+curl -fsSL https://hope2333.github.io/repo/install.sh | sh -s -- --install codegraph
 ```
 
 `-Sy` 会先刷新软件源再安装，确保拿到最新版本。更多仓库将陆续入源。
