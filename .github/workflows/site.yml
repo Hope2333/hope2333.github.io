@@ -108,11 +108,15 @@ jobs:
           cp feed/pacman/*/*.pkg.tar.* _site/repo/Termux/pacman/
 
       - name: Publish unified db to release CDNs
-        if: ${{ secrets.HOPE_PAT != '' }}
         env:
-          GH_TOKEN: ${{ secrets.HOPE_PAT }}
+          HOPE_PAT: ${{ secrets.HOPE_PAT }}
         run: |
           set -euo pipefail
+          if [ -z "$HOPE_PAT" ]; then
+            echo "HOPE_PAT secret not set — skipping CDN db publish (Pages fallback still serves the db)"
+            exit 0
+          fi
+          export GH_TOKEN="$HOPE_PAT"
           DB="feed/pacman-unified/hope2333.db.tar.gz"
           [ -f "$DB" ] || { echo "::error::unified db missing"; exit 1; }
           fail=0
