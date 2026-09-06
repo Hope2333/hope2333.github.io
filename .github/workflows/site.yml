@@ -99,6 +99,13 @@ jobs:
             docker run --rm -v "$PWD/$pool:/work" archlinux bash -c "cd /work && repo-add $base.db.tar.gz *.pkg.tar.*"
             cp "$pool/$base.db" "$pool/$base.db.tar.gz" _site/repo/Termux/pacman/
           done
+          # Unified [hope2333] db: latest packages of every feed repo in one pool
+          # (fresh CI workspace => latest-only snapshot, single version cached)
+          mkdir -p feed/pacman-unified
+          cp feed/pacman/*/*.pkg.tar.* feed/pacman-unified/
+          docker run --rm -v "$PWD/feed/pacman-unified:/work" archlinux bash -c 'cd /work && repo-add hope2333.db.tar.gz *.pkg.tar.*'
+          cp feed/pacman-unified/hope2333.db feed/pacman-unified/hope2333.db.tar.gz _site/repo/Termux/pacman/
+          cp feed/pacman/*/*.pkg.tar.* _site/repo/Termux/pacman/
 
       - name: Build mirrorlist package
         run: |
@@ -112,19 +119,20 @@ jobs:
           # releases/latest/download would 404 for their assets).
           declare -A REPO_PIN=( [MiMoCode-Termux]=Push260829 )
           mkdir -p build/mirrorlist build/mirrorlist-deb/DEBIAN build/mirrorlist-deb/etc/apt/sources.list.d feed/pacman-meta _site/repo/Termux/apt
-          # a. pacman mirrorlist conf (5 sections)
+          # a. pacman mirrorlist conf (single unified source [hope2333]:
+          #    per-repo release CDN servers first, this Pages site last as fallback)
           : > build/mirrorlist/mirrorlist.conf
-          for r in "${REPOS[@]}"; do
-            server="https://github.com/Hope2333/$r/releases/latest/download/"
-            [ -z "${REPO_PIN[$r]:-}" ] || server="https://github.com/Hope2333/$r/releases/download/${REPO_PIN[$r]}/"
-            {
-              printf '[%s]\n' "$r"
-              printf 'Server = https://hope2333.github.io/repo/Termux/pacman/\n'
+          {
+            printf '[hope2333]\n'
+            for r in "${REPOS[@]}"; do
+              server="https://github.com/Hope2333/$r/releases/latest/download/"
+              [ -z "${REPO_PIN[$r]:-}" ] || server="https://github.com/Hope2333/$r/releases/download/${REPO_PIN[$r]}/"
               printf 'Server = %s\n' "$server"
-              printf 'SigLevel = Optional TrustAll\n'
-              printf '\n'
-            } >> build/mirrorlist/mirrorlist.conf
-          done
+            done
+            printf 'Server = https://hope2333.github.io/repo/Termux/pacman/\n'
+            printf 'SigLevel = Optional TrustAll\n'
+            printf '\n'
+          } >> build/mirrorlist/mirrorlist.conf
           # b. install script (RootDir-safe, no nested pacman, no $PREFIX)
           {
             printf '%s\n' 'post_install() { _apply; }'
@@ -162,7 +170,8 @@ jobs:
           [ -n "$PKG" ] || { echo "::error::mirrorlist pkg not found on host after makepkg"; ls -la build/mirrorlist || true; exit 1; }
           echo "mirrorlist pkg resolved: $PKG"
           cp "$PKG" feed/pacman-meta/
-          cp "$PKG" _site/repo/Termux/pacman/
+          cp "$PKG" feed/pacman-meta/hope2333-mirrorlist-latest-1-any.pkg.tar.xz
+          cp feed/pacman-meta/hope2333-mirrorlist-latest-1-any.pkg.tar.xz _site/repo/Termux/pacman/
           docker run --rm -v "$PWD/feed/pacman-meta:/work" archlinux bash -c 'cd /work && repo-add hope2333-meta.db.tar.gz *.pkg.tar.xz'
           cp feed/pacman-meta/hope2333-meta.db feed/pacman-meta/hope2333-meta.db.tar.gz _site/repo/Termux/pacman/
           # f. deb aarch64
@@ -201,7 +210,7 @@ jobs:
           PKG="feed/pacman-meta/hope2333-mirrorlist-${VER}-1-any.pkg.tar.xz"
           DEB="_site/repo/Termux/apt/hope2333-mirrorlist_${VER}-1_aarch64.deb"
           gh release view mirrorlist -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 || gh release create mirrorlist -R "$GITHUB_REPOSITORY" --title "hope2333-mirrorlist" --notes "rolling mirrorlist package (latest-only)"
-          gh release upload mirrorlist -R "$GITHUB_REPOSITORY" "$PKG" "$DEB" --clobber
+          gh release upload mirrorlist -R "$GITHUB_REPOSITORY" "$PKG" "feed/pacman-meta/hope2333-mirrorlist-latest-1-any.pkg.tar.xz" "$DEB" --clobber
 
       - name: Stamp build time into homepage
         run: |

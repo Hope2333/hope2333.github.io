@@ -19,14 +19,15 @@ opencode-termux 将 [OpenCode](https://github.com/anomalyco/opencode) 引入 Ter
 | **glibc（附录）** | `opencode-glibc` | 维护 | glibc 封装 via bun-termux-loader |
 | **压缩变体** | `opencode-compressed` | 后传 | UPX --best 压制原生 |
 
-**二选一** — `opencode` 与 `opencode-glibc` 互斥不可共存。
+**三选一** — `opencode`、`opencode-glibc`、`opencode-compressed` 互斥（`opencode-glibc-standalone` 可与 `opencode` 共存）。
 
 ## 快速安装
 
 ```bash
 # 通过 hope2333 pacman 源（推荐）
-pacman -S opencode          # 原生主线
-pacman -S opencode-glibc    # glibc 附录
+pacman -S opencode              # 原生主线
+pacman -S opencode-glibc        # glibc 附录（自包含，bin-only）
+pacman -S opencode-compressed   # 压缩变体（UPX + crhandler shim）
 ```
 
 详见[安装指南](install.html)。
@@ -37,4 +38,4 @@ pacman -S opencode-glibc    # glibc 附录
 - [安装指南](install.html)
 - [从源码构建](build.html)
 - [架构说明](architecture.html)
-- [最新发布](release/Push260903.html)
+- [发布列表（不钉 tag）](https://github.com/Hope2333/opencode-termux/releases)

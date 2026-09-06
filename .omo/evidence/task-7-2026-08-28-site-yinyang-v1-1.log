@@ -1,0 +1,50 @@
+TASK: T7 pandoc CI step — Render wiki markdown to HTML in CI via pandoc (+ templates)
+PLAN: 2026-08-28-site-yinyang-v1-1
+REPO: /data/data/com.termux/files/home/workspace/hope2333.github.io
+
+NOTE: Plan file .omo/plans/2026-08-28-site-yinyang-v1-1.md and .omo/ dir were NOT present in repo.
+Task spec was fully self-contained; executed per explicit instructions. Scope C8 could not be read.
+
+=== Files created (wiki/tpl/*) ===
+wiki/tpl/head.html   (charset/viewport/css/favicon)
+wiki/tpl/begin.html  (wiki-top header + main open)
+wiki/tpl/end.html    (main close + footer + theme.js)
+
+=== site.yml change ===
+Inserted step "Render wiki markdown" in BUILD job.
+Position: AFTER "Assemble _site" (lines 37-44) and BEFORE "Fetch release assets" (line 55).
+Feed/pacman/apt steps untouched. Triggers/permissions/concurrency/env/upload steps untouched.
+
+=== ACCEPTANCE (verbatim) ===
+$ python3 -c "import yaml;yaml.safe_load(open('.github/workflows/site.yml'))"
+exit 0  (yaml OK)
+
+$ grep -c 'apt-get install -y pandoc' .github/workflows/site.yml
+1
+
+$ grep -c 'tpl/head.html' .github/workflows/site.yml
+1
+
+$ grep -c 'wiki/tpl' .github/workflows/site.yml
+4   (>=3: find line + -H/-B/-A lines)
+
+$ test -f wiki/tpl/head.html && test -f wiki/tpl/begin.html && test -f wiki/tpl/end.html
+all three tpl files present
+
+=== PANDOC TRIAL ===
+pandoc 3.10.1 available locally.
+Ran: pandoc wiki/guides/install.md -f gfm -t html5 --metadata title="install"   -H wiki/tpl/head.html -B wiki/tpl/begin.html -A wiki/tpl/end.html -o $TMPDIR/wt.html
+(/tmp not writable in Termux; used $TMPDIR per environment constraint)
+Output verified:
+  contains </html>: YES
+  contains /assets/site.css: YES
+  contains theme-toggle: YES
+Output cleaned: $TMPDIR/wt.html removed.
+TRIAL: PASS
+
+=== STEP INDENTATION ===
+Matches neighboring steps: '- name:' at 6 spaces, 'run:' at 8 spaces, body at 10 spaces.
+Consistent with Assemble _site / Fetch release assets steps (visual check PASS).
+
+=== VERDICT ===
+PASS

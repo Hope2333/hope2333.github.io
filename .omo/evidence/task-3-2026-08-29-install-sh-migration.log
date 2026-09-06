@@ -1,0 +1,74 @@
+# T3 evidence — Pages mirrorlist-centric (plan 2026-08-29-install-sh-migration)
+# Date: 2026-08-29 | Executor: Sisyphus-Junior (omo-t3-2026-08-29)
+# Owned files edited (6): repo/Termux/pacman/index.html, repo/Termux/index.html,
+#   repo/index.html, repo/Termux/apt/index.html, wiki/guides/software-source.md,
+#   wiki/guides/install.md
+# Tooling note: built-in `edit` blocked by hash-anchored enforcement; edits applied via
+#   oc_hashline_edit (content-derived 2-char line hashes; probe-with-wrong-hash reveals
+#   true anchors). One probe accidentally matched (Termux/index.html line 63 `  </ol>`
+#   hash=XX) and was consumed by the subsequent section replace — no residual damage.
+
+## Acceptance greps (verbatim)
+
+== repo/Termux/pacman/index.html
+hope2333-meta: 1            (>=1 PASS)
+hope2333-mirrorlist: 4      (>=2 PASS)
+database already registered: 1  (>=1 PASS)
+details: 1                  (>=1 PASS)
+hex6: 0                     (=0 PASS)
+
+== repo/Termux/index.html
+hope2333-meta: 1            (>=1 PASS)
+hope2333-mirrorlist: 5      (>=2 PASS)
+database already registered: 1  (>=1 PASS)
+details: 2                  (>=1 PASS)
+hex6: 0                     (=0 PASS)
+
+== repo/index.html
+配置或升级: 1               (>=1 PASS)
+install.sh cmd: 1           (=1 PASS, command block byte-identical)
+hex6: 0                     (=0 PASS)
+
+== repo/Termux/apt/index.html
+已失效: 1                   (>=1 PASS)
+hope2333-mirrorlist: 3      (>=1 PASS)
+hope2333-bootstrap.list: 1  (>=1 PASS)
+hex6: 0                     (=0 PASS)
+
+== wiki/guides/software-source.md
+hope2333-mirrorlist: 4      (>=1 PASS)
+
+== wiki/guides/install.md
+hope2333-mirrorlist: 3      (>=1 PASS)
+
+== repo/Termux/pacman/index.html (manual fallback block)
+releases/latest/download/: 5  (>=5 PASS)
+
+## Worktree audit (dirty_worktree class)
+git status --porcelain shows my 6 owned files modified. Pre-existing modifications by
+parallel tasks NOT touched by T3: .github/workflows/site.yml (T1), repo/install.sh (T2),
+untracked .omo/ (evidence). repo/index.html diff = 2 insertions + 2 deletions = exactly
+the two directed line replacements (h2 wording + middle bullet); install.sh command
+block untouched.
+
+## Content verification (misleading_success_output class)
+- pacman subpage: recommended flow = bootstrap [hope2333-meta] section → pacman -Sy &&
+  pacman -S hope2333-mirrorlist → Include auto-append note; database-already-registered
+  replacement warning present; manual 5-section fallback inside <details> (each section:
+  [<repo>] / io Server / github releases/latest/download/ Server / SigLevel = Optional
+  TrustAll).
+- Termux hub: same recommended flow + warning synced; APT section = bootstrap line →
+  apt update && apt install hope2333-mirrorlist → hope2333.list 5-flat note; 旧 stable
+  main 已失效 warning; manual 5 flat lines in <details>.
+- /repo/: h2 → 「配置或升级（引导源 + mirrorlist 包，自动迁移旧配置）」; bullet updated;
+  curl command byte-identical.
+- apt subpage: 推荐流程 (bootstrap line → hope2333-bootstrap.list → mirrorlist pkg) +
+  已失效 migration note + manual flat <details> with Packages.gz note inside.
+- wiki guides: source-setup sections rewritten to bootstrap + mirrorlist package flow;
+  manual fallback retained; rest of each guide intact (常用用法/Roadmap; 已入源/未入源/
+  验证安装).
+- All 4 HTML pages: zero hex colors (var() tokens only), theme wiring (site.css/
+  theme.js/theme-toggle) untouched, details/summary styled via page-scoped CSS using
+  var() tokens.
+
+## Verdict: PASS (all acceptance criteria met)

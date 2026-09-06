@@ -19,14 +19,15 @@ opencode-termux brings [OpenCode](https://github.com/anomalyco/opencode) to Term
 | **Glibc (appendix)** | `opencode-glibc` | Maintenance | glibc wrapper via bun-termux-loader |
 | **Compressed** | `opencode-compressed` | Follow-up | UPX --best packed native |
 
-**Pick ONE provider** — `opencode` and `opencode-glibc` are mutually exclusive.
+**Pick ONE provider** — `opencode`, `opencode-glibc` and `opencode-compressed` are mutually exclusive (`opencode-glibc-standalone` coexists with `opencode`).
 
 ## Quick Install
 
 ```bash
 # Via hope2333 pacman source (recommended)
-pacman -S opencode          # native mainline
-pacman -S opencode-glibc    # glibc appendix
+pacman -S opencode              # native mainline
+pacman -S opencode-glibc        # glibc appendix (bin-only, self-contained)
+pacman -S opencode-compressed   # compressed variant (UPX + crhandler shim)
 ```
 
 See [install guide](install.html) for details.
@@ -37,4 +38,4 @@ See [install guide](install.html) for details.
 - [Install guide](install.html)
 - [Build from source](build.html)
 - [Architecture](architecture.html)
-- [Latest release](release/Push260903.html)
+- [Releases (no tag pin)](https://github.com/Hope2333/opencode-termux/releases)

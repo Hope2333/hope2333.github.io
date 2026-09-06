@@ -27,6 +27,7 @@ make family-compressed VER=1.18.27   # Compressed (UPX) only
 - `scripts/fleet-upx.sh` — Distributed UPX compression
 - `scripts/sha-stage.sh` — SHA256SUMS accumulation
 - `scripts/push-stage.sh` — Dry-run release upload
+- `tools/maintain.sh` — maintainer ops: `--upload` (make-driven upload; compressed family can fan out to fleet nodes), `--auto-clean` (post-upload local cache cleanup), `--clear`; help first: `tools/maintain.sh --help`
 
 ## Transplant Pipeline (Native)
 

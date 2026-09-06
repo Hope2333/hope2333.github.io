@@ -43,3 +43,5 @@ A self-built bionic `libopentui.so` (compiled with NDK) provides terminal UI ren
 - `bin/opencode` is a real executable ELF (no bash wrapper)
 - Three-way mutual exclusion: opencode ↔ opencode-glibc ↔ opencode-compressed
 - Standalone variant: `bin/opencode-glibc` entry, coexists with native
+- Glibc packages are bin-only and self-contained (no Termux glibc packages needed)
+- Compressed packages always ship `usr/lib/opencode/libopencode-crhandler.so` (DT_RUNPATH $ORIGIN/../lib/opencode)
