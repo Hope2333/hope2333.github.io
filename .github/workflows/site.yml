@@ -76,6 +76,7 @@ jobs:
               [ -n "$id" ] || continue
               case "$name" in
                 *.pkg.tar.xz) target="feed/pacman/${repo##*/}/$name" ;;
+                *.pkg.tar.gz) target="feed/pacman/${repo##*/}/$name" ;;
                 *) continue ;;
               esac
               if [ -e "$target" ]; then
@@ -95,7 +96,7 @@ jobs:
           for pool in feed/pacman/*/; do
             pool="${pool%/}"
             base="${pool##*/}"
-            docker run --rm -v "$PWD/$pool:/work" archlinux bash -c "cd /work && repo-add $base.db.tar.gz *.pkg.tar.xz"
+            docker run --rm -v "$PWD/$pool:/work" archlinux bash -c "cd /work && repo-add $base.db.tar.gz *.pkg.tar.*"
             cp "$pool/$base.db" "$pool/$base.db.tar.gz" _site/repo/Termux/pacman/
           done
 
