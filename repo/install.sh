@@ -124,6 +124,40 @@ else
   exit 1
 fi
 
+# 3.5 统一源自愈（v8.2）：mirrorlist 包钩子存在相对路径缺陷（构建期 CWD=包根可用，
+#     装机期 pacman 执行 CWD 非包根 → conf/Include 未落）。脚本自身保证终态 = [hope2333] 可用。
+if command -v pacman >/dev/null 2>&1; then
+  P="$PREFIX"
+  ML_CONF="$P/etc/pacman.d/hope2333-mirrorlist.conf"
+  SRC_CONF="$P/usr/share/hope2333-mirrorlist/mirrorlist.conf"
+  if ! grep -q 'pacman.d/hope2333-mirrorlist.conf' "$P/etc/pacman.conf"; then
+    echo "检测到 mirrorlist 钩子未生效，脚本自愈补写统一源"
+    mkdir -p "$(dirname "$ML_CONF")"
+    if [ -f "$SRC_CONF" ]; then
+      install -m644 "$SRC_CONF" "$ML_CONF"
+    else
+      cat > "$ML_CONF" <<'MIRRORLIST'
+[hope2333]
+Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
+Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/
+Server = https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/
+Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/
+Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
+Server = https://hope2333.github.io/repo/Termux/pacman/
+SigLevel = Optional TrustAll
+MIRRORLIST
+    fi
+    printf 'Include = %s
+' "$ML_CONF" >> "$P/etc/pacman.conf"
+  fi
+  pacman -Sy
+  if ! pacman -Sl hope2333 >/dev/null 2>&1; then
+    echo "错误: [hope2333] 统一源未生效（检查网络，或按 https://hope2333.github.io/wiki/guides/software-source.html 手动配置）"
+    exit 1
+  fi
+  echo "[hope2333] 统一源已生效（$(pacman -Sl hope2333 | wc -l) 个包）"
+fi
+
 # 4. 可选：--install <pkg>（配置完成后追加安装步骤）
 if [ -n "$INSTALL_PKG" ]; then
   echo "=== 安装 $INSTALL_PKG ==="
