@@ -161,23 +161,24 @@ jobs:
             printf '\n'
           } >> build/mirrorlist/mirrorlist.conf
           # b. install script (v8.2: PREFIX-safe at RUNTIME — hooks execute on Termux
-          #    with pacman CWD != package root; relative paths silently skipped wiring)
-          {
-            printf '%s\n' 'post_install() { _apply; }'
-            printf '%s\n' 'post_upgrade() { _apply; }'
-            printf '%s\n' 'pre_remove() { _remove; }'
-            printf '%s\n' 'post_remove() { _remove; }'
-            printf '%s\n' '_apply() {'
-            printf '%s\n' '  P="${PREFIX:-/data/data/com.termux/files/usr}"'
-            printf '%s\n' '  mkdir -p "$P/etc/pacman.d"'
-            printf '%s\n' '  install -Dm644 "$P/usr/share/hope2333-mirrorlist/mirrorlist.conf" "$P/etc/pacman.d/hope2333-mirrorlist.conf"'
-            printf "%s\n" "  grep -q 'pacman.d/hope2333-mirrorlist.conf' \"$P/etc/pacman.conf\" || printf '\\nInclude = %s/etc/pacman.d/hope2333-mirrorlist.conf\\n' \"$P\" >> \"$P/etc/pacman.conf\""
-            printf '%s\n' '}'
-            printf '%s\n' '_remove() {'
-            printf "%s\n" "  sed -i '/pacman.d\\/hope2333-mirrorlist.conf/d' \"$P/etc/pacman.conf\" 2>/dev/null || true"
-            printf '%s\n' '  rm -f "$P/etc/pacman.d/hope2333-mirrorlist.conf" 2>/dev/null || true'
-            printf '%s\n' '}'
-          } > build/mirrorlist/hope2333-mirrorlist.install
+          #    with pacman CWD != package root; relative paths silently skipped wiring).
+          #    quoted heredoc: $P must land in the hook LITERALLY (expanded at hook time).
+          cat > build/mirrorlist/hope2333-mirrorlist.install <<'HOOK'
+post_install() { _apply; }
+post_upgrade() { _apply; }
+pre_remove() { _remove; }
+post_remove() { _remove; }
+_apply() {
+  P="${PREFIX:-/data/data/com.termux/files/usr}"
+  mkdir -p "$P/etc/pacman.d"
+  install -Dm644 "$P/usr/share/hope2333-mirrorlist/mirrorlist.conf" "$P/etc/pacman.d/hope2333-mirrorlist.conf"
+  grep -q 'pacman.d/hope2333-mirrorlist.conf' "$P/etc/pacman.conf" || printf '\nInclude = %s/etc/pacman.d/hope2333-mirrorlist.conf\n' "$P" >> "$P/etc/pacman.conf"
+}
+_remove() {
+  sed -i '/pacman.d\/hope2333-mirrorlist.conf/d' "$P/etc/pacman.conf" 2>/dev/null || true
+  rm -f "$P/etc/pacman.d/hope2333-mirrorlist.conf" 2>/dev/null || true
+}
+HOOK
           # c. PKGBUILD
           {
             printf 'pkgname=hope2333-mirrorlist\n'
