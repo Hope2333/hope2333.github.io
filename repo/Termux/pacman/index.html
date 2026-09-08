@@ -49,32 +49,16 @@ SigLevel = Optional TrustAll</code></pre>
   <p class="note">已有旧版 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本引导节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
   <h2>手动配置（备用）</h2>
   <details>
-    <summary>展开 5 个独立源节（不装 hope2333-mirrorlist 包）</summary>
-    <pre><code>[codegraph-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
+    <summary>展开统一源节（不装 hope2333-mirrorlist 包）</summary>
+    <pre><code>[hope2333]
 Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[opencode-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
 Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[MiMoCode-Termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
-Server = https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[freebuff-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
+Server = https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/
 Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[codebuff-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
 Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
+Server = https://hope2333.github.io/repo/Termux/pacman/
 SigLevel = Optional TrustAll</code></pre>
-    <p class="note">db 索引托管在本站（仅数百字节）；包文件按 Server 顺序逐文件回退，最终从 GitHub Release CDN 下载（302 自动跟随）。v1 源未签名，Optional TrustAll；后续 repo-add -s 升级。</p>
+    <p class="note">统一 db（hope2333.db.tar.gz）收录五仓全部包，托管在本站与各 Release CDN；包文件按 Server 顺序逐文件回退，最终从 GitHub Release CDN 下载（302 自动跟随）。MiMoCode 为预发布渠道，显式钉 Push260829。v1 源未签名，Optional TrustAll；后续 repo-add -s 升级。</p>
   </details>
 </main>
 <footer>

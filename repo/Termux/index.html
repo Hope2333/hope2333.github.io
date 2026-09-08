@@ -67,29 +67,13 @@ SigLevel = Optional TrustAll</code></pre>
   <p class="hint">已有旧版 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本引导节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
   <details>
     <summary>手动配置（不装 hope2333-mirrorlist 包）</summary>
-    <pre><code>[codegraph-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
+    <pre><code>[hope2333]
 Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[opencode-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
 Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[MiMoCode-Termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
-Server = https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[freebuff-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
+Server = https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/
 Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/
-SigLevel = Optional TrustAll
-
-[codebuff-termux]
-Server = https://hope2333.github.io/repo/Termux/pacman/
 Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
+Server = https://hope2333.github.io/repo/Termux/pacman/
 SigLevel = Optional TrustAll</code></pre>
   </details>
 
@@ -106,10 +90,12 @@ SigLevel = Optional TrustAll</code></pre>
     <summary>手动配置（不装 hope2333-mirrorlist 包）</summary>
     <pre><code>deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codegraph-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/opencode-termux/releases/latest/download/ ./
-deb [trusted=yes arch=aarch64] https://github.com/Hope2333/MiMoCode-Termux/releases/latest/download/ ./
+deb [trusted=yes arch=aarch64] https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/freebuff-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codebuff-termux/releases/latest/download/ ./</code></pre>
   </details>
+
+  <p class="hint">统一源节与 hope2333-mirrorlist 包内容一致；MiMoCode 为预发布渠道，显式钉在 Push260829（GitHub 禁止 prerelease 为 Latest，releases/latest 会 404）。</p>
 
   <p class="roadmap">未来将引入签名校验（repo-add -s / Release 签名），当前 v1 无签名。</p>
 
