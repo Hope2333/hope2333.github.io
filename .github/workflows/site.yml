@@ -65,6 +65,7 @@ jobs:
           # ships an older mimocode-glibc than the older Push260803 tag, and
           # opencode-glibc-standalone exists only on non-latest tags
           # (Push260828 / Push260903rc1).
+          mkdir -p feed
           manifest="feed/pacman.manifest"
           : > "$manifest"
           for repo in $FEED_REPOS; do
@@ -121,6 +122,10 @@ jobs:
           mkdir -p feed/pacman-unified
           cp feed/pacman/*/*.pkg.tar.* feed/pacman-unified/
           docker run --rm -v "$PWD/feed/pacman-unified:/work" archlinux bash -c 'cd /work && repo-add hope2333.db.tar.gz *.pkg.tar.*'
+          # repo-add leaves hope2333.db as a symlink; materialize a real copy
+          # so gh release upload ships content, not the link itself
+          rm feed/pacman-unified/hope2333.db
+          cp feed/pacman-unified/hope2333.db.tar.gz feed/pacman-unified/hope2333.db
           cp feed/pacman-unified/hope2333.db feed/pacman-unified/hope2333.db.tar.gz _site/repo/Termux/pacman/
           cp feed/pacman/*/*.pkg.tar.* _site/repo/Termux/pacman/
 
