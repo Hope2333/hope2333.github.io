@@ -16,12 +16,17 @@ curl -fsSL https://hope2333.github.io/repo/install.sh | sh
 curl -fsSL https://hope2333.github.io/repo/install.sh | sh -s -- --install opencode
 ```
 
-或手动配置引导源 + mirrorlist 包。
+或手动配置统一源 + mirrorlist 包。
 
-pacman 客户端将引导节追加到 `$PREFIX/etc/pacman.conf`：
+pacman 客户端将统一节追加到 `$PREFIX/etc/pacman.conf`：
 
 ```ini
-[hope2333-meta]
+[hope2333]
+Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
+Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/
+Server = https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/
+Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/
+Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
 Server = https://hope2333.github.io/repo/Termux/pacman/
 SigLevel = Optional TrustAll
 ```
@@ -32,7 +37,7 @@ SigLevel = Optional TrustAll
 pacman -Sy && pacman -S hope2333-mirrorlist
 ```
 
-包内自动追加 `Include = /etc/pacman.d/hope2333-mirrorlist.conf`，此后源变更随包升级生效。
+包安装后钩子会把该节收敛为 `节头 + Include = /etc/pacman.d/hope2333-mirrorlist.conf`（Server/SigLevel 移入包内托管 conf），此后源变更随包升级生效。
 
 apt 客户端将引导行写入 `$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list`：
 
@@ -48,7 +53,7 @@ apt update && apt install hope2333-mirrorlist
 
 包内写入 hope2333.list（5 行 flat，指向各仓 Release latest）。
 
-> 旧 `deb .../repo/Termux/apt/ stable main` 行已失效（io 不再托管 apt 仓），请移除或替换为引导行。已有旧版 `[hope2333]` pacman 块请整体替换为引导节，勿追加（重复注册会报 database already registered）。
+> 旧 `deb .../repo/Termux/apt/ stable main` 行已失效（io 不再托管 apt 仓），请移除或替换为引导行。已有旧版 `[hope2333-meta]` 引导节或旧 `[hope2333]` pacman 块请整体替换为统一节，勿追加（重复注册会报 database already registered）；或直接重跑 install.sh 自动迁移。
 
 ## 已入源项目（pacman）
 

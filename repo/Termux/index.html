@@ -52,22 +52,13 @@ summary { cursor: pointer; color: var(--blue); font-size: 14px; }
   <p class="kicker">Hope2333 · Termux</p>
   <h1>Termux 专属手动配置 · <span class="accent">Hope2333</span></h1>
   <hr class="bar">
-  <p class="hint">推荐先用一键脚本：<a href="/repo/">/repo/ install.sh</a>（自动检测 Termux、配置引导源并安装 hope2333-mirrorlist 包、自动迁移旧配置、幂等）。以下为手动配置方式。</p>
+  <p class="hint">推荐先用一键脚本：<a href="/repo/">/repo/ install.sh</a>（自动检测 Termux、配置统一源并安装 hope2333-mirrorlist 包、自动迁移旧配置、幂等）。以下为手动配置方式。</p>
 
-  <h2>Pacman 源配置（引导源 + mirrorlist 包）</h2>
+  <h2>Pacman 源配置（统一源 + mirrorlist 包）</h2>
   <ol>
-    <li>将引导节追加到 <code>$PREFIX/etc/pacman.conf</code> 末尾：</li>
+    <li>将统一节追加到 <code>$PREFIX/etc/pacman.conf</code> 末尾：</li>
   </ol>
-  <pre><code>[hope2333-meta]
-Server = https://hope2333.github.io/repo/Termux/pacman/
-SigLevel = Optional TrustAll</code></pre>
-  <ol start="2">
-    <li>安装 mirrorlist 包：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>（包内自动追加 <code>Include = /etc/pacman.d/hope2333-mirrorlist.conf</code>，此后源变更随包升级生效）</li>
-  </ol>
-  <p class="hint">已有旧版 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本引导节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
-  <details>
-    <summary>手动配置（不装 hope2333-mirrorlist 包）</summary>
-    <pre><code>[hope2333]
+  <pre><code>[hope2333]
 Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
 Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/
 Server = https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/
@@ -75,8 +66,10 @@ Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/
 Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
 Server = https://hope2333.github.io/repo/Termux/pacman/
 SigLevel = Optional TrustAll</code></pre>
-  </details>
-
+  <ol start="2">
+    <li>安装 mirrorlist 包：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>（包安装后钩子把该节收敛为 <code>节头 + Include = /etc/pacman.d/hope2333-mirrorlist.conf</code>，Server/SigLevel 移入包内托管 conf，此后源变更随包升级生效）</li>
+  </ol>
+  <p class="hint">已有旧版 <code>[hope2333-meta]</code> 引导节或旧 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本统一节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
   <h2>APT 源配置（引导源 + mirrorlist 包）</h2>
   <ol>
     <li>将引导行写入 <code>$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list</code>：</li>

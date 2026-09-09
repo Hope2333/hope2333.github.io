@@ -31,26 +31,14 @@ summary{cursor:pointer;color:var(--blue);font-family:var(--mono);font-size:.95re
   <p class="kicker">hope2333.github.io / repo / Termux / pacman</p>
   <h1>Pacman 软件源（Termux）</h1>
   <hr class="bar">
-  <p class="lead">通过引导源 + hope2333-mirrorlist 包安装本站发布的 Termux 软件包。</p>
+  <p class="lead">通过统一 [hope2333] 源 + hope2333-mirrorlist 包安装本站发布的 Termux 软件包。</p>
 </header>
 <main>
-  <h2>推荐流程（引导源 + mirrorlist 包）</h2>
+  <h2>推荐流程（统一源 + mirrorlist 包）</h2>
   <ol>
-    <li>将引导节追加到 <code>$PREFIX/etc/pacman.conf</code> 末尾：</li>
+    <li>将统一节追加到 <code>$PREFIX/etc/pacman.conf</code> 末尾：</li>
   </ol>
-  <pre><code>[hope2333-meta]
-Server = https://hope2333.github.io/repo/Termux/pacman/
-SigLevel = Optional TrustAll</code></pre>
-  <ol start="2">
-    <li>安装 mirrorlist 包：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>；</li>
-    <li>包内自动追加 <code>Include = /etc/pacman.d/hope2333-mirrorlist.conf</code>，此后源变更随包升级生效。</li>
-  </ol>
-  <p>配置完成后即可安装软件包，例如 <code>pacman -S codegraph</code>。</p>
-  <p class="note">已有旧版 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本引导节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
-  <h2>手动配置（备用）</h2>
-  <details>
-    <summary>展开统一源节（不装 hope2333-mirrorlist 包）</summary>
-    <pre><code>[hope2333]
+  <pre><code>[hope2333]
 Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
 Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/
 Server = https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/
@@ -58,8 +46,13 @@ Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/
 Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
 Server = https://hope2333.github.io/repo/Termux/pacman/
 SigLevel = Optional TrustAll</code></pre>
-    <p class="note">统一 db（hope2333.db.tar.gz）收录五仓全部包，托管在本站与各 Release CDN；包文件按 Server 顺序逐文件回退，最终从 GitHub Release CDN 下载（302 自动跟随）。MiMoCode 为预发布渠道，显式钉 Push260829。v1 源未签名，Optional TrustAll；后续 repo-add -s 升级。</p>
-  </details>
+  <ol start="2">
+    <li>安装 mirrorlist 包：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>；</li>
+    <li>包安装后钩子把该节收敛为 <code>节头 + Include = /etc/pacman.d/hope2333-mirrorlist.conf</code>（Server/SigLevel 移入包内托管 conf），此后源变更随包升级生效。</li>
+  </ol>
+  <p>配置完成后即可安装软件包，例如 <code>pacman -S codegraph</code>。</p>
+  <p class="note">已有旧版 <code>[hope2333-meta]</code> 引导节或旧 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本统一节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
+  <p class="note">统一 db（hope2333.db.tar.gz）收录五仓全部包 + hope2333-mirrorlist，托管在本站与各 Release CDN；包文件按 Server 顺序逐文件回退，最终从 GitHub Release CDN 下载（302 自动跟随）。MiMoCode 为预发布渠道，显式钉 Push260829。v1 源未签名，Optional TrustAll；后续 repo-add -s 升级。</p>
 </main>
 <footer>
   <nav><a href="../../../">返回首页</a></nav>
