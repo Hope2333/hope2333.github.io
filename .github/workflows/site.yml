@@ -286,9 +286,10 @@ jobs:
           PKG="$(find build/mirrorlist -maxdepth 1 -name 'hope2333-mirrorlist-*.pkg.tar.xz' | head -1)"
           [ -n "$PKG" ] || { echo "::error::mirrorlist pkg not found on host after makepkg"; ls -la build/mirrorlist || true; exit 1; }
           echo "mirrorlist pkg resolved: $PKG"
+          # alias lives in _site (host-writable): build/mirrorlist is docker-
+          # owned (makepkg uid) and refuses writes from the runner user
           cp "$PKG" _site/repo/Termux/pacman/
-          cp "$PKG" build/mirrorlist/hope2333-mirrorlist-latest-1-any.pkg.tar.xz
-          cp build/mirrorlist/hope2333-mirrorlist-latest-1-any.pkg.tar.xz _site/repo/Termux/pacman/
+          cp "$PKG" _site/repo/Termux/pacman/hope2333-mirrorlist-latest-1-any.pkg.tar.xz
           # f. deb aarch64
           {
             printf 'Package: hope2333-mirrorlist\n'
@@ -322,10 +323,10 @@ jobs:
         run: |
           set -euo pipefail
           VER="$MIRRORLIST_VER"
-          PKG="build/mirrorlist/hope2333-mirrorlist-${VER}-1-any.pkg.tar.xz"
+          PKG="_site/repo/Termux/pacman/hope2333-mirrorlist-${VER}-1-any.pkg.tar.xz"
           DEB="_site/repo/Termux/apt/hope2333-mirrorlist_${VER}-1_aarch64.deb"
           gh release view mirrorlist -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 || gh release create mirrorlist -R "$GITHUB_REPOSITORY" --title "hope2333-mirrorlist" --notes "rolling mirrorlist package (latest-only)"
-          gh release upload mirrorlist -R "$GITHUB_REPOSITORY" "$PKG" "build/mirrorlist/hope2333-mirrorlist-latest-1-any.pkg.tar.xz" "$DEB" --clobber
+          gh release upload mirrorlist -R "$GITHUB_REPOSITORY" "$PKG" "_site/repo/Termux/pacman/hope2333-mirrorlist-latest-1-any.pkg.tar.xz" "$DEB" --clobber
 
       - name: Stamp build time into homepage
         run: |
