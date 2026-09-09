@@ -67,7 +67,7 @@ Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
 Server = https://hope2333.github.io/repo/Termux/pacman/
 SigLevel = Optional TrustAll</code></pre>
   <ol start="2">
-    <li>安装 mirrorlist 包：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>（包安装后钩子把该节收敛为 <code>节头 + Include = /etc/pacman.d/hope2333-mirrorlist.conf</code>，Server/SigLevel 移入包内托管 conf，此后源变更随包升级生效）</li>
+    <li>安装 mirrorlist 包：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>（包安装后钩子把手动节替换为 <code>Include = /etc/pacman.d/hope2333-mirrorlist.conf</code> 一行——托管 conf 自带节头与 Server/SigLevel，pacman.conf 内保留同名节会双重注册丢 Server，此后源变更随包升级生效）</li>
   </ol>
   <p class="hint">已有旧版 <code>[hope2333-meta]</code> 引导节或旧 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本统一节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
   <h2>APT 源配置（引导源 + mirrorlist 包）</h2>

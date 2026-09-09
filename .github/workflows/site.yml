@@ -216,14 +216,17 @@ jobs:
             printf 'SigLevel = Optional TrustAll\n'
             printf '\n'
           } >> build/mirrorlist/mirrorlist.conf
-          # b. install script (v10.0: the package OWNS the live conf via
+          # b. install script (v10.1: the package OWNS the live conf via
           #    usr/etc/pacman.d/... + backup=, so the hook only manages the
-          #    Include line in pacman.conf. v10 wires it SECTION-AWARE (inside
-          #    [hope2333], never blind-appended at EOF where it could land in
-          #    a later section) and strips the transient inline bootstrap
-          #    lines (Pages Server / SigLevel) from [hope2333] once the owned
-          #    conf — which carries both — is in place. v9 semantics kept:
-          #    no conf copy, no conf rm; backup= still protects user edits.
+          #    Include line in pacman.conf. The managed conf carries its own
+          #    [hope2333] header and must be the ONLY registration of that
+          #    repo: a [hope2333] section in pacman.conf double-registers and
+          #    pacman drops the conf's servers (observed: "database already
+          #    registered" -> "no servers configured for repository"). So the
+          #    hook removes any [hope2333] section from pacman.conf and
+          #    appends the Include at EOF — the conf's header takes over from
+          #    there (B1-proven arrangement). v9 semantics kept: no conf copy,
+          #    no conf rm; backup= still protects user edits.
           #    quoted heredoc: $P must land in the hook LITERALLY (expanded at hook time).
           cat > build/mirrorlist/hope2333-mirrorlist.install <<'HOOK'
           post_install() { _apply; }
@@ -234,26 +237,17 @@ jobs:
             P="${PREFIX:-/data/data/com.termux/files/usr}"
             [ -f "$P/etc/pacman.conf" ] || return 0
             mkdir -p "$P/etc/pacman.d"
-            if ! grep -q 'pacman.d/hope2333-mirrorlist.conf' "$P/etc/pacman.conf"; then
-              awk -v inc="Include = $P/etc/pacman.d/hope2333-mirrorlist.conf" '
-                BEGIN { wired = 0 }
-                /^\[hope2333\]$/ { print; if (!wired) { print inc; wired = 1 } next }
+            if grep -q '^\[hope2333\]' "$P/etc/pacman.conf"; then
+              awk '
+                /^\[hope2333\]$/ { inhope = 1; next }
+                /^\[/ { inhope = 0; print; next }
+                inhope { next }
                 { print }
-                END { if (!wired) { print ""; print "[hope2333]"; print inc } }
               ' "$P/etc/pacman.conf" > "$P/etc/pacman.conf.tmp" \
                 && mv "$P/etc/pacman.conf.tmp" "$P/etc/pacman.conf"
             fi
-            _clean_inline
-          }
-          _clean_inline() {
-            P="${PREFIX:-/data/data/com.termux/files/usr}"
-            [ -f "$P/etc/pacman.conf" ] || return 0
-            awk '
-              /^\[hope2333\]$/ { inhope = 1; print; next }
-              /^\[/ { inhope = 0; print; next }
-              { if (!(inhope && (/^Server = https:\/\/hope2333\.github\.io\/repo\/Termux\/pacman\// || /^SigLevel[ \t]*=/))) print }
-            ' "$P/etc/pacman.conf" > "$P/etc/pacman.conf.tmp" \
-              && mv "$P/etc/pacman.conf.tmp" "$P/etc/pacman.conf" || true
+            grep -q 'pacman.d/hope2333-mirrorlist.conf' "$P/etc/pacman.conf" || \
+              printf '\nInclude = %s/etc/pacman.d/hope2333-mirrorlist.conf\n' "$P" >> "$P/etc/pacman.conf"
           }
           _remove() {
             P="${PREFIX:-/data/data/com.termux/files/usr}"

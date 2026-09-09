@@ -37,7 +37,7 @@ SigLevel = Optional TrustAll
 pacman -Sy && pacman -S hope2333-mirrorlist
 ```
 
-包安装后钩子会把该节收敛为 `节头 + Include = /etc/pacman.d/hope2333-mirrorlist.conf`（Server/SigLevel 移入包内托管 conf），此后源变更随包升级生效。
+包安装后钩子会把手动节替换为 `Include = /etc/pacman.d/hope2333-mirrorlist.conf` 一行（托管 conf 自带 `[hope2333]` 节头与 Server/SigLevel，经 Include 生效；pacman.conf 内保留同名节会双重注册丢 Server），此后源变更随包升级生效。
 
 apt 客户端将引导行写入 `$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list`：
 

@@ -102,18 +102,21 @@ inmeta { next }
     echo "已移除无主手放 conf（将由 hope2333-mirrorlist 包提供托管副本）"
   fi
 
-  # ── B. 引导节准备（仅当 Include 尚未接线）─────────────────────────────
-  #     把 [hope2333]（旧单仓块或残留半成品）收敛为引导形态：节头 + Pages
-  #     内联 Server + SigLevel。conf 文件此刻尚不存在，Include 会失败，
-  #     故必须先有可用内联 Server 才能拉到统一库（内含 hope2333-mirrorlist）。
-  if ! grep -q 'pacman.d/hope2333-mirrorlist.conf' "$PACMAN_CONF"; then
-    awk '
-/^\[hope2333\]$/ { inhope = 1; if (!done) { print; print "Server = https://hope2333.github.io/repo/Termux/pacman/"; print "SigLevel = Optional TrustAll"; done = 1 } next }
+  # ── B. 布局修复 + 引导节准备 ──────────────────────────────────────────
+  #     终态契约：pacman.conf 内不得有 [hope2333] 节——托管 conf 自带
+  #     [hope2333] 节头，经 Include 内联完成唯一注册；pacman.conf 再写同名
+  #     节会双重注册并被 pacman 丢弃 Server（实测：database already
+  #     registered → no servers configured for repository）。故先删除任何
+  #     [hope2333] 节（旧单仓块/引导残留/错误中间态），Include 未接线时
+  #     再追加临时引导节（Pages 内联 Server）拉起首装。
+  awk '
+/^\[hope2333\]$/ { inhope = 1; next }
 /^\[/ { inhope = 0; print; next }
 inhope { next }
 { print }
-END { if (!done) { print ""; print "[hope2333]"; print "Server = https://hope2333.github.io/repo/Termux/pacman/"; print "SigLevel = Optional TrustAll" } }
 ' "$PACMAN_CONF" > "$PACMAN_CONF.tmp" && mv "$PACMAN_CONF.tmp" "$PACMAN_CONF"
+  if ! grep -q 'pacman.d/hope2333-mirrorlist.conf' "$PACMAN_CONF"; then
+    printf '\n[hope2333]\nServer = https://hope2333.github.io/repo/Termux/pacman/\nSigLevel = Optional TrustAll\n' >> "$PACMAN_CONF"
   fi
 
   # ── C. 刷新源 ─────────────────────────────────────────────────────────
@@ -132,9 +135,9 @@ END { if (!done) { print ""; print "[hope2333]"; print "Server = https://hope233
     echo "hope2333-mirrorlist 已是最新（$inst），跳过重装"
   fi
 
-  # ── E. 终态收敛：[hope2333] = 节头 + Include ──────────────────────────
-  #     钩子 v10 同样会做（section-aware 接线 + 清理内联 Server/SigLevel），
-  #     此处为权威兜底——本机 scriptlet 可能损坏，钩子不保证执行。
+  # ── E. 终态收敛：无 [hope2333] 节 + EOF Include ───────────────────────
+  #     钩子 v10 同样会做（删节 + EOF 接线），此处为权威兜底——本机
+  #     scriptlet 可能损坏，钩子不保证执行。
   #     极端情况兜底：钩子未落 conf 时从包内 share 副本恢复（v8.2 遗留自愈，
   #     修正了旧版 $P/usr/share 的错误路径），再不行用内置快照。
   if [ ! -f "$ML_CONF" ] && [ -f "$ML_SHARE" ]; then
@@ -156,15 +159,25 @@ Server = https://hope2333.github.io/repo/Termux/pacman/
 SigLevel = Optional TrustAll
 MIRRORLIST
   fi
-  awk -v inc="Include = $ML_CONF" '
-/^\[hope2333\]$/ { inhope = 1; if (!done) { print; print inc; done = 1 } next }
+  if grep -q '^\[hope2333\]' "$PACMAN_CONF"; then
+    awk '
+/^\[hope2333\]$/ { inhope = 1; next }
 /^\[/ { inhope = 0; print; next }
 inhope { next }
 { print }
-END { if (!done) { print ""; print "[hope2333]"; print inc } }
 ' "$PACMAN_CONF" > "$PACMAN_CONF.tmp" && mv "$PACMAN_CONF.tmp" "$PACMAN_CONF"
+  fi
+  grep -q 'pacman.d/hope2333-mirrorlist.conf' "$PACMAN_CONF" || printf '\nInclude = %s\n' "$ML_CONF" >> "$PACMAN_CONF"
 
-  # ── F. 验证 ───────────────────────────────────────────────────────────
+  # ── F. 验证（-Sy 全绿证明终态布局的 Server 解析可用）─────────────────
+  if ! sync_out="$(pacman -Sy 2>&1)"; then
+    if printf '%s\n' "$sync_out" | grep -q 'no servers configured for repository\|could not register'; then
+      echo "错误: [hope2333] 源布局异常（双重注册/无 Server）："
+      printf '%s\n' "$sync_out" | grep -E 'error|could not|no servers' || true
+      exit 1
+    fi
+    echo "警告: pacman -Sy 部分失败（非 hope2333 布局问题，多为 Termux 镜像抖动），继续"
+  fi
   if ! pacman -Sl hope2333 >/dev/null 2>&1; then
     echo "错误: [hope2333] 统一源未生效（检查网络，或按 https://hope2333.github.io/wiki/guides/software-source.html 手动配置）"
     exit 1
