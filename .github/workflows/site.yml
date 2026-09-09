@@ -58,34 +58,51 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          # Per-repo tag pins: pre-alpha channels are marked prerelease and GitHub
-          # forbids prereleases from being Latest (422 "Latest release cannot be
-          # draft or prerelease"), so releases/latest resolves to the old stable
-          # tag and would regress the feed. Pin such repos to their channel tag.
-          declare -A FEED_PIN=( [Hope2333/MiMoCode-Termux]=Push260829 )
+          # Scan ALL releases of every feed repo and keep only the LATEST version
+          # of each package (same latest-per-package scoping philosophy as
+          # gen-packages-index.py). A latest-release-only scan regressed the
+          # unified db twice: MiMoCode's pinned prerelease tag (Push260829)
+          # ships an older mimocode-glibc than the older Push260803 tag, and
+          # opencode-glibc-standalone exists only on non-latest tags
+          # (Push260828 / Push260903rc1).
+          manifest="feed/pacman.manifest"
+          : > "$manifest"
           for repo in $FEED_REPOS; do
-            mkdir -p "feed/pacman/${repo##*/}"
-            rel="latest"
-            [ -z "${FEED_PIN[$repo]:-}" ] || rel="tags/${FEED_PIN[$repo]}"
-            if ! assets="$(gh api "repos/$repo/releases/$rel" --jq '.assets[] | "\(.id)\t\(.name)"' 2>/dev/null)"; then
-              echo "::warning ::no stable release for $repo (skipping feed)"
-              printf '::warning ::no stable release for %s (skipping feed)\n' "$repo" >> "$GITHUB_STEP_SUMMARY"
+            if ! tags="$(gh api "repos/$repo/releases?per_page=100" --paginate --jq '.[].tag_name' 2>/dev/null)" || [ -z "$tags" ]; then
+              echo "::warning ::no releases for $repo (skipping feed)"
+              printf '::warning ::no releases for %s (skipping feed)\n' "$repo" >> "$GITHUB_STEP_SUMMARY"
               continue
             fi
-            printf '%s\n' "$assets" | while IFS=$'\t' read -r id name; do
-              [ -n "$id" ] || continue
-              case "$name" in
-                *.pkg.tar.xz) target="feed/pacman/${repo##*/}/$name" ;;
-                *.pkg.tar.gz) target="feed/pacman/${repo##*/}/$name" ;;
-                *) continue ;;
-              esac
-              if [ -e "$target" ]; then
-                echo "::warning ::duplicate asset name kept-first: $name"
-                printf '::warning ::duplicate asset name kept-first: %s\n' "$name" >> "$GITHUB_STEP_SUMMARY"
-                continue
-              fi
-              gh api -H "Accept: application/octet-stream" "repos/$repo/releases/assets/$id" > "$target"
+            for tag in $tags; do
+              assets="$(gh api "repos/$repo/releases/tags/$tag" --jq '.assets[] | "\(.id)\t\(.name)"' 2>/dev/null)" || assets=""
+              printf '%s\n' "$assets" | while IFS=$'\t' read -r id name; do
+                [ -n "$id" ] || continue
+                case "$name" in
+                  *.pkg.tar.xz|*.pkg.tar.gz) ;;
+                  *) continue ;;
+                esac
+                base="${name%.*pkg.tar.*}"
+                parsed="$(printf '%s' "$base" | sed -E 's/^(.*)-([0-9][0-9A-Za-z.]*)-([0-9]+)-([A-Za-z0-9_]+)$/\1\t\2\t\3\t\4/')" || { echo "::warning ::unparseable pkg asset name: $name"; continue; }
+                [ "$parsed" != "$base" ] || { echo "::warning ::unparseable pkg asset name: $name"; continue; }
+                # legacy/renamed packages stay out of the dbs: opencode-native is
+                # the pre-rename name of opencode (mainline inherited the plain
+                # name at Push260828); bun-termux / opencode-termux are
+                # EarlyEmergencyRelease0 artifacts of the pre-transplant line.
+                case "${parsed%%$'\t'*}" in
+                  opencode-native|bun-termux|opencode-termux) continue ;;
+                esac
+                printf '%s\t%s|%s|%s|%s\n' "$parsed" "$repo" "$tag" "$id" "$name" >> "$manifest"
+              done
             done
+          done
+          # dedupe: highest pkgver (then pkgrel) per pkgname; download winners only
+          winners="$(sort -t$'\t' -k1,1 -k2,2V -k3,3n "$manifest" | awk -F'\t' '{m[$1]=$0} END{for (k in m) print m[k]}')"
+          [ -n "$winners" ] || { echo "::error::no pacman pkg assets found across feed repos"; exit 1; }
+          printf '%s\n' "$winners" | while IFS=$'\t' read -r pname ver rel arch meta; do
+            IFS='|' read -r repo tag id name <<<"$meta"
+            mkdir -p "feed/pacman/${repo##*/}"
+            echo "fetch $name ($repo@$tag)"
+            gh api -H "Accept: application/octet-stream" "repos/$repo/releases/assets/$id" > "feed/pacman/${repo##*/}/$name"
           done
 
       - name: Build pacman repo
@@ -118,11 +135,15 @@ jobs:
           fi
           export GH_TOKEN="$HOPE_PAT"
           DB="feed/pacman-unified/hope2333.db.tar.gz"
-          [ -f "$DB" ] || { echo "::error::unified db missing"; exit 1; }
+          DBRAW="feed/pacman-unified/hope2333.db"
+          [ -f "$DB" ] && [ -f "$DBRAW" ] || { echo "::error::unified db missing"; exit 1; }
           fail=0
           publish() {
-            if gh release upload "$2" -R "$1" "$DB" --clobber >/dev/null 2>&1; then
-              echo "published hope2333.db.tar.gz -> $1@$2"
+            # both names: pacman fetches <repo>.db (uncompressed name); shipping
+            # only the .tar.gz name made every github CDN 404 on -Sy and fall
+            # through to the Pages fallback
+            if gh release upload "$2" -R "$1" "$DB" "$DBRAW" --clobber >/dev/null 2>&1; then
+              echo "published hope2333.db{,.tar.gz} -> $1@$2"
             else
               echo "::warning ::db publish failed for $1@$2"; fail=1
             fi
@@ -160,8 +181,14 @@ jobs:
             printf 'SigLevel = Optional TrustAll\n'
             printf '\n'
           } >> build/mirrorlist/mirrorlist.conf
-          # b. install script (v8.2: PREFIX-safe at RUNTIME — hooks execute on Termux
-          #    with pacman CWD != package root; relative paths silently skipped wiring).
+          # b. install script (v9.0: the package OWNS the live conf via
+          #    usr/etc/pacman.d/... + backup=, so the hook only wires the Include
+          #    line into pacman.conf. The old share->conf copy was doubly broken:
+          #    its "$P/usr/share/..." source path never existed (the share copy
+          #    lives at "$P/share/..."), so the live conf was always hand-placed,
+          #    and a working copy would have clobbered user edits after pacman's
+          #    backup machinery ran. _remove no longer rm's the conf: pacman
+          #    removes the owned file and preserves user edits as .pacsave.
           #    quoted heredoc: $P must land in the hook LITERALLY (expanded at hook time).
           cat > build/mirrorlist/hope2333-mirrorlist.install <<'HOOK'
           post_install() { _apply; }
@@ -171,12 +198,10 @@ jobs:
           _apply() {
             P="${PREFIX:-/data/data/com.termux/files/usr}"
             mkdir -p "$P/etc/pacman.d"
-            install -Dm644 "$P/usr/share/hope2333-mirrorlist/mirrorlist.conf" "$P/etc/pacman.d/hope2333-mirrorlist.conf"
             grep -q 'pacman.d/hope2333-mirrorlist.conf' "$P/etc/pacman.conf" || printf '\nInclude = %s/etc/pacman.d/hope2333-mirrorlist.conf\n' "$P" >> "$P/etc/pacman.conf"
           }
           _remove() {
             sed -i '/pacman.d\/hope2333-mirrorlist.conf/d' "$P/etc/pacman.conf" 2>/dev/null || true
-            rm -f "$P/etc/pacman.d/hope2333-mirrorlist.conf" 2>/dev/null || true
           }
           HOOK
           # c. PKGBUILD
@@ -189,8 +214,13 @@ jobs:
             printf 'url="https://github.com/Hope2333/hope2333.github.io"\n'
             printf 'license=(MIT)\n'
             printf 'install=hope2333-mirrorlist.install\n'
+            # backup path is RootDir-relative: Termux pacman RootDir is
+            # /data/data/com.termux/files, so $pkgdir/usr/etc/... lands at
+            # $PREFIX/etc/... and must be declared WITH the usr/ prefix.
+            printf "backup=('usr/etc/pacman.d/hope2333-mirrorlist.conf')\n"
             printf 'package() {\n'
             printf '  install -Dm644 /work/mirrorlist.conf "$pkgdir/usr/share/hope2333-mirrorlist/mirrorlist.conf"\n'
+            printf '  install -Dm644 /work/mirrorlist.conf "$pkgdir/usr/etc/pacman.d/hope2333-mirrorlist.conf"\n'
             printf '}\n'
           } > build/mirrorlist/PKGBUILD
           # d. build pacman any-pkg in archlinux container (makepkg refuses root)
