@@ -124,6 +124,22 @@ jobs:
             echo "fetch $name ($repo@$tag)"
             gh api -H "Accept: application/octet-stream" "repos/$repo/releases/assets/$id" > "feed/pacman/${repo##*/}/$name"
           done
+          # ── self-clean: delete stale mirrorlist daily snapshots from 'mirrorlist' tag ──
+          # After dedup, only the highest-version mirrorlist pkg is the winner.
+          # Old daily snapshots (YYYYMMDD) accumulate on the tag and bloat the release.
+          # This step deletes all non-winning mirrorlist assets from the mirrorlist tag.
+          ml_winner_ids="$(printf '%s\n' "$winners" | awk -F'\t' '$4=="mirrorlist"{print $5}')"
+          ml_all_ids="$(printf '%s\n' "$ml_assets" | awk -F'\t' '{print $1}')"
+          if [ -n "$ml_all_ids" ]; then
+            for mlid in $ml_all_ids; do
+              if printf '%s\n' "$ml_winner_ids" | grep -q "^${mlid}$"; then
+                continue
+              fi
+              mlname="$(printf '%s\n' "$ml_assets" | awk -F'\t' -v id="$mlid" '$1==id{print $2}')"
+              echo "clean stale mirrorlist: $mlname (asset $mlid)"
+              gh api -X DELETE "repos/$GITHUB_REPOSITORY/releases/assets/$mlid" 2>/dev/null || true
+            done
+          fi
 
       - name: Build pacman repo
         run: |
