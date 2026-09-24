@@ -117,6 +117,24 @@ jobs:
           done
           # dedupe: highest pkgver (then pkgrel) per pkgname; download winners only
           winners="$(sort -t$'\t' -k1,1 -k2,2V -k3,3n "$manifest" | awk -F'\t' '{m[$1]=$0} END{for (k in m) print m[k]}')"
+          # v12.0 (2026-09-24): retired package names are hard-dropped from the
+          # unified db — keeping them makes -Sl/-Ss show ghosts and -Syu compete
+          # two Replace candidates for the same installed pkg (installed v1
+          # `opencode` was claimed by BOTH legacy opencode-glibc and opencode1).
+          # Renames: opencode-glibc→opencode-wrapper, opencode-compressed→
+          # opencode1-compressed, mimocode-glibc→mimocode-wrapper (v9.0/v11);
+          # opencode-glibc-standalone frozen (not republished, v9.0).
+          # Old rolling-tag assets stay as archive (no destructive cleanup);
+          # they are simply no longer published into any db.
+          RETIRED_PKGNAMES="opencode-glibc opencode-compressed opencode-glibc-standalone mimocode-glibc"
+          winners="$(
+            printf '%s\n' "$winners" |
+            awk -F'\t' -v r="$RETIRED_PKGNAMES" '
+              BEGIN { n = split(r, a, " "); for (i = 1; i <= n; i++) rm[a[i]] = 1 }
+              !($1 in rm)
+            '
+          )"
+          [ -n "$winners" ] || { echo "::error::no pacman pkg assets survive after retired-name filter"; exit 1; }
           [ -n "$winners" ] || { echo "::error::no pacman pkg assets found across feed repos"; exit 1; }
           printf '%s\n' "$winners" | while IFS=$'\t' read -r pname ver rel arch meta; do
             IFS='|' read -r repo tag id name <<<"$meta"
