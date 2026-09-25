@@ -61,12 +61,9 @@ pacman -U opencode-compressed-<ver>-1-aarch64.pkg.tar.gz
 dpkg -i opencode-compressed_<ver>_aarch64.deb
 ```
 
-### Standalone (opencode-glibc-standalone) — frozen rollback, coexists with opencode
+### Standalone (opencode-glibc-standalone) — retired, no longer provided
 
-```bash
-pacman -U opencode-glibc-standalone-<ver>-1-aarch64.pkg.tar.xz
-dpkg -i opencode-glibc-standalone_<ver>_aarch64.deb
-```
+> **No longer provided.** `opencode-glibc-standalone` is retired and is no longer published to the repository or releases; its install instructions are withdrawn. Use mainline `opencode` (native) or `opencode-wrapper` instead.
 
 ## Mutual Exclusion
 
@@ -75,7 +72,6 @@ dpkg -i opencode-glibc-standalone_<ver>_aarch64.deb
 | opencode | opencode-glibc | No |
 | opencode | opencode-compressed | No |
 | opencode-glibc | opencode-compressed | No |
-| opencode | opencode-glibc-standalone | Yes |
 
 ## Switching Providers
 

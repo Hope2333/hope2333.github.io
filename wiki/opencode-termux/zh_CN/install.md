@@ -61,12 +61,9 @@ pacman -U opencode-compressed-<ver>-1-aarch64.pkg.tar.gz
 dpkg -i opencode-compressed_<ver>_aarch64.deb
 ```
 
-### standalone（opencode-glibc-standalone）— 冻结回退，可与 opencode 共存
+### standalone（opencode-glibc-standalone）— 已退役，不再提供
 
-```bash
-pacman -U opencode-glibc-standalone-<ver>-1-aarch64.pkg.tar.xz
-dpkg -i opencode-glibc-standalone_<ver>_aarch64.deb
-```
+> **不再提供**：`opencode-glibc-standalone` 已退役，不再随仓库/release 发布，安装指引随之撤除。需要回退能力请改用主线 `opencode`（native）或 `opencode-wrapper`。
 
 ## 互斥矩阵
 
@@ -75,7 +72,6 @@ dpkg -i opencode-glibc-standalone_<ver>_aarch64.deb
 | opencode | opencode-glibc | 否 |
 | opencode | opencode-compressed | 否 |
 | opencode-glibc | opencode-compressed | 否 |
-| opencode | opencode-glibc-standalone | 是 |
 
 ## 切换 provider
 

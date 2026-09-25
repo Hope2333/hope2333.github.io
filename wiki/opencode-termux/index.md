@@ -19,7 +19,7 @@ opencode-termux brings [OpenCode](https://github.com/anomalyco/opencode) to Term
 | **Glibc (appendix)** | `opencode-glibc` | Maintenance | glibc wrapper via bun-termux-loader |
 | **Compressed** | `opencode-compressed` | Follow-up | UPX --best packed native |
 
-**Pick ONE provider** — `opencode`, `opencode-glibc` and `opencode-compressed` are mutually exclusive (`opencode-glibc-standalone` coexists with `opencode`).
+**Pick ONE provider** — `opencode`, `opencode-glibc` and `opencode-compressed` are mutually exclusive. (`opencode-glibc-standalone` is retired and no longer provided.)
 
 ## Quick Install
 

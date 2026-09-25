@@ -19,7 +19,7 @@ opencode-termux 将 [OpenCode](https://github.com/anomalyco/opencode) 引入 Ter
 | **glibc（附录）** | `opencode-glibc` | 维护 | glibc 封装 via bun-termux-loader |
 | **压缩变体** | `opencode-compressed` | 后传 | UPX --best 压制原生 |
 
-**三选一** — `opencode`、`opencode-glibc`、`opencode-compressed` 互斥（`opencode-glibc-standalone` 可与 `opencode` 共存）。
+**三选一** — `opencode`、`opencode-glibc`、`opencode-compressed` 互斥。（`opencode-glibc-standalone` 已退役，不再提供。）
 
 ## 快速安装
 
