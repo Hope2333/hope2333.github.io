@@ -9,6 +9,7 @@ Release details for each opencode-termux version.
 
 | Version | Description | Link |
 |---------|-------------|------|
+| Push260922 | RC3 two-generation full-family refresh (PKGREL=3, 70 assets) | [View](Push260922.md) |
 | Push260914 | freebuff 0.0.174 Update | [View](Push260914.md) |
 | Push260912 | opencode-wrapper Formal Release (v1.18.30, four-family matrix) | [View](Push260912.md) |
 | Push260906 | Asset update (compressed follow-up) | [View](Push260906.md) |

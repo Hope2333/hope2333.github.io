@@ -9,6 +9,7 @@ opencode-termux 各版本发布详情。
 
 | 版本 | 说明 | 链接 |
 |------|------|------|
+| Push260922 | Push260922 — RC3 双代全家族翻新（PKGREL=3，70 件） | [查看](Push260922.html) |
 | Push260914 | Push260914 — freebuff 0.0.174 更新 | [查看](Push260914.html) |
 | Push260912 | Push260912 — opencode-wrapper 正式发布：glibc 线更名 wrapper 线，四家族矩阵 | [查看](Push260912.html) |
 | Push260906 | Push260906 — 资产更新：三家族 + upx 压制版 + 镜像源同步 | [查看](Push260906.html) |
