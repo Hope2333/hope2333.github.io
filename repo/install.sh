@@ -84,20 +84,28 @@ if command -v pacman >/dev/null 2>&1; then
   [ -f "$PACMAN_CONF" ] || { echo "错误: 未找到 $PACMAN_CONF"; exit 1; }
 
   # ── 0. RootDir 自检/自愈 ─────────────────────────────────────────────
-  # 事务根必须指向 Termux 根（$PREFIX 的上一级）。RootDir=/ 时包 payload
-  # 会灌进 Android 只读 rootfs，报 "Partition / is mounted read only" +
-  # "not enough free disk space"（pkg 文件无法落位）。
+  # 事务根必须指向 Termux 根（$PREFIX 的上一级）。实测三类坑（2026-09-29
+  # 实验机复现，kernel 3.18）：① conf 里 RootDir 处于注释态（#RootDir = /）
+  # 或缺省 → alpm 回落编译默认 /，payload 灌进只读 rootfs，报 "Partition
+  # / is mounted read only" + "not enough free disk space"；② DBPath 等路
+  # 径指令缺失时，该 pacman 构建会把编译默认 dbpath 再拼上 RootDir → 双重
+  # 路径找不到库；③ HookDir/GPGDir 目录不存在会被 pacman 解析直接拒绝。
   EXPECT_ROOT="${P%/*}"
+  if grep -qE '^[[:space:]]*#?[[:space:]]*RootDir' "$PACMAN_CONF"; then
+    sed -i "s|^[[:space:]]*#[[:space:]]*RootDir[[:space:]]*=.*|RootDir = $EXPECT_ROOT|; s|^[[:space:]]*RootDir[[:space:]]*=.*|RootDir = $EXPECT_ROOT|" "$PACMAN_CONF"
+  else
+    sed -i "/^\[options\]/a RootDir = $EXPECT_ROOT" "$PACMAN_CONF"
+  fi
+  if ! grep -q '^DBPath' "$PACMAN_CONF"; then
+    sed -i "/^RootDir/a DBPath = $P/var/lib/pacman/\nLogFile = $P/var/log/pacman.log\nCacheDir = $P/var/cache/pacman/pkg/\nHookDir = $P/etc/pacman.d/hooks/\nGPGDir = $P/etc/pacman.d/gnupg/" "$PACMAN_CONF"
+  fi
+  mkdir -p "$P/etc/pacman.d/hooks" "$P/etc/pacman.d/gnupg" "$P/var/lib/pacman" "$P/var/cache/pacman/pkg" "$P/var/log"
   CONF_ROOT="$(sed -n 's/^RootDir[[:space:]]*=//p' "$PACMAN_CONF" | head -1 | tr -d '[:space:]')"
   if [ "$CONF_ROOT" != "$EXPECT_ROOT" ]; then
-    if sed -i "s|^RootDir[[:space:]]*=.*|RootDir = $EXPECT_ROOT|" "$PACMAN_CONF" 2>/dev/null && \
-       [ "$(sed -n 's/^RootDir[[:space:]]*=//p' "$PACMAN_CONF" | head -1 | tr -d '[:space:]')" = "$EXPECT_ROOT" ]; then
-      echo "已修正 pacman.conf RootDir: '${CONF_ROOT:-（空）}' -> $EXPECT_ROOT"
-    else
-      echo "错误: pacman.conf RootDir='${CONF_ROOT:-（空）}' 应为 $EXPECT_ROOT，且自动修正失败；请手工编辑 $PACMAN_CONF 后重试" >&2
-      exit 1
-    fi
+    echo "错误: pacman.conf RootDir 修正失败（当前 '$CONF_ROOT'，应为 '$EXPECT_ROOT'）；请手工编辑 $PACMAN_CONF 后重试" >&2
+    exit 1
   fi
+  echo "RootDir 自检通过: $CONF_ROOT"
 
   # ── A. 迁移预清理（幂等）───────────────────────────────────────────────
   # A1. [hope2333-meta] 引导节整体退役：从节头删到下一节头/文件尾。
