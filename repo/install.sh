@@ -83,6 +83,22 @@ if command -v pacman >/dev/null 2>&1; then
   ML_SHARE="$P/share/hope2333-mirrorlist/mirrorlist.conf"
   [ -f "$PACMAN_CONF" ] || { echo "错误: 未找到 $PACMAN_CONF"; exit 1; }
 
+  # ── 0. RootDir 自检/自愈 ─────────────────────────────────────────────
+  # 事务根必须指向 Termux 根（$PREFIX 的上一级）。RootDir=/ 时包 payload
+  # 会灌进 Android 只读 rootfs，报 "Partition / is mounted read only" +
+  # "not enough free disk space"（pkg 文件无法落位）。
+  EXPECT_ROOT="${P%/*}"
+  CONF_ROOT="$(sed -n 's/^RootDir[[:space:]]*=//p' "$PACMAN_CONF" | head -1 | tr -d '[:space:]')"
+  if [ "$CONF_ROOT" != "$EXPECT_ROOT" ]; then
+    if sed -i "s|^RootDir[[:space:]]*=.*|RootDir = $EXPECT_ROOT|" "$PACMAN_CONF" 2>/dev/null && \
+       [ "$(sed -n 's/^RootDir[[:space:]]*=//p' "$PACMAN_CONF" | head -1 | tr -d '[:space:]')" = "$EXPECT_ROOT" ]; then
+      echo "已修正 pacman.conf RootDir: '${CONF_ROOT:-（空）}' -> $EXPECT_ROOT"
+    else
+      echo "错误: pacman.conf RootDir='${CONF_ROOT:-（空）}' 应为 $EXPECT_ROOT，且自动修正失败；请手工编辑 $PACMAN_CONF 后重试" >&2
+      exit 1
+    fi
+  fi
+
   # ── A. 迁移预清理（幂等）───────────────────────────────────────────────
   # A1. [hope2333-meta] 引导节整体退役：从节头删到下一节头/文件尾。
   #     B1 时代钩子盲追加到 EOF 的 Include 行落在该节作用域内，随之一起清除。
