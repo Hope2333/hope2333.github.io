@@ -9,6 +9,7 @@ Release details for each opencode-termux version.
 
 | Version | Description | Link |
 |---------|-------------|------|
+| Push260930 | RC5 B1(native-gnu) finalized (PKGREL=5, 38 assets) | [View](Push260930.md) |
 | Push260928 | RC4 fixes & completion (PKGREL=4 shim + musl pty, 84 assets) | [View](Push260928.md) |
 | Push260922 | RC3 two-generation full-family refresh (PKGREL=3, 70 assets) | [View](Push260922.md) |
 | Push260914 | freebuff 0.0.174 Update | [View](Push260914.md) |

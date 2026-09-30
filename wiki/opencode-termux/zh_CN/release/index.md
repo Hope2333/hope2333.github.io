@@ -9,6 +9,7 @@ opencode-termux 各版本发布详情。
 
 | 版本 | 说明 | 链接 |
 |------|------|------|
+| Push260930 | RC5 B1(native-gnu) finalized (PKGREL=5, 38 assets) | [View](Push260930.md) |
 | Push260928 | Push260928 — RC4 修复与补全（PKGREL=4 shim + musl pty，84 件） | [查看](Push260928.html) |
 | Push260922 | Push260922 — RC3 双代全家族翻新（PKGREL=3，70 件） | [查看](Push260922.html) |
 | Push260914 | Push260914 — freebuff 0.0.174 更新 | [查看](Push260914.html) |
