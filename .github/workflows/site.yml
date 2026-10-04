@@ -236,6 +236,8 @@ jobs:
           # releases/latest/download would 404 for their assets).
           declare -A REPO_PIN=( [MiMoCode-Termux]=Push260829 )
           mkdir -p build/mirrorlist build/mirrorlist-deb/DEBIAN build/mirrorlist-deb/etc/apt/sources.list.d _site/repo/Termux/apt
+          # v10.2: ship the incident NOTICE inside the package too
+          cp NOTICE.md build/mirrorlist/NOTICE
           # a. pacman mirrorlist conf (single unified source [hope2333]:
           #    per-repo release CDN servers first, this Pages site last as fallback)
           : > build/mirrorlist/mirrorlist.conf
@@ -262,9 +264,16 @@ jobs:
           #    there (B1-proven arrangement). v9 semantics kept: no conf copy,
           #    no conf rm; backup= still protects user edits.
           #    quoted heredoc: $P must land in the hook LITERALLY (expanded at hook time).
+          #    v10.2 (2026-10-04): post_install/post_upgrade additionally run
+          #    _check_pacshadow — SILENT detection of the RootDir double-shadow
+          #    defect (2026-10 incident: RootDir=/data/data/com.termux/files +
+          #    absolute-path pkgs => files land in <RootDir>/data/... overlay).
+          #    Prints the one-line fix20 command ONLY when the disease is
+          #    detected (active non-"/" RootDir, or overlay dir present);
+          #    zero output on healthy machines.
           cat > build/mirrorlist/hope2333-mirrorlist.install <<'HOOK'
-          post_install() { _apply; }
-          post_upgrade() { _apply; }
+          post_install() { _apply; _check_pacshadow; }
+          post_upgrade() { _apply; _check_pacshadow; }
           pre_remove() { _remove; }
           post_remove() { _remove; }
           _apply() {
@@ -287,6 +296,29 @@ jobs:
             P="${PREFIX:-/data/data/com.termux/files/usr}"
             sed -i '/pacman.d\/hope2333-mirrorlist.conf/d' "$P/etc/pacman.conf" 2>/dev/null || true
           }
+          _check_pacshadow() {
+            P="${PREFIX:-/data/data/com.termux/files/usr}"
+            [ -f "$P/etc/pacman.conf" ] || return 0
+            bad=0; why=""
+            rd="$(grep -E '^[[:space:]]*RootDir[[:space:]]*=' "$P/etc/pacman.conf" | head -n1 || true)"
+            if [ -n "$rd" ]; then
+              rdv="$(printf '%s' "${rd#*=}" | tr -d '[:space:]')"
+              if [ -n "$rdv" ] && [ "$rdv" != "/" ]; then
+                bad=1; why="RootDir = $rdv"
+              fi
+            fi
+            shadow=""
+            for c in "$P/../data" "$P/data"; do
+              if [ -d "$c/data/com.termux/files/usr" ]; then
+                shadow="$shadow $c"; bad=1
+              fi
+            done
+            if [ "$bad" -eq 1 ]; then
+              printf '\n\033[31m检测到 pacman 叠影病灶（%s）—— 包文件可能被装入叠加目录导致运行失效\033[0m\n' "${why}${shadow:+; 叠影目录:$shadow}"
+              printf '\033[31m一键修复:\033[0m bash <(curl -sL https://github.com/Hope2333/opencode-termux/releases/download/EarlyEmergencyRelease0/init-pacmanV00fix20.sh)\n\n'
+            fi
+            return 0
+          }
           HOOK
           # c. PKGBUILD
           {
@@ -305,6 +337,7 @@ jobs:
             printf 'package() {\n'
             printf '  install -Dm644 /work/mirrorlist.conf "$pkgdir/usr/share/hope2333-mirrorlist/mirrorlist.conf"\n'
             printf '  install -Dm644 /work/mirrorlist.conf "$pkgdir/usr/etc/pacman.d/hope2333-mirrorlist.conf"\n'
+            printf '  install -Dm644 /work/NOTICE "$pkgdir/usr/share/hope2333-mirrorlist/NOTICE"\n'
             printf '}\n'
           } > build/mirrorlist/PKGBUILD
           # d. build pacman any-pkg in archlinux container (makepkg refuses root)
