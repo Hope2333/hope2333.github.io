@@ -236,8 +236,9 @@ jobs:
           # releases/latest/download would 404 for their assets).
           declare -A REPO_PIN=( [MiMoCode-Termux]=Push260829 )
           mkdir -p build/mirrorlist build/mirrorlist-deb/DEBIAN build/mirrorlist-deb/etc/apt/sources.list.d _site/repo/Termux/apt
-          # v10.2: ship the incident NOTICE inside the package too
+          # v11: ship the incident NOTICE + the offline auto-repair script
           cp NOTICE.md build/mirrorlist/NOTICE
+          cp scripts/repair-doubled.sh build/mirrorlist/repair-doubled.sh
           # a. pacman mirrorlist conf (single unified source [hope2333]:
           #    per-repo release CDN servers first, this Pages site last as fallback)
           : > build/mirrorlist/mirrorlist.conf
@@ -264,13 +265,18 @@ jobs:
           #    there (B1-proven arrangement). v9 semantics kept: no conf copy,
           #    no conf rm; backup= still protects user edits.
           #    quoted heredoc: $P must land in the hook LITERALLY (expanded at hook time).
-          #    v10.2 (2026-10-04): post_install/post_upgrade additionally run
-          #    _check_pacshadow — SILENT detection of the RootDir double-shadow
-          #    defect (2026-10 incident: RootDir=/data/data/com.termux/files +
-          #    absolute-path pkgs => files land in <RootDir>/data/... overlay).
-          #    Prints the one-line fix20 command ONLY when the disease is
-          #    detected (active non-"/" RootDir, or overlay dir present);
-          #    zero output on healthy machines.
+          #    v11 (2026-10-04): post_install/post_upgrade additionally run
+          #    _check_pacshadow — SILENT on healthy machines; when the RootDir
+          #    double-shadow disease is detected (user-corrected criterion:
+          #    <RootDir>/data/data/com.termux/files/usr subtree present AND
+          #    non-empty, i.e. real misplaced files), it AUTO-REPAIRS by
+          #    invoking the packaged repair script usr/lib/hope2333/
+          #    repair-doubled.sh (offline, no curl). The repair script guards
+          #    its own health checks, defers itself when the pacman lock is
+          #    held (scriptlets run mid-transaction), and on any failure
+          #    prints red + preserves the scene + points to the manual fix20
+          #    script. Manual fallback URL only if the packaged repair script
+          #    itself is missing.
           cat > build/mirrorlist/hope2333-mirrorlist.install <<'HOOK'
           post_install() { _apply; _check_pacshadow; }
           post_upgrade() { _apply; _check_pacshadow; }
@@ -299,24 +305,29 @@ jobs:
           _check_pacshadow() {
             P="${PREFIX:-/data/data/com.termux/files/usr}"
             [ -f "$P/etc/pacman.conf" ] || return 0
-            bad=0; why=""
-            rd="$(grep -E '^[[:space:]]*RootDir[[:space:]]*=' "$P/etc/pacman.conf" | head -n1 || true)"
-            if [ -n "$rd" ]; then
-              rdv="$(printf '%s' "${rd#*=}" | tr -d '[:space:]')"
-              if [ -n "$rdv" ] && [ "$rdv" != "/" ]; then
-                bad=1; why="RootDir = $rdv"
-              fi
+            RS="$P/lib/hope2333/repair-doubled.sh"
+            if [ ! -f "$RS" ]; then
+              # this very install may have landed inside the overlay: fall
+              # back to the packaged copy inside the shadow tree
+              for c in "$P/../data" "$P/data"; do
+                s="$c/data/com.termux/files/usr/lib/hope2333/repair-doubled.sh"
+                if [ -f "$s" ]; then RS="$s"; break; fi
+              done
             fi
-            shadow=""
+            if [ -f "$RS" ]; then
+              # the repair script self-guards: silent exit 0 when healthy
+              bash "$RS" || true
+              return 0
+            fi
+            # packaged repair script unavailable: recursive non-empty disease
+            # check, then manual guidance only
             for c in "$P/../data" "$P/data"; do
-              if [ -d "$c/data/com.termux/files/usr" ]; then
-                shadow="$shadow $c"; bad=1
+              if [ -d "$c/data/com.termux/files/usr" ] && [ -n "$(find "$c/data/com.termux/files/usr" -type f -print -quit 2>/dev/null)" ]; then
+                printf '\n\033[31m检测到 pacman 叠影病灶（叠加目录内存在装错文件）且包内修复脚本缺失\033[0m\n'
+                printf '\033[31m手动修复: bash <(curl -sL https://github.com/Hope2333/opencode-termux/releases/download/EarlyEmergencyRelease0/init-pacmanV00fix20.sh)\033[0m\n\n'
+                break
               fi
             done
-            if [ "$bad" -eq 1 ]; then
-              printf '\n\033[31m检测到 pacman 叠影病灶（%s）—— 包文件可能被装入叠加目录导致运行失效\033[0m\n' "${why}${shadow:+; 叠影目录:$shadow}"
-              printf '\033[31m一键修复:\033[0m bash <(curl -sL https://github.com/Hope2333/opencode-termux/releases/download/EarlyEmergencyRelease0/init-pacmanV00fix20.sh)\n\n'
-            fi
             return 0
           }
           HOOK
@@ -330,14 +341,20 @@ jobs:
             printf 'url="https://github.com/Hope2333/hope2333.github.io"\n'
             printf 'license=(MIT)\n'
             printf 'install=hope2333-mirrorlist.install\n'
-            # backup path is RootDir-relative: Termux pacman RootDir is
-            # /data/data/com.termux/files, so $pkgdir/usr/etc/... lands at
-            # $PREFIX/etc/... and must be declared WITH the usr/ prefix.
-            printf "backup=('usr/etc/pacman.d/hope2333-mirrorlist.conf')\n"
+            # v11 (2026-10-04): members moved to the termux-pacman absolute
+            # path convention (data/data/com.termux/files/usr/...), matching
+            # the repacked app packages — the package must install correctly
+            # on post-fix machines where RootDir has fallen back to "/".
+            # (old relative usr/ members would write to /usr/etc there and
+            # break; the auto-repair reinstall also requires absolute
+            # members to land at the real paths)
+            # backup path is RootDir-relative and follows the member path.
+            printf "backup=('data/data/com.termux/files/usr/etc/pacman.d/hope2333-mirrorlist.conf')\n"
             printf 'package() {\n'
-            printf '  install -Dm644 /work/mirrorlist.conf "$pkgdir/usr/share/hope2333-mirrorlist/mirrorlist.conf"\n'
-            printf '  install -Dm644 /work/mirrorlist.conf "$pkgdir/usr/etc/pacman.d/hope2333-mirrorlist.conf"\n'
-            printf '  install -Dm644 /work/NOTICE "$pkgdir/usr/share/hope2333-mirrorlist/NOTICE"\n'
+            printf '  install -Dm644 /work/mirrorlist.conf "$pkgdir/data/data/com.termux/files/usr/share/hope2333-mirrorlist/mirrorlist.conf"\n'
+            printf '  install -Dm644 /work/mirrorlist.conf "$pkgdir/data/data/com.termux/files/usr/etc/pacman.d/hope2333-mirrorlist.conf"\n'
+            printf '  install -Dm644 /work/NOTICE "$pkgdir/data/data/com.termux/files/usr/share/hope2333-mirrorlist/NOTICE"\n'
+            printf '  install -Dm755 /work/repair-doubled.sh "$pkgdir/data/data/com.termux/files/usr/lib/hope2333/repair-doubled.sh"\n'
             printf '}\n'
           } > build/mirrorlist/PKGBUILD
           # d. build pacman any-pkg in archlinux container (makepkg refuses root)
