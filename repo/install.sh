@@ -83,29 +83,44 @@ if command -v pacman >/dev/null 2>&1; then
   ML_SHARE="$P/share/hope2333-mirrorlist/mirrorlist.conf"
   [ -f "$PACMAN_CONF" ] || { echo "错误: 未找到 $PACMAN_CONF"; exit 1; }
 
-  # ── 0. RootDir 自检/自愈 ─────────────────────────────────────────────
-  # 事务根必须指向 Termux 根（$PREFIX 的上一级）。实测三类坑（2026-09-29
-  # 实验机复现，kernel 3.18）：① conf 里 RootDir 处于注释态（#RootDir = /）
-  # 或缺省 → alpm 回落编译默认 /，payload 灌进只读 rootfs，报 "Partition
-  # / is mounted read only" + "not enough free disk space"；② DBPath 等路
-  # 径指令缺失时，该 pacman 构建会把编译默认 dbpath 再拼上 RootDir → 双重
-  # 路径找不到库；③ HookDir/GPGDir 目录不存在会被 pacman 解析直接拒绝。
-  EXPECT_ROOT="${P%/*}"
-  if grep -qE '^[[:space:]]*#?[[:space:]]*RootDir' "$PACMAN_CONF"; then
-    sed -i "s|^[[:space:]]*#[[:space:]]*RootDir[[:space:]]*=.*|RootDir = $EXPECT_ROOT|; s|^[[:space:]]*RootDir[[:space:]]*=.*|RootDir = $EXPECT_ROOT|" "$PACMAN_CONF"
-  else
-    sed -i "/^\[options\]/a RootDir = $EXPECT_ROOT" "$PACMAN_CONF"
+  # ── 0. RootDir 约定回落 / + 叠影哨兵（phase0 2026-10-04）───────────────
+  # 约定反转：hope2333 源的 pacman 包成员已是 termux-pacman 官方绝对路径
+  # data/data/com.termux/files/usr/...（无前导 /），事务根必须回落编译
+  # 默认 /。旧自愈把 RootDir 写死为 /data/data/com.termux/files —— 在绝对
+  # 成员约定下会让 pacman 把成员二次前缀灌进 <RootDir>/data/...（叠影），
+  # 故废弃写死逻辑：① RootDir 行一律注释（alpm 回落 /）；② DBPath 等
+  # 路径指令缺失时补绝对路径（RootDir=/ 下缺失会把编译默认 dbpath 再拼
+  # 上 RootDir → 双重路径找不到库）；③ HookDir/GPGDir 目录不存在会被
+  # pacman 解析直接拒绝（先建目录）。
+  if grep -qE '^[[:space:]]*RootDir' "$PACMAN_CONF"; then
+    sed -i 's|^[[:space:]]*RootDir[[:space:]]*=.*|#RootDir = / (phase0: absolute-member convention — alpm falls back to compiled default /)|' "$PACMAN_CONF"
   fi
   if ! grep -q '^DBPath' "$PACMAN_CONF"; then
-    sed -i "/^RootDir/a DBPath = $P/var/lib/pacman/\nLogFile = $P/var/log/pacman.log\nCacheDir = $P/var/cache/pacman/pkg/\nHookDir = $P/etc/pacman.d/hooks/\nGPGDir = $P/etc/pacman.d/gnupg/" "$PACMAN_CONF"
+    sed -i "/^\[options\]/a DBPath = $P/var/lib/pacman/\nLogFile = $P/var/log/pacman.log\nCacheDir = $P/var/cache/pacman/pkg/\nHookDir = $P/etc/pacman.d/hooks/\nGPGDir = $P/etc/pacman.d/gnupg/" "$PACMAN_CONF"
   fi
   mkdir -p "$P/etc/pacman.d/hooks" "$P/etc/pacman.d/gnupg" "$P/var/lib/pacman" "$P/var/cache/pacman/pkg" "$P/var/log"
-  CONF_ROOT="$(sed -n 's/^RootDir[[:space:]]*=//p' "$PACMAN_CONF" | head -1 | tr -d '[:space:]')"
-  if [ "$CONF_ROOT" != "$EXPECT_ROOT" ]; then
-    echo "错误: pacman.conf RootDir 修正失败（当前 '$CONF_ROOT'，应为 '$EXPECT_ROOT'）；请手工编辑 $PACMAN_CONF 后重试" >&2
+  if grep -qE '^[[:space:]]*RootDir' "$PACMAN_CONF"; then
+    echo "错误: pacman.conf RootDir 注释失败（存在未注释的 RootDir 行）；请手工编辑 $PACMAN_CONF 后重试" >&2
     exit 1
   fi
-  echo "RootDir 自检通过: $CONF_ROOT"
+  # 叠影哨兵（fix20 语义）：历史坏约定机器在 $PREFIX 上级（RootDir=$PREFIX
+  # 上级时）或 $PREFIX 下（RootDir=$PREFIX 时）留有非空的
+  # data/com.termux/files/usr 叠影子树 —— 空壳不算病，存在实体文件才算
+  # （与 mirrorlist 包 repair-doubled.sh 同判据）。检出即红字提示，不阻塞
+  # 源配置（叠影不参与新事务），但应尽快清理。
+  SHADOW_HITS=""
+  for shadow_top in "$P/../data" "$P/data"; do
+    if [ -d "$shadow_top/data/com.termux/files/usr" ] && \
+       [ -n "$(find "$shadow_top/data/com.termux/files/usr" -type f -print -quit 2>/dev/null)" ]; then
+      SHADOW_HITS="$SHADOW_HITS $shadow_top"
+    fi
+  done
+  if [ -n "$SHADOW_HITS" ]; then
+    printf '\033[31m警告: 检出叠影目录（历史 RootDir 坏约定遗留的实体文件树）:%s\033[0m\n' "$SHADOW_HITS"
+    printf '\033[31m请运行 fix20 修复脚本清理（opencode-termux 仓 packing/init-pacmanV00fix20.sh，\n或 mirrorlist 包自带的 repair-doubled.sh），否则残留旧版二进制可能遮蔽新装文件。\033[0m\n'
+  else
+    echo "RootDir 回落 /（已注释；绝对成员约定），叠影哨兵未检出异常"
+  fi
 
   # ── A. 迁移预清理（幂等）───────────────────────────────────────────────
   # A1. [hope2333-meta] 引导节整体退役：从节头删到下一节头/文件尾。
