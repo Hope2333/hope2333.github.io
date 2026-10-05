@@ -47,7 +47,7 @@ pacman -S opencode1-compressed    # v1 压缩变体（UPX，.pkg.tar.gz）
 ### 原生（opencode / opencode1）
 
 ```bash
-pacman -U opencode-<ver>-90-aarch64.pkg.tar.xz
+pacman -U opencode-<ver>-<rel>-aarch64.pkg.tar.xz
 dpkg -i opencode_<ver>_aarch64.deb
 ```
 

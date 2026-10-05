@@ -47,7 +47,7 @@ Per-repo flat indexes ride the latest release assets:
 ### Native (opencode / opencode1)
 
 ```bash
-pacman -U opencode-<ver>-90-aarch64.pkg.tar.xz
+pacman -U opencode-<ver>-<rel>-aarch64.pkg.tar.xz
 dpkg -i opencode_<ver>_aarch64.deb
 ```
 

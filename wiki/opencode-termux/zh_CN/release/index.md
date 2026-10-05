@@ -9,7 +9,7 @@ opencode-termux 各版本发布详情。
 
 | 版本 | 说明 | 链接 |
 |------|------|------|
-| Push261005 | rc1 fleet B 线重建代（-90，raw；57 件：28 pacman + 28 deb + SHA256SUMS） | [查看](Push261005.md) |
+| Push261005 | rc1 fleet B 线重建代（rel 重打 6/5/1·4/1，raw；57 件：28 pacman + 28 deb + SHA256SUMS） | [查看](Push261005.md) |
 | Push260930 | RC5 B1(native-gnu) finalized (PKGREL=5, 38 assets) | [View](Push260930.md) |
 | Push260928 | Push260928 — RC4 修复与补全（PKGREL=4 shim + musl pty，84 件） | [查看](Push260928.html) |
 | Push260922 | Push260922 — RC3 双代全家族翻新（PKGREL=3，70 件） | [查看](Push260922.html) |

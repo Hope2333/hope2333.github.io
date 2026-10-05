@@ -25,7 +25,7 @@ Five families across two generations, installable side by side (v1 and v2 coexis
 
 Within one generation pick exactly ONE of native / wrapper / compressed; v1 (`opencode1*`) and v2 (`opencode*`) coexist. Legacy names `opencode-glibc`, `opencode-compressed` and `opencode-glibc-standalone` are retired and hard-dropped from the unified `[hope2333]` db.
 
-> **Latest batch (Push261005, pkgrel `-90`)**: native families only — fleet B-line rebuild (NDK r27c, not stripped), raw uncompressed packages; the compressed family follows on the same tag.
+> **Latest batch (Push261005)**: native families only — fleet B-line rebuild (NDK r27c, not stripped), raw uncompressed packages, rel repacked per the prev-max+1 rule (6/5/1; opencode1 4/1); the compressed family follows on the same tag.
 
 ## Quick Install
 

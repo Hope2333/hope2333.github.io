@@ -9,7 +9,7 @@ Release details for each opencode-termux version.
 
 | Version | Description | Link |
 |---------|-------------|------|
-| Push261005 | rc1 fleet B-line rebuild (-90, raw; 57 assets: 28 pacman + 28 deb + SHA256SUMS) | [View](Push261005.md) |
+| Push261005 | rc1 fleet B-line rebuild (rel repack 6/5/1·4/1, raw; 57 assets: 28 pacman + 28 deb + SHA256SUMS) | [View](Push261005.md) |
 | Push260930 | RC5 B1(native-gnu) finalized (PKGREL=5, 38 assets) | [View](Push260930.md) |
 | Push260928 | RC4 fixes & completion (PKGREL=4 shim + musl pty, 84 assets) | [View](Push260928.md) |
 | Push260922 | RC3 two-generation full-family refresh (PKGREL=3, 70 assets) | [View](Push260922.md) |
