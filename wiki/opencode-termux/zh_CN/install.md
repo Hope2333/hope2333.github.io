@@ -22,56 +22,56 @@ pacman -U https://github.com/Hope2333/hope2333.github.io/releases/latest/downloa
 ### 安装家族
 
 ```bash
-# 原生主线（推荐，零 glibc 依赖，Android API >= 28）
+# v2 原生主线（推荐，零 glibc 依赖，Android API >= 28）
 pacman -S opencode
 
-# glibc 附录（自包含复合体，无需 Termux glibc 系包）
-pacman -S opencode-glibc
+# v1 原生主线（与 v2 共存）
+pacman -S opencode1
 
-# 压缩变体（UPX 压制，自带 usr/lib/opencode/libopencode-crhandler.so）
-pacman -S opencode-compressed
+# 附录 / 压缩家族（不在 Push261005 raw 批内）：
+pacman -S opencode-wrapper        # v2 wrapper 附录
+pacman -S opencode1-wrapper       # v1 wrapper 附录（glibc 载荷）
+pacman -S opencode1-compressed    # v1 压缩变体（UPX，.pkg.tar.gz）
 ```
+
+旧名 `opencode-glibc` / `opencode-compressed` 已退役，`[hope2333]` 库不再提供——分别改用 `opencode-wrapper` / `opencode1-compressed`。
 
 ## 通过 apt flat 索引
 
 各仓 flat 索引随最新 release 资产分发：
 
-- opencode-termux：<https://github.com/Hope2333/opencode-termux/releases/latest/download/Packages.gz>（40 条：13 原生 + 13 压缩 + 13 glibc + 1 standalone）
+- opencode-termux：<https://github.com/Hope2333/opencode-termux/releases/latest/download/Packages.gz> — **当前不可用**：自 Push261005 起 release 仅含 native pacman/deb + `SHA256SUMS.txt`，无 `Packages.gz`（实测 404）。期间请用上方 pacman 源。
 
 ## 手动安装
 
-### 原生（opencode）
+### 原生（opencode / opencode1）
 
 ```bash
-pacman -U opencode-<ver>-1-aarch64.pkg.tar.xz
+pacman -U opencode-<ver>-90-aarch64.pkg.tar.xz
 dpkg -i opencode_<ver>_aarch64.deb
 ```
 
-### glibc（opencode-glibc）— bin-only、自包含
+### wrapper（opencode-wrapper / opencode1-wrapper）
 
 ```bash
-pacman -U opencode-glibc-<ver>-1-aarch64.pkg.tar.xz
-dpkg -i opencode-glibc_<ver>_aarch64.deb
+pacman -U opencode-wrapper-<ver>-<pkgrel>-aarch64.pkg.tar.xz
+dpkg -i opencode-wrapper_<ver>_aarch64.deb
 ```
 
-### 压缩（opencode-compressed）— gzip 快速包装，恒带 crhandler shim
+### 压缩（opencode1-compressed）— UPX 压制，`.pkg.tar.gz`
 
 ```bash
-pacman -U opencode-compressed-<ver>-1-aarch64.pkg.tar.gz
-dpkg -i opencode-compressed_<ver>_aarch64.deb
+pacman -U opencode1-compressed-<ver>-<pkgrel>-aarch64.pkg.tar.gz
+dpkg -i opencode1-compressed_<ver>_aarch64.deb
 ```
 
 ### standalone（opencode-glibc-standalone）— 已退役，不再提供
 
 > **不再提供**：`opencode-glibc-standalone` 已退役，不再随仓库/release 发布，安装指引随之撤除。需要回退能力请改用主线 `opencode`（native）或 `opencode-wrapper`。
 
-## 互斥矩阵
+## 互斥规则
 
-| 包 A | 包 B | 可共存？ |
-|------|------|----------|
-| opencode | opencode-glibc | 否 |
-| opencode | opencode-compressed | 否 |
-| opencode-glibc | opencode-compressed | 否 |
+同代（v1 或 v2）内 native / wrapper / compressed 互斥，三选一；跨代 v1（`opencode1*`）与 v2（`opencode*`）可共存；`*-standalone` 为共存例外。
 
 ## 切换 provider
 
@@ -80,4 +80,4 @@ dpkg -i opencode-compressed_<ver>_aarch64.deb
 ## 要求
 
 - Android API >= 28
-- Termux（全部家族；glibc 家族已不再需要 Termux `glibc` / `ca-certificates-glibc` 包）
+- Termux（全部家族；native 家族无需 Termux `glibc` 系包）

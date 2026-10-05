@@ -11,23 +11,28 @@ OpenCode on Termux/Android — flagship project.
 
 opencode-termux brings [OpenCode](https://github.com/anomalyco/opencode) to Termux/Android via a native Bionic runtime. The project produces a single zero-glibc Android ELF through a transplant-revive pipeline, shipped as formal releases under the `opencode` package name.
 
-## Three Runtime Lines
+## Package Families
 
-| Line | Package | Status | Runtime |
-|------|---------|--------|---------|
-| **Native (mainline)** | `opencode` | Stable | Pure Bionic, zero glibc deps |
-| **Glibc (appendix)** | `opencode-glibc` | Maintenance | glibc wrapper via bun-termux-loader |
-| **Compressed** | `opencode-compressed` | Follow-up | UPX --best packed native |
+Five families across two generations, installable side by side (v1 and v2 coexist):
 
-**Pick ONE provider** — `opencode`, `opencode-glibc` and `opencode-compressed` are mutually exclusive. (`opencode-glibc-standalone` is retired and no longer provided.)
+| Package | Gen | Status | Runtime |
+|---------|-----|--------|---------|
+| **Native (mainline)** | v2 | `opencode` | Stable — pure Bionic, zero glibc deps |
+| **Wrapper (appendix)** | v2 | `opencode-wrapper` | Bun-termux-loader wrapper |
+| **Native (v1 mainline)** | v1 | `opencode1` | Stable — pure Bionic, zero glibc deps |
+| **Wrapper (v1 appendix)** | v1 | `opencode1-wrapper` | Glibc runtime payload |
+| **Compressed (v1)** | v1 | `opencode1-compressed` | UPX-packed native (`.pkg.tar.gz`) |
+
+Within one generation pick exactly ONE of native / wrapper / compressed; v1 (`opencode1*`) and v2 (`opencode*`) coexist. Legacy names `opencode-glibc`, `opencode-compressed` and `opencode-glibc-standalone` are retired and hard-dropped from the unified `[hope2333]` db.
+
+> **Latest batch (Push261005, pkgrel `-90`)**: native families only — fleet B-line rebuild (NDK r27c, not stripped), raw uncompressed packages; the compressed family follows on the same tag.
 
 ## Quick Install
 
 ```bash
 # Via hope2333 pacman source (recommended)
-pacman -S opencode              # native mainline
-pacman -S opencode-glibc        # glibc appendix (bin-only, self-contained)
-pacman -S opencode-compressed   # compressed variant (UPX + crhandler shim)
+pacman -S opencode     # v2 native mainline
+pacman -S opencode1    # v1 native mainline (coexists with v2)
 ```
 
 See [install guide](install.html) for details.

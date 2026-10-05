@@ -22,43 +22,47 @@ This writes `/etc/pacman.d/hope2333-mirrorlist.conf` and includes it from `/etc/
 ### Install families
 
 ```bash
-# Native mainline (recommended — zero glibc deps, Android API >= 28)
+# v2 native mainline (recommended — zero glibc deps, Android API >= 28)
 pacman -S opencode
 
-# Glibc appendix (self-contained composite; no Termux glibc packages needed)
-pacman -S opencode-glibc
+# v1 native mainline (coexists with v2)
+pacman -S opencode1
 
-# Compressed variant (UPX-packed; ships usr/lib/opencode/libopencode-crhandler.so)
-pacman -S opencode-compressed
+# Appendix / compressed families (not in the Push261005 raw batch):
+pacman -S opencode-wrapper        # v2 wrapper appendix
+pacman -S opencode1-wrapper       # v1 wrapper appendix (glibc payload)
+pacman -S opencode1-compressed    # v1 compressed (UPX, .pkg.tar.gz)
 ```
+
+Legacy names `opencode-glibc` / `opencode-compressed` are retired and no longer served by the `[hope2333]` db — switch to `opencode-wrapper` / `opencode1-compressed` respectively.
 
 ## Via apt flat index
 
 Per-repo flat indexes ride the latest release assets:
 
-- opencode-termux: <https://github.com/Hope2333/opencode-termux/releases/latest/download/Packages.gz> (40 entries: 13 native + 13 compressed + 13 glibc + 1 standalone)
+- opencode-termux: <https://github.com/Hope2333/opencode-termux/releases/latest/download/Packages.gz> — **currently unavailable**: since Push261005 the release ships only native pacman/deb assets + `SHA256SUMS.txt`, no `Packages.gz` (verified 404). Use the pacman source above meanwhile.
 
 ## Manual install
 
-### Native (opencode)
+### Native (opencode / opencode1)
 
 ```bash
-pacman -U opencode-<ver>-1-aarch64.pkg.tar.xz
+pacman -U opencode-<ver>-90-aarch64.pkg.tar.xz
 dpkg -i opencode_<ver>_aarch64.deb
 ```
 
-### Glibc (opencode-glibc) — bin-only, self-contained
+### Wrapper (opencode-wrapper / opencode1-wrapper)
 
 ```bash
-pacman -U opencode-glibc-<ver>-1-aarch64.pkg.tar.xz
-dpkg -i opencode-glibc_<ver>_aarch64.deb
+pacman -U opencode-wrapper-<ver>-<pkgrel>-aarch64.pkg.tar.xz
+dpkg -i opencode-wrapper_<ver>_aarch64.deb
 ```
 
-### Compressed (opencode-compressed) — gzip fast-wrap, always ships the crhandler shim
+### Compressed (opencode1-compressed) — UPX-packed, `.pkg.tar.gz`
 
 ```bash
-pacman -U opencode-compressed-<ver>-1-aarch64.pkg.tar.gz
-dpkg -i opencode-compressed_<ver>_aarch64.deb
+pacman -U opencode1-compressed-<ver>-<pkgrel>-aarch64.pkg.tar.gz
+dpkg -i opencode1-compressed_<ver>_aarch64.deb
 ```
 
 ### Standalone (opencode-glibc-standalone) — retired, no longer provided
@@ -67,11 +71,7 @@ dpkg -i opencode-compressed_<ver>_aarch64.deb
 
 ## Mutual Exclusion
 
-| Package A | Package B | Coexist? |
-|-----------|-----------|----------|
-| opencode | opencode-glibc | No |
-| opencode | opencode-compressed | No |
-| opencode-glibc | opencode-compressed | No |
+Within one generation (v1 or v2), native / wrapper / compressed are mutually exclusive — pick ONE. Across generations, v1 (`opencode1*`) and v2 (`opencode*`) coexist; `*-standalone` is the coexistence exception.
 
 ## Switching Providers
 
@@ -80,4 +80,4 @@ Install the new provider — dpkg/pacman will automatically replace the conflict
 ## Requirements
 
 - Android API >= 28
-- Termux (all families; the glibc family no longer requires the Termux `glibc` / `ca-certificates-glibc` packages)
+- Termux (all families; the native families need no Termux `glibc` packages)
