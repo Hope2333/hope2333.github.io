@@ -40,7 +40,7 @@ Legacy names `opencode-glibc` / `opencode-compressed` are retired and no longer 
 
 Per-repo flat indexes ride the latest release assets:
 
-- opencode-termux: <https://github.com/Hope2333/opencode-termux/releases/latest/download/Packages.gz> — **currently unavailable**: since Push261005 the release ships only native pacman/deb assets + `SHA256SUMS.txt`, no `Packages.gz` (verified 404). Use the pacman source above meanwhile.
+- opencode-termux: <https://github.com/Hope2333/opencode-termux/releases/download/Push260912/Packages.gz> — **pinned**: since Push261005 releases no longer ship `Packages.gz` (`latest/download` → 404), so the flat apt index is pinned to the newest tag that still ships it; the mirrorlist deb's `hope2333.list` carries the same pinned URL. Un-pin once releases ship the index again.
 
 ## Manual install
 

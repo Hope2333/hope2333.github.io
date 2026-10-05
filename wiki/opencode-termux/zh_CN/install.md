@@ -40,7 +40,7 @@ pacman -S opencode1-compressed    # v1 压缩变体（UPX，.pkg.tar.gz）
 
 各仓 flat 索引随最新 release 资产分发：
 
-- opencode-termux：<https://github.com/Hope2333/opencode-termux/releases/latest/download/Packages.gz> — **当前不可用**：自 Push261005 起 release 仅含 native pacman/deb + `SHA256SUMS.txt`，无 `Packages.gz`（实测 404）。期间请用上方 pacman 源。
+- opencode-termux：<https://github.com/Hope2333/opencode-termux/releases/download/Push260912/Packages.gz> — **已钉版**：自 Push261005 起 release 不再随附 `Packages.gz`（`latest/download` → 404），故 flat apt 索引钉在仍附带索引的最新 tag；mirrorlist deb 的 `hope2333.list` 使用同一钉定 URL。待 release 恢复随附索引后解除钉版。
 
 ## 手动安装
 
