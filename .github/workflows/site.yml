@@ -115,6 +115,14 @@ jobs:
             [ "$parsed" != "$base" ] || { echo "::warning ::unparseable pkg asset name: $name"; continue; }
             printf '%s\t%s|%s|%s|%s\n' "$parsed" "$GITHUB_REPOSITORY" "mirrorlist" "$id" "$name" >> "$manifest"
           done
+          # TEMPORARY (user decision 2026-10-05): keep the pkgrel-90 fleet
+          # B-line rebuild generation (Push261005 raw batch) OUT of the
+          # unified db for now — the switch is deferred until the
+          # wrapper/compressed families catch up, then done in ONE step to
+          # avoid churning installs back and forth. Filtering before dedupe
+          # lets the previous highest rel (e.g. -5) still win per version.
+          # REMOVE this filter when the one-step switch is approved.
+          awk -F'\t' '$3 != "90"' "$manifest" > "$manifest.tmp90" && mv "$manifest.tmp90" "$manifest"
           # dedupe: highest pkgver (then pkgrel) per pkgname; download winners only
           winners="$(sort -t$'\t' -k1,1 -k2,2V -k3,3n "$manifest" | awk -F'\t' '{m[$1]=$0} END{for (k in m) print m[k]}')"
           # v12.0 (2026-09-24): retired package names are hard-dropped from the
