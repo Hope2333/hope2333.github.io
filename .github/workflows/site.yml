@@ -246,6 +246,14 @@ jobs:
           # channel tag (GitHub forbids prereleases from being Latest, so
           # releases/latest/download would 404 for their assets).
           declare -A REPO_PIN=( [MiMoCode-Termux]=Push260829 )
+          # apt-only pin: since Push261005 the opencode-termux release no
+          # longer ships Packages.gz, so `releases/latest/download/Packages.gz`
+          # 404s and the flat apt index in hope2333.list breaks. Pin the apt
+          # source to the newest tag that still ships it. REMOVE once releases
+          # ship Packages.gz again. Do NOT reuse REPO_PIN here: the pacman
+          # mirrorlist servers must keep pointing at latest (they mirror the
+          # unified hope2333.db, which the publish step uploads to latest).
+          declare -A APT_REPO_PIN=( [opencode-termux]=Push260912 )
           mkdir -p build/mirrorlist build/mirrorlist-deb/DEBIAN build/mirrorlist-deb/etc/apt/sources.list.d _site/repo/Termux/apt
           # v11: ship the incident NOTICE + the offline auto-repair script
           cp NOTICE.md build/mirrorlist/NOTICE
@@ -400,6 +408,7 @@ jobs:
           for r in "${REPOS[@]}"; do
             apt_base="https://github.com/Hope2333/$r/releases/latest/download/"
             [ -z "${REPO_PIN[$r]:-}" ] || apt_base="https://github.com/Hope2333/$r/releases/download/${REPO_PIN[$r]}/"
+            [ -z "${APT_REPO_PIN[$r]:-}" ] || apt_base="https://github.com/Hope2333/$r/releases/download/${APT_REPO_PIN[$r]}/"
             printf 'deb [trusted=yes arch=aarch64] %s ./\n' "$apt_base" >> build/mirrorlist-deb/etc/apt/sources.list.d/hope2333.list
           done
           dpkg-deb --build --root-owner-group build/mirrorlist-deb "hope2333-mirrorlist_${FULLVER}_aarch64.deb"
