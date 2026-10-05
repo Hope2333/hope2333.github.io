@@ -170,6 +170,10 @@ jobs:
         run: |
           set -euo pipefail
           shopt -s nullglob
+          # archlinux:base-devel everywhere: one shared image pull per job
+          # (layers cached across steps) and no per-run `pacman -Sy base-devel`
+          # inside the makepkg container — upstream publishes this variant
+          # daily/weekly with the group preinstalled (archlinux/archlinux-docker).
           mkdir -p _site/repo/Termux/pacman
           for pool in feed/pacman/*/; do
             pool="${pool%/}"
@@ -178,14 +182,14 @@ jobs:
             # db + the Pages pkg dir; the mirrorlist pkg is served through the
             # [hope2333] server list and has no per-pool db of its own
             if [ "$base" = "hope2333.github.io" ]; then continue; fi
-            docker run --rm -v "$PWD/$pool:/work" archlinux bash -c "cd /work && repo-add $base.db.tar.gz *.pkg.tar.*"
+            docker run --rm -v "$PWD/$pool:/work" archlinux:base-devel bash -c "cd /work && repo-add $base.db.tar.gz *.pkg.tar.*"
             cp "$pool/$base.db" "$pool/$base.db.tar.gz" _site/repo/Termux/pacman/
           done
           # Unified [hope2333] db: latest packages of every feed repo in one pool
           # (fresh CI workspace => latest-only snapshot, single version cached)
           mkdir -p feed/pacman-unified
           cp feed/pacman/*/*.pkg.tar.* feed/pacman-unified/
-          docker run --rm -v "$PWD/feed/pacman-unified:/work" archlinux bash -c 'cd /work && repo-add hope2333.db.tar.gz *.pkg.tar.*'
+          docker run --rm -v "$PWD/feed/pacman-unified:/work" archlinux:base-devel bash -c 'cd /work && repo-add hope2333.db.tar.gz *.pkg.tar.*'
           # repo-add leaves hope2333.db as a symlink; materialize a real copy
           # so gh release upload ships content, not the link itself
           rm feed/pacman-unified/hope2333.db
@@ -364,8 +368,9 @@ jobs:
             printf '  install -Dm755 /work/repair-doubled.sh "$pkgdir/data/data/com.termux/files/usr/lib/hope2333/repair-doubled.sh"\n'
             printf '}\n'
           } > build/mirrorlist/PKGBUILD
-          # d. build pacman any-pkg in archlinux container (makepkg refuses root)
-          docker run --rm -v "$PWD/build/mirrorlist:/work" archlinux bash -c 'pacman -Sy --noconfirm base-devel >/dev/null && useradd -m builder && chown -R builder /work && su builder -c "cd /work && echo PKGEXT=.pkg.tar.xz > /home/builder/.makepkg.conf && makepkg -f" && ls -la /work'
+          # d. build pacman any-pkg in archlinux container (makepkg refuses root);
+          #    base-devel variant ships the toolchain preinstalled — no per-run install
+          docker run --rm -v "$PWD/build/mirrorlist:/work" archlinux:base-devel bash -c 'useradd -m builder && chown -R builder /work && su builder -c "cd /work && echo PKGEXT=.pkg.tar.xz > /home/builder/.makepkg.conf && makepkg -f" && ls -la /work'
           # e. Pages pkg drop (meta db retired: hope2333-mirrorlist ships in
           #    the unified [hope2333] db — no separate repo/db anymore)
           PKG="$(find build/mirrorlist -maxdepth 1 -name 'hope2333-mirrorlist-*.pkg.tar.xz' | head -1)"
