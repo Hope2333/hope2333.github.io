@@ -185,16 +185,22 @@ audit_shadow() { # $1=受影响包(空格分隔)  $2=叠影顶层(空格分隔) 
 # 反查受影响包：叠影文件三键形（双叠直录 / 剥 RootDir 补 / / 剥 RootDir 相对）
 # 与 pacman -Ql 求交（同 fix20 [17]）
 affected_pkgs() {
-    local tops="$1" rel_list eff_root
+    local tops="$1" rel_list eff_root rel_raw
     rel_list=$(mktemp) || return 1
+    # 先收集再统一排序去重：多叠影顶层时逐轮 `sort -u >` 会互相覆盖，
+    # 只剩最后一个 top 的清单（漏检另一 top 的受影响包）
+    rel_raw="$rel_list.raw"
+    : >"$rel_raw"
     for t in $tops; do
         eff_root="${t%/data}"
         find "$t" -type f 2>/dev/null | while IFS= read -r f; do
             printf '%s\n' "$f"
             strip="${f#"$eff_root"}"
             printf '/%s\n%s\n' "$strip" "$strip"
-        done | sort -u > "$rel_list"
+        done >>"$rel_raw"
     done
+    sort -u "$rel_raw" >"$rel_list"
+    rm -f "$rel_raw"
     pacman -Ql 2>/dev/null | awk '{ pkg=$1; $1=""; sub(/^ /,""); print $0 "\t" pkg }' \
         | sort | join -t "$(printf '\t')" - "$rel_list" 2>/dev/null \
         | cut -f2 | sort -u
