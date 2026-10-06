@@ -6,4 +6,4 @@ lang: es
 # Wiki
 
 > [!NOTE]
-> Contenido pendiente de traducción. La página canónica en inglés está en la raíz: [wiki/index](/wiki/index.md)。
+> **Versión en español pendiente.** Esta página aún no tiene traducción al español. El contenido original (chino) está en la raíz del sitio: [/wiki/index](/wiki/index.md).
