@@ -134,3 +134,13 @@ footer nav a:hover{color:var(--green)}
 .md th{background:var(--mantle);font-family:var(--mono);font-size:.85rem}
 .md hr{border:0;border-top:1px solid color-mix(in srgb,var(--text) 12%,transparent);margin:var(--s4) 0}
 .md img{max-width:100%;border-radius:var(--radius)}
+
+/* == 亲密 Proximity：语言切换（🌐 Gnome 40+ 图标按钮风格）—— 圆形底 + 线性地球，与 ☯ 主题按钮同排成组 == */
+.wiki-top{position:relative}
+.lang-btn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:1px solid color-mix(in srgb,var(--text) 45%,transparent);background:transparent;color:var(--text);cursor:pointer;transition:background .15s ease}
+.lang-btn:hover,.lang-btn[aria-expanded="true"]{background:color-mix(in srgb,var(--text) 10%,transparent)}
+.lang-menu{position:absolute;top:100%;left:auto;right:0;margin-top:.4rem;background:var(--mantle);border:1px solid color-mix(in srgb,var(--text) 12%,transparent);border-radius:var(--radius);box-shadow:0 6px 18px color-mix(in srgb,var(--crust) 55%,transparent);padding:.35rem;min-width:9.5rem;z-index:10}
+.lang-menu button{display:flex;width:100%;align-items:center;justify-content:space-between;gap:var(--s3);border:0;background:transparent;color:var(--text);font-family:var(--sans);font-size:.9rem;padding:.4rem .6rem;border-radius:8px;cursor:pointer;text-align:left}
+.lang-menu button:hover{background:color-mix(in srgb,var(--text) 10%,transparent)}
+.lang-menu button[aria-current="true"]{color:var(--mauve);font-weight:600}
+.lang-menu button[aria-current="true"]::after{content:"✓"}

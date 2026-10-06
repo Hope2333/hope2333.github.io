@@ -79,19 +79,100 @@
     }
   }
 
+  // URL 路径 → 页面逻辑路径（lang-map 键口径）：剥 LANG 前缀与 .html/.htm 后缀。
+  // 例：/zh_CN/wiki/opencode-termux/index.html → wiki/opencode-termux/index；
+  //     /wiki/opencode-termux/release/index.html → wiki/opencode-termux/release/index（en 根 canonical 无前缀）。
+  function logicalPathFromUrl(pathname) {
+    var p = String(pathname || '').replace(/^\/+/, '').replace(/\.html?$/i, '');
+    var segs = p.split('/');
+    if (segs.length && SUPPORTED_LANGS.indexOf(segs[0]) !== -1) segs.shift();
+    return segs.join('/');
+  }
+
+  var LANG_LABELS = { en: 'English', zh_CN: '简体中文', zh_TW: '繁體中文', ja: '日本語', es: 'Español' };
+  var LANG_MAP_URL = '/wiki/tpl/lang-map.json';
+
+  // 菜单构建：五语条目 + 当前语言高亮（aria-current）。
+  // langMap 传入 wiki/tpl/lang-map.json 的解析结果；不可用时回落 pathForLang（与表同构）。
+  function buildMenu(doc, menu, logicalPath, currentLang, onPick, langMap) {
+    if (!menu) return false;
+    menu.textContent = '';
+    var entry = (langMap && langMap[logicalPath]) || null;
+    SUPPORTED_LANGS.forEach(function (lang) {
+      var url = (entry && entry.alternates && entry.alternates[lang]) || pathForLang(logicalPath, lang);
+      if (url && url.charAt(0) !== '/') url = '/' + url; // 站内绝对化
+      if (/\.html?$/.test(url) === false) url = url + '.html';
+      var item = doc.createElement('button');
+      item.type = 'button';
+      item.setAttribute('aria-current', lang === currentLang ? 'true' : 'false');
+      item.textContent = LANG_LABELS[lang] || lang;
+      item.addEventListener('click', function () {
+        onPick(lang, url);
+      });
+      menu.appendChild(item);
+    });
+    return true;
+  }
+
+  // 浏览器侧接线（DOM 相关；node 下无 document 自动跳过）：
+  // 点击 🌐 弹菜单；条目点击经 setLang 写 localStorage 并跳到 lang-map 对应 URL。
+  function initLangMenu(doc) {
+    if (!doc || !doc.getElementById) return false;
+    var btn = doc.getElementById('lang-btn');
+    var menu = doc.getElementById('lang-menu');
+    if (!btn || !menu) return false;
+    var current = (doc.documentElement && doc.documentElement.lang) || 'en';
+    var logical = logicalPathFromUrl(global.location && global.location.pathname);
+    function close() { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
+    function rebuild(map) {
+      buildMenu(doc, menu, logical, current, function (lang, url) {
+        setLang(lang);
+        global.location.href = url;
+      }, map);
+    }
+    btn.addEventListener('click', function () {
+      if (!menu.hidden) { close(); return; }
+      menu.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      rebuild(null);
+      if (typeof global.fetch === 'function') {
+        global.fetch(LANG_MAP_URL)
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(rebuild)
+          .catch(function () { /* 保留回落菜单 */ });
+      }
+    });
+    doc.addEventListener('click', function (e) {
+      if (!menu.hidden && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) close();
+    });
+    return true;
+  }
+
   var api = {
     SUPPORTED_LANGS: SUPPORTED_LANGS,
     STORAGE_KEY: STORAGE_KEY,
+    LANG_LABELS: LANG_LABELS,
     mapTag: mapTag,
     pickLang: pickLang,
     setLang: setLang,
     pathForLang: pathForLang,
-    getStoredLang: getStoredLang
+    getStoredLang: getStoredLang,
+    logicalPathFromUrl: logicalPathFromUrl,
+    buildMenu: buildMenu,
+    initLangMenu: initLangMenu
   };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = api;
   } else {
     global.I18n = api;
+    // 浏览器自动接线（node require 路径无 document，不会走到这里）
+    if (typeof global.document !== 'undefined' && global.document.getElementById) {
+      if (global.document.readyState === 'loading') {
+        global.document.addEventListener('DOMContentLoaded', function () { initLangMenu(global.document); });
+      } else {
+        initLangMenu(global.document);
+      }
+    }
   }
 })(typeof globalThis !== 'undefined' ? globalThis : this);

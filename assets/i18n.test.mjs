@@ -81,3 +81,12 @@ test('pathForLang: en 指根 canonical，其余指 /<LANG>/ 前缀', () => {
     '/ja/wiki/opencode-termux/index');
   assert.equal(i18n.pathForLang('/wiki/index', 'es'), '/es/wiki/index');
 });
+
+test('logicalPathFromUrl: 剥 LANG 前缀与 .html 后缀，得 lang-map 键口径', () => {
+  assert.equal(i18n.logicalPathFromUrl('/zh_CN/wiki/opencode-termux/index.html'),
+    'wiki/opencode-termux/index');
+  assert.equal(i18n.logicalPathFromUrl('/wiki/opencode-termux/release/index.html'),
+    'wiki/opencode-termux/release/index');
+  assert.equal(i18n.logicalPathFromUrl('/en/wiki/index.html'), 'wiki/index');
+  assert.equal(i18n.logicalPathFromUrl('/ja/wiki/index'), 'wiki/index');
+});
