@@ -12,6 +12,127 @@ set -eu
 #   install.sh                     仅配置软件源（默认行为）
 #   install.sh --install <pkg>     配置软件源并安装指定包
 #   install.sh --help              显示本帮助
+#   install.sh --selfcheck         无副作用自检：打印所选语言文案与解析出的 server 地址
+
+# ── 0. 语言协商（draft D4：ENV 传参，脚本只维护一份）─────────────────────
+#    读环境变量 LANG（en / zh_CN / zh_TW / ja / es，容忍 en_US.UTF-8 形态），
+#    缺省 en。文案表仅覆盖人读提示；下载源与源地址行保持单一来源、零改动
+#    （含源地址的行不在文案表内、不被本节触碰）。
+MSG_LANG=en
+pick_lang() {
+  _ml="${LANG-}"
+  _ml="${_ml%%.*}"
+  _ml="${_ml%%@*}"
+  case "$_ml" in
+    zh_TW*|zh_HK*|zh_Hant*) MSG_LANG=zh_TW ;;
+    zh_CN*|zh*)             MSG_LANG=zh_CN ;;
+    ja*)                    MSG_LANG=ja ;;
+    es*)                    MSG_LANG=es ;;
+    *)                      MSG_LANG=en ;;
+  esac
+}
+pick_lang
+
+set_messages() {
+  case "$MSG_LANG" in
+    zh_CN)
+      M_ERR_INSTALL_ARG='错误: --install 需要一个包名参数（如 --install opencode）'
+      M_ERR_UNKNOWN_ARG='错误: 未知参数: %s'
+      M_PREFIX_FALLBACK='未设置 $PREFIX，回退到 Termux 默认路径：%s'
+      M_TERMUX_ONLY='仅支持 Termux（目标 aarch64）'
+      M_ARCH='架构：%s'
+      M_PACMAN='检测到包管理器：pacman'
+      M_ML_UP2DATE='hope2333-mirrorlist 已是最新（%s），跳过重装'
+      M_UNIFIED_OK='[hope2333] 统一源已生效（%s 个包）'
+      M_APT='检测到 plain Termux (apt)。本仓库为 pacman 源，apt 客户端配置如下（flat 源，包走 Release CDN）：'
+      M_NO_PM='未找到 pacman 或 apt，无法继续'
+      M_INSTALLING='=== 安装 %s ==='
+      M_SC_TITLE='hope2333 软件源安装脚本 — selfcheck（无副作用：不安装、不写盘、不联网）'
+      M_SC_LANG='语言 / language: %s（来源：环境变量 LANG，缺省 en）'
+      M_SC_ADDR='解析出的源地址（自本脚本既有行提取，单一来源）：'
+      M_SC_NOFILE='selfcheck 需以本地脚本文件运行（curl|sh 管道下 $0 不可读）'
+      ;;
+    zh_TW)
+      M_ERR_INSTALL_ARG='錯誤: --install 需要一個套件名參數（如 --install opencode）'
+      M_ERR_UNKNOWN_ARG='錯誤: 未知參數: %s'
+      M_PREFIX_FALLBACK='未設定 $PREFIX，回退到 Termux 預設路徑：%s'
+      M_TERMUX_ONLY='僅支援 Termux（目標 aarch64）'
+      M_ARCH='架構：%s'
+      M_PACMAN='偵測到套件管理器：pacman'
+      M_ML_UP2DATE='hope2333-mirrorlist 已是最新（%s），跳過重裝'
+      M_UNIFIED_OK='[hope2333] 統一源已生效（%s 個套件）'
+      M_APT='偵測到 plain Termux (apt)。本倉庫為 pacman 源，apt 用戶端設定如下（flat 源，套件走 Release CDN）：'
+      M_NO_PM='找不到 pacman 或 apt，無法繼續'
+      M_INSTALLING='=== 安裝 %s ==='
+      M_SC_TITLE='hope2333 軟體源安裝腳本 — selfcheck（無副作用：不安裝、不寫盤、不連網）'
+      M_SC_LANG='語言 / language: %s（來源：環境變數 LANG，預設 en）'
+      M_SC_ADDR='解析出的源位址（自本腳本既有行提取，單一來源）：'
+      M_SC_NOFILE='selfcheck 需以本地腳本檔案執行（curl|sh 管道下 $0 不可讀）'
+      ;;
+    ja)
+      M_ERR_INSTALL_ARG='エラー: --install にはパッケージ名が必要です（例: --install opencode）'
+      M_ERR_UNKNOWN_ARG='エラー: 不明な引数: %s'
+      M_PREFIX_FALLBACK='$PREFIX が未設定のため Termux の既定パスにフォールバック: %s'
+      M_TERMUX_ONLY='Termux（aarch64）のみ対応しています'
+      M_ARCH='アーキテクチャ: %s'
+      M_PACMAN='パッケージマネージャを検出: pacman'
+      M_ML_UP2DATE='hope2333-mirrorlist は最新（%s）のため再インストールをスキップ'
+      M_UNIFIED_OK='[hope2333] 統一リポジトリが有効（%s パッケージ）'
+      M_APT='plain Termux (apt) を検出。本リポジトリは pacman 向けのため、apt クライアント設定は次のとおり（flat リポジトリ、パッケージは Release CDN 経由）：'
+      M_NO_PM='pacman も apt も見つからず、続行できません'
+      M_INSTALLING='=== %s をインストール ==='
+      M_SC_TITLE='hope2333 リポジトリインストールスクリプト — selfcheck（副作用なし: インストール・書き込み・通信なし）'
+      M_SC_LANG='言語 / language: %s（来源: 環境変数 LANG、既定 en）'
+      M_SC_ADDR='解決されたサーバーアドレス（本スクリプトの既存行から抽出、単一ソース）：'
+      M_SC_NOFILE='selfcheck はローカルのスクリプトファイルで実行してください（curl|sh パイプでは $0 を読めません）'
+      ;;
+    es)
+      M_ERR_INSTALL_ARG='error: --install requiere un nombre de paquete (p. ej., --install opencode)'
+      M_ERR_UNKNOWN_ARG='error: argumento desconocido: %s'
+      M_PREFIX_FALLBACK='$PREFIX no definido; se usa la ruta predeterminada de Termux: %s'
+      M_TERMUX_ONLY='solo se admite Termux (aarch64)'
+      M_ARCH='arquitectura: %s'
+      M_PACMAN='gestor de paquetes detectado: pacman'
+      M_ML_UP2DATE='hope2333-mirrorlist ya está actualizado (%s); se omite la reinstalación'
+      M_UNIFIED_OK='[hope2333] repositorio unificado activo (%s paquetes)'
+      M_APT='se detectó plain Termux (apt). Este repositorio es para pacman; la configuración del cliente apt es la siguiente (repositorio flat, paquetes vía Release CDN):'
+      M_NO_PM='no se encontró pacman ni apt; no se puede continuar'
+      M_INSTALLING='=== instalando %s ==='
+      M_SC_TITLE='script de instalación del repositorio hope2333 — selfcheck (sin efectos: no instala, no escribe, no accede a la red)'
+      M_SC_LANG='idioma / language: %s (origen: variable de entorno LANG, predeterminado en)'
+      M_SC_ADDR='direcciones de servidor resueltas (extraídas de las líneas existentes de este script, fuente única):'
+      M_SC_NOFILE='selfcheck requiere ejecutar el archivo de script local (con curl|sh no se puede leer $0)'
+      ;;
+    *)
+      M_ERR_INSTALL_ARG='error: --install requires a package name (e.g. --install opencode)'
+      M_ERR_UNKNOWN_ARG='error: unknown argument: %s'
+      M_PREFIX_FALLBACK='$PREFIX not set; falling back to Termux default path: %s'
+      M_TERMUX_ONLY='only Termux (aarch64) is supported'
+      M_ARCH='architecture: %s'
+      M_PACMAN='package manager detected: pacman'
+      M_ML_UP2DATE='hope2333-mirrorlist is up to date (%s); skipping reinstall'
+      M_UNIFIED_OK='[hope2333] unified repository is active (%s packages)'
+      M_APT='plain Termux (apt) detected. This repository is a pacman repo; the apt client configuration is as follows (flat repo, packages via Release CDN):'
+      M_NO_PM='neither pacman nor apt found; cannot continue'
+      M_INSTALLING='=== installing %s ==='
+      M_SC_TITLE='hope2333 repository install script — selfcheck (no side effects: no install, no writes, no network)'
+      M_SC_LANG='language: %s (source: LANG environment variable, default en)'
+      M_SC_ADDR='resolved server addresses (extracted from existing lines of this script, single source):'
+      M_SC_NOFILE='selfcheck must run from a local script file ($0 unreadable under curl|sh)'
+      ;;
+  esac
+}
+set_messages
+
+print_server_lines() {
+  # 仅提取本脚本既有行的源地址（行内兜底节 + 内置快照），不新增/不复制任何 URL 字面量
+  if [ ! -f "$0" ]; then
+    printf '%s\n' "$M_SC_NOFILE" >&2
+    return 1
+  fi
+  sed -n 's|.*\(Serv[e]r = https:[^\\]*\)\\n.*|\1|p' "$0"
+  awk '/^Serv[e]r = / && /https:/ { print }' "$0"
+}
 # 一行命令（远程执行时参数经 sh -s -- 传递）：
 #   curl -fsSL https://hope2333.github.io/repo/install.sh | sh
 #   curl -fsSL https://hope2333.github.io/repo/install.sh | sh -s -- --install opencode
@@ -26,6 +147,7 @@ hope2333 软件源安装脚本（Termux, aarch64）
                              （入源包: opencode / opencode-compressed / opencode-glibc /
                                mimocode / mimocode-glibc / codegraph / freebuff / codebuff）
   install.sh --help          显示本帮助
+  install.sh --selfcheck     无副作用自检：打印所选语言文案与解析出的 server 地址
 
 一行命令:
   curl -fsSL https://hope2333.github.io/repo/install.sh | sh
@@ -40,9 +162,12 @@ case "${1-}" in
     usage
     exit 0
     ;;
+  --selfcheck)
+    SELFCHECK=1
+    ;;
   --install)
     [ $# -ge 2 ] || {
-      echo "错误: --install 需要一个包名参数（如 --install opencode）" >&2
+      printf '%s\n' "$M_ERR_INSTALL_ARG" >&2
       usage >&2
       exit 1
     }
@@ -50,25 +175,35 @@ case "${1-}" in
     shift 2
     ;;
   *)
-    echo "错误: 未知参数: $1" >&2
+    printf "$M_ERR_UNKNOWN_ARG\n" "$1" >&2
     usage >&2
     exit 1
     ;;
 esac
+
+# ── --selfcheck：无副作用诊断（打印文案与解析出的源地址后即退出；
+#    先于任何 Termux 探测/安装/写盘/联网动作）─────────────────────────────
+if [ "${SELFCHECK-}" = "1" ]; then
+  printf '%s\n' "$M_SC_TITLE"
+  printf "$M_SC_LANG\n" "$MSG_LANG"
+  printf '%s\n' "$M_SC_ADDR"
+  print_server_lines
+  exit 0
+fi
 
 # 1. Termux 探测
 if [ -n "${PREFIX:-}" ] && [ -d "$PREFIX" ]; then
   :
 elif [ -d /data/data/com.termux/files/usr ]; then
   PREFIX=/data/data/com.termux/files/usr
-  echo "未设置 \$PREFIX，回退到 Termux 默认路径：$PREFIX"
+  printf "$M_PREFIX_FALLBACK\n" "$PREFIX"
 else
-  echo "仅支持 Termux（目标 aarch64）"
+  printf '%s\n' "$M_TERMUX_ONLY"
   exit 1
 fi
 
 # 2. 架构信息（仅诊断输出，绝不作为分支依据）
-echo "架构：$(uname -m)"
+printf "$M_ARCH\n" "$(uname -m)"
 if command -v termux-info >/dev/null 2>&1; then
   echo "--- termux-info 诊断 ---"
   termux-info | sed -n '1,8p'
@@ -76,7 +211,7 @@ fi
 
 # 3. 包管理器探测与引导
 if command -v pacman >/dev/null 2>&1; then
-  echo "检测到包管理器：pacman"
+  printf '%s\n' "$M_PACMAN"
   P="$PREFIX"
   PACMAN_CONF="$P/etc/pacman.conf"
   ML_CONF="$P/etc/pacman.d/hope2333-mirrorlist.conf"
@@ -171,7 +306,7 @@ inhope { next }
       exit 1
     fi
   else
-    echo "hope2333-mirrorlist 已是最新（$inst），跳过重装"
+    printf "$M_ML_UP2DATE\n" "$inst"
   fi
 
   # ── E. 终态收敛：无 [hope2333] 节 + EOF Include ───────────────────────
@@ -221,10 +356,10 @@ inhope { next }
     echo "错误: [hope2333] 统一源未生效（检查网络，或按 https://hope2333.github.io/wiki/guides/software-source.html 手动配置）"
     exit 1
   fi
-  echo "[hope2333] 统一源已生效（$(pacman -Sl hope2333 | wc -l) 个包）"
+  printf "$M_UNIFIED_OK\n" "$(pacman -Sl hope2333 | wc -l)"
 
 elif command -v apt >/dev/null 2>&1; then
-  echo "检测到 plain Termux (apt)。本仓库为 pacman 源，apt 客户端配置如下（flat 源，包走 Release CDN）："
+  printf '%s\n' "$M_APT"
   BOOTSTRAP_LIST="$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list"
   mkdir -p "$(dirname "$BOOTSTRAP_LIST")"
   if [ ! -f "$BOOTSTRAP_LIST" ] || ! grep -q 'hope2333.github.io/repo/Termux/apt' "$BOOTSTRAP_LIST"; then
@@ -233,13 +368,13 @@ elif command -v apt >/dev/null 2>&1; then
   apt update
   apt install -y hope2333-mirrorlist
 else
-  echo "未找到 pacman 或 apt，无法继续"
+  printf '%s\n' "$M_NO_PM"
   exit 1
 fi
 
 # 4. 可选：--install <pkg>（配置完成后追加安装步骤）
 if [ -n "$INSTALL_PKG" ]; then
-  echo "=== 安装 $INSTALL_PKG ==="
+  printf "$M_INSTALLING\n" "$INSTALL_PKG"
   if command -v pacman >/dev/null 2>&1; then
     pacman -Sy
     pacman -S --noconfirm "$INSTALL_PKG"
