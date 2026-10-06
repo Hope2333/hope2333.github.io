@@ -437,6 +437,12 @@ jobs:
           sed -i "s/__BUILD_STAMP__/$(date -u '+%Y-%m-%d %H:%M:%S') UTC/" _site/index.html
           ! grep -q '__BUILD_STAMP__' _site/index.html
 
+      - name: Verify site structure
+        run: |
+          set -euo pipefail
+          # 部署前门：五语 html / lang 抽样 / 跳转页对账 / repo+db / lang-map 双向一致性
+          bash tools/verify-site-structure.sh
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
