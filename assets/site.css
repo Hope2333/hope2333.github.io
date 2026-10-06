@@ -51,6 +51,8 @@ h1 .accent{color:var(--mauve)}
 .cta a.repo:hover{background:color-mix(in srgb,var(--blue) 14%,transparent);transform:translateY(-2px)}
 .cta a.gh{color:var(--mauve);border-color:color-mix(in srgb,var(--mauve) 45%,transparent)}
 .cta a.gh:hover{background:color-mix(in srgb,var(--mauve) 14%,transparent);transform:translateY(-2px)}
+/* 亲密 Proximity：🌐/☯ 折叠按钮成组跟随行尾 —— 首个按钮吃掉剩余空隙，与左侧动作按钮留出大间隔，两按钮间保持 gap 小间距 */
+.cta #lang-btn{margin-left:auto}
 
 /* == 亲密 Proximity：头像与主题切换 —— 头像紧邻主标题成组，☯ 按钮与 CTA 同排呼应 == */
 .head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:var(--s4)}
