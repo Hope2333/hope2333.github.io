@@ -110,7 +110,7 @@ apt upgrade             # 升级全部软件包
 apt search <关键词>     # 搜索软件包
 ```
 
-日常升级见 [更新指引](update.html)。
+日常升级见 [更新指引](update.md)。
 
 ## Roadmap
 

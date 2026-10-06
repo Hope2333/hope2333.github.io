@@ -73,7 +73,7 @@ curl -fsSL https://hope2333.github.io/repo/install.sh | sh -s -- --install codeg
 
 ## 未入源项目（GitHub 手动安装）
 
-尚未入源的项目，请前往对应项目的 GitHub 仓库获取，安装方式见仓库 README。各项目的仓库链接见 [项目索引](../index.html)。
+尚未入源的项目，请前往对应项目的 GitHub 仓库获取，安装方式见仓库 README。各项目的仓库链接见 [项目索引](../index.md)。
 
 ## 验证安装
 

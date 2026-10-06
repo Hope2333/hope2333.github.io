@@ -35,12 +35,12 @@ pacman -S opencode     # v2 原生主线
 pacman -S opencode1    # v1 原生主线（与 v2 共存）
 ```
 
-详见[安装指南](install.html)。
+详见[安装指南](install.md)。
 
 ## 链接
 
 - [GitHub](https://github.com/Hope2333/opencode-termux)
-- [安装指南](install.html)
-- [从源码构建](build.html)
-- [架构说明](architecture.html)
+- [安装指南](install.md)
+- [从源码构建](build.md)
+- [架构说明](architecture.md)
 - [发布列表（不钉 tag）](https://github.com/Hope2333/opencode-termux/releases)

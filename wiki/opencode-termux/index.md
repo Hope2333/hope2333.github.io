@@ -35,12 +35,12 @@ pacman -S opencode     # v2 native mainline
 pacman -S opencode1    # v1 native mainline (coexists with v2)
 ```
 
-See [install guide](install.html) for details.
+See [install guide](install.md) for details.
 
 ## Links
 
 - [GitHub](https://github.com/Hope2333/opencode-termux)
-- [Install guide](install.html)
-- [Build from source](build.html)
-- [Architecture](architecture.html)
+- [Install guide](install.md)
+- [Build from source](build.md)
+- [Architecture](architecture.md)
 - [Releases (no tag pin)](https://github.com/Hope2333/opencode-termux/releases)

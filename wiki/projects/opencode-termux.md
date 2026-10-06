@@ -21,7 +21,7 @@ pacman -S opencode-glibc
 pacman -S opencode-compressed
 ```
 
-详见 [wiki 安装指南](/wiki/opencode-termux/install.html)。
+详见 [wiki 安装指南](/wiki/opencode-termux/install.md)。
 
 ## 链接
 
