@@ -5,11 +5,11 @@ lang: zh-TW
 
 # exagear-obb
 
-> ExaGear OBB builder scripts
+> ExaGear OBB 構建腳本
 
 ## 簡介
 
-ExaGear OBB builder scripts。項目提供一組用於構建 ExaGear OBB 的腳本，簡化 ExaGear 相關文件的打包流程。
+ExaGear OBB 構建腳本。項目提供一組用於構建 ExaGear OBB 的腳本，簡化 ExaGear 相關文件的打包流程。
 
 ## 安裝
 

@@ -5,11 +5,11 @@ lang: es
 
 # codebuff-termux
 
-> Codebuff AI coding assistant for Termux
+> Asistente de programación con IA Codebuff para Termux
 
 ## Introducción
 
-Codebuff AI coding assistant for Termux. El proyecto lleva Codebuff, un asistente de programación con IA, a la plataforma Termux para que pueda usarse cómodamente en dispositivos Android.
+Asistente de programación con IA Codebuff para Termux. El proyecto lleva Codebuff, un asistente de programación con IA, a la plataforma Termux para que pueda usarse cómodamente en dispositivos Android.
 
 ## Instalación
 

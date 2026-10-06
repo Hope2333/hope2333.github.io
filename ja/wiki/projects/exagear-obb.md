@@ -5,11 +5,11 @@ lang: ja
 
 # exagear-obb
 
-> ExaGear OBB builder scripts
+> ExaGear OBB ビルドスクリプト
 
 ## 概要
 
-ExaGear OBB builder scripts。ExaGear OBB を構築するためのスクリプト集で、ExaGear 関連ファイルのパッケージング手順を簡素化します。
+ExaGear OBB ビルドスクリプト。ExaGear OBB を構築するためのスクリプト集で、ExaGear 関連ファイルのパッケージング手順を簡素化します。
 
 ## インストール
 

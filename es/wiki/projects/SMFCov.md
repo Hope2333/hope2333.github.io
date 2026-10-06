@@ -5,11 +5,11 @@ lang: es
 
 # SMFCov
 
-> Shell-based media converter
+> Conversor de medios basado en Shell
 
 ## Introducción
 
-Shell-based media converter. SMFCov es una herramienta de conversión de formatos multimedia basada en Shell, que encadena mediante scripts los flujos de conversión multimedia más habituales.
+Conversor de medios basado en Shell. SMFCov es una herramienta de conversión de formatos multimedia basada en Shell, que encadena mediante scripts los flujos de conversión multimedia más habituales.
 
 ## Instalación
 

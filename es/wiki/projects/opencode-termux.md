@@ -5,7 +5,7 @@ lang: es
 
 # opencode-termux
 
-> OpenCode on Termux/Android, the flagship project
+> OpenCode en Termux/Android, el proyecto insignia
 
 ## Introducción
 

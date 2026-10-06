@@ -5,7 +5,7 @@ lang: ja
 
 # oh-my-litecode
 
-> AI CLI toolchain manager (OML)
+> AI CLI ツールチェーンマネージャー（OML）
 
 ## 概要
 

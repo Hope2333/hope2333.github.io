@@ -5,7 +5,7 @@ lang: zh-TW
 
 # enve
 
-> 2D animation software (fork)
+> 2D 動畫軟件（fork）
 
 ## 簡介
 

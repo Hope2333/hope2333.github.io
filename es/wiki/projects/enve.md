@@ -5,11 +5,11 @@ lang: es
 
 # enve
 
-> 2D animation software (fork)
+> Software de animación 2D (fork)
 
 ## Introducción
 
-2D animation software (fork). Este proyecto es un fork del software de animación 2D enve, mantenido y adaptado a partir de la obra original.
+Software de animación 2D (fork). Este proyecto es un fork del software de animación 2D enve, mantenido y adaptado a partir de la obra original.
 
 ## Instalación
 

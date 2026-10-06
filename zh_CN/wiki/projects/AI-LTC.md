@@ -5,11 +5,11 @@ lang: zh-CN
 
 # AI-LTC
 
-> Long-term AI coordination framework
+> 面向长期协作的 AI 协调框架
 
 ## 简介
 
-Long-term AI coordination framework。项目是一个面向长期协作的 AI 协调框架，用于组织和管理 AI 之间的长程协作。
+面向长期协作的 AI 协调框架。项目是一个面向长期协作的 AI 协调框架，用于组织和管理 AI 之间的长程协作。
 
 ## 安装
 

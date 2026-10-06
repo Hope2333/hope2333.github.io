@@ -1,10 +1,10 @@
 # exagear-obb
 
-> ExaGear OBB builder scripts
+> ExaGear OBB 构建脚本
 
 ## 简介
 
-ExaGear OBB builder scripts。项目提供一组用于构建 ExaGear OBB 的脚本，简化 ExaGear 相关文件的打包流程。
+ExaGear OBB 构建脚本。项目提供一组用于构建 ExaGear OBB 的脚本，简化 ExaGear 相关文件的打包流程。
 
 ## 安装
 

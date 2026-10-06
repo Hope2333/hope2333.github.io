@@ -5,11 +5,11 @@ lang: ja
 
 # codebuff-termux
 
-> Codebuff AI coding assistant for Termux
+> Termux 向け Codebuff AI コーディングアシスタント
 
 ## 概要
 
-Codebuff AI coding assistant for Termux。AI コーディングアシスタント「Codebuff」を Termux プラットフォームに移植し、Android 端末上で手軽に使えるようにします。
+Termux 向け Codebuff AI コーディングアシスタント。AI コーディングアシスタント「Codebuff」を Termux プラットフォームに移植し、Android 端末上で手軽に使えるようにします。
 
 ## インストール
 

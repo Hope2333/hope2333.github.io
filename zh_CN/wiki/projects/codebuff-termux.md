@@ -5,11 +5,11 @@ lang: zh-CN
 
 # codebuff-termux
 
-> Codebuff AI coding assistant for Termux
+> Termux 版 Codebuff AI 编程助手
 
 ## 简介
 
-Codebuff AI coding assistant for Termux。项目把 Codebuff 这款 AI 编程助手带到 Termux 平台，方便在 Android 设备上使用。
+Termux 版 Codebuff AI 编程助手。项目把 Codebuff 这款 AI 编程助手带到 Termux 平台，方便在 Android 设备上使用。
 
 ## 安装
 

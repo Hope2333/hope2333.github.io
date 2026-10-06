@@ -5,7 +5,7 @@ lang: zh-TW
 
 # opencode-termux
 
-> OpenCode on Termux/Android, the flagship project
+> OpenCode on Termux/Android，旗艦項目
 
 ## 簡介
 

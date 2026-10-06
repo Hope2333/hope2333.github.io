@@ -5,11 +5,11 @@ lang: ja
 
 # freebuff-termux
 
-> Freebuff AI coding assistant for Termux
+> Termux 向け Freebuff AI コーディングアシスタント
 
 ## 概要
 
-Freebuff AI coding assistant for Termux。AI コーディングアシスタント「Freebuff」を Termux プラットフォームに移植し、Android 端末上で手軽に使えるようにします。
+Termux 向け Freebuff AI コーディングアシスタント。AI コーディングアシスタント「Freebuff」を Termux プラットフォームに移植し、Android 端末上で手軽に使えるようにします。
 
 ## インストール
 

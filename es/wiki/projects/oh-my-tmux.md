@@ -5,11 +5,11 @@ lang: es
 
 # oh-my-tmux
 
-> Lightweight Oh My Tmux configuration with performance tweaks
+> Configuración ligera de Oh My Tmux con ajustes de rendimiento
 
 ## Introducción
 
-Lightweight Oh My Tmux configuration with performance tweaks. El proyecto ofrece una configuración ligera de Oh My Tmux con ajustes de rendimiento, de modo que tmux funcione con fluidez incluso en dispositivos de bajo rendimiento.
+Configuración ligera de Oh My Tmux con ajustes de rendimiento. El proyecto ofrece una configuración ligera de Oh My Tmux con ajustes de rendimiento, de modo que tmux funcione con fluidez incluso en dispositivos de bajo rendimiento.
 
 ## Instalación
 

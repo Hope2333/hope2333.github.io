@@ -5,11 +5,11 @@ lang: es
 
 # tsac-ng
 
-> Multi-backend neural audio codec in C
+> Códec de audio neuronal multi-backend escrito en C
 
 ## Introducción
 
-Multi-backend neural audio codec in C. El proyecto es un códec de audio neuronal con múltiples backends implementado en C, compatible con varios esquemas de inferencia de backend.
+Códec de audio neuronal multi-backend escrito en C. El proyecto es un códec de audio neuronal con múltiples backends implementado en C, compatible con varios esquemas de inferencia de backend.
 
 ## Instalación
 

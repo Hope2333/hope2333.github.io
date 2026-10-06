@@ -5,11 +5,11 @@ lang: zh-CN
 
 # tsac-ng
 
-> Multi-backend neural audio codec in C
+> C 实现的多后端神经音频编解码器
 
 ## 简介
 
-Multi-backend neural audio codec in C。项目是一个用 C 实现的多后端神经音频编解码器，支持多种后端推理方案。
+C 实现的多后端神经音频编解码器。项目是一个用 C 实现的多后端神经音频编解码器，支持多种后端推理方案。
 
 ## 安装
 

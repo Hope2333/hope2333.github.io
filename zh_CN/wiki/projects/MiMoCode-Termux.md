@@ -5,7 +5,7 @@ lang: zh-CN
 
 # MiMoCode-Termux
 
-> MiMoCode for Termux, based on opencode-termux
+> MiMoCode for Termux，基于 opencode-termux
 
 ## 简介
 

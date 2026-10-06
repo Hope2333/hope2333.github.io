@@ -5,11 +5,11 @@ lang: zh-TW
 
 # freebuff-termux
 
-> Freebuff AI coding assistant for Termux
+> Termux 版 Freebuff AI 編程助手
 
 ## 簡介
 
-Freebuff AI coding assistant for Termux。項目把 Freebuff 這款 AI 編程助手帶到 Termux 平臺，方便在 Android 設備上使用。
+Termux 版 Freebuff AI 編程助手。項目把 Freebuff 這款 AI 編程助手帶到 Termux 平臺，方便在 Android 設備上使用。
 
 ## 安裝
 

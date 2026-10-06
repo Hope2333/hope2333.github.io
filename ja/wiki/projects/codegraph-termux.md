@@ -5,7 +5,7 @@ lang: ja
 
 # codegraph-termux
 
-> Local-first code intelligence for AI agents (MCP)
+> AI エージェント向けのローカルファーストなコードインテリジェンス（MCP）
 
 ## 概要
 

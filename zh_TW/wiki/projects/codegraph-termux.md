@@ -5,7 +5,7 @@ lang: zh-TW
 
 # codegraph-termux
 
-> Local-first code intelligence for AI agents (MCP)
+> 面向 AI 代理的本地優先代碼智能（MCP）
 
 ## 簡介
 

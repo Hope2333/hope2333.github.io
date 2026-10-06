@@ -5,11 +5,11 @@ lang: es
 
 # oh-my-litecode
 
-> AI CLI toolchain manager (OML)
+> Gestor de la cadena de herramientas de IA para CLI (OML)
 
 ## Introducción
 
-AI CLI toolchain manager (OML). El proyecto es un gestor de cadenas de herramientas CLI de IA, pensado para administrar de forma unificada los distintos asistentes CLI de IA.
+Gestor de la cadena de herramientas de IA para CLI (OML). El proyecto es un gestor de cadenas de herramientas CLI de IA, pensado para administrar de forma unificada los distintos asistentes CLI de IA.
 
 ## Instalación
 

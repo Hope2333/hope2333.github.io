@@ -5,11 +5,11 @@ lang: es
 
 # bun-termux
 
-> Bun runtime for Termux
+> Runtime de Bun para Termux
 
 ## Introducción
 
-Bun runtime for Termux. El proyecto proporciona el runtime de Bun para la plataforma Termux, facilitando la ejecución de Bun y de las herramientas de su ecosistema en dispositivos Android.
+Runtime de Bun para Termux. El proyecto proporciona el runtime de Bun para la plataforma Termux, facilitando la ejecución de Bun y de las herramientas de su ecosistema en dispositivos Android.
 
 ## Instalación
 

@@ -5,7 +5,7 @@ lang: ja
 
 # enve
 
-> 2D animation software (fork)
+> 2D アニメーションソフトウェア（フォーク）
 
 ## 概要
 

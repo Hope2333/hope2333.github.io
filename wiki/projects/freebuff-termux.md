@@ -1,10 +1,10 @@
 # freebuff-termux
 
-> Freebuff AI coding assistant for Termux
+> Termux 版 Freebuff AI 编程助手
 
 ## 简介
 
-Freebuff AI coding assistant for Termux。项目把 Freebuff 这款 AI 编程助手带到 Termux 平台，方便在 Android 设备上使用。
+Termux 版 Freebuff AI 编程助手。项目把 Freebuff 这款 AI 编程助手带到 Termux 平台，方便在 Android 设备上使用。
 
 ## 安装
 

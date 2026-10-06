@@ -5,11 +5,11 @@ lang: zh-TW
 
 # bun-termux
 
-> Bun runtime for Termux
+> Termux 版 Bun 運行時
 
 ## 簡介
 
-Bun runtime for Termux。項目爲 Termux 平臺提供 Bun 運行時，方便在 Android 設備上運行 Bun 及其生態工具。
+Termux 版 Bun 運行時。項目爲 Termux 平臺提供 Bun 運行時，方便在 Android 設備上運行 Bun 及其生態工具。
 
 ## 安裝
 

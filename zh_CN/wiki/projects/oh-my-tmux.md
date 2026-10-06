@@ -5,11 +5,11 @@ lang: zh-CN
 
 # oh-my-tmux
 
-> Lightweight Oh My Tmux configuration with performance tweaks
+> 轻量化 Oh My Tmux 配置，附带性能调优
 
 ## 简介
 
-Lightweight Oh My Tmux configuration with performance tweaks。项目提供一套轻量化的 Oh My Tmux 配置，附带性能调优，让 tmux 在低性能设备上也能流畅使用。
+轻量化 Oh My Tmux 配置，附带性能调优。项目提供一套轻量化的 Oh My Tmux 配置，附带性能调优，让 tmux 在低性能设备上也能流畅使用。
 
 ## 安装
 

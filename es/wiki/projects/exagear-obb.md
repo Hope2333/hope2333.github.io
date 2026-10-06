@@ -5,11 +5,11 @@ lang: es
 
 # exagear-obb
 
-> ExaGear OBB builder scripts
+> Scripts de construcción de OBB para ExaGear
 
 ## Introducción
 
-ExaGear OBB builder scripts. El proyecto ofrece un conjunto de scripts para construir OBB de ExaGear, simplificando el empaquetado de los archivos relacionados con ExaGear.
+Scripts de construcción de OBB para ExaGear. El proyecto ofrece un conjunto de scripts para construir OBB de ExaGear, simplificando el empaquetado de los archivos relacionados con ExaGear.
 
 ## Instalación
 

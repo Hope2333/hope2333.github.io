@@ -5,11 +5,11 @@ lang: es
 
 # AI-LTC
 
-> Long-term AI coordination framework
+> Framework de coordinación de IA a largo plazo
 
 ## Introducción
 
-Long-term AI coordination framework. AI-LTC es un framework de coordinación para IA orientado a la colaboración a largo plazo, pensado para organizar y gestionar la colaboración de largo recorrido entre agentes de IA.
+Framework de coordinación de IA a largo plazo. AI-LTC es un framework de coordinación para IA orientado a la colaboración a largo plazo, pensado para organizar y gestionar la colaboración de largo recorrido entre agentes de IA.
 
 ## Instalación
 

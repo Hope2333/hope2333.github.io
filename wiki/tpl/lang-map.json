@@ -339,5 +339,16 @@
       "ja": "ja/wiki/opencode-termux/release/Push261005",
       "es": "es/wiki/opencode-termux/release/Push261005"
     }
+  },
+  "wiki/docs": {
+    "title": "Docs",
+    "status": "full",
+    "alternates": {
+      "en": "en/wiki/docs",
+      "zh_CN": "zh_CN/wiki/docs",
+      "zh_TW": "zh_TW/wiki/docs",
+      "ja": "ja/wiki/docs",
+      "es": "es/wiki/docs"
+    }
   }
 }

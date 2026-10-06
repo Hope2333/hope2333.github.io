@@ -1,6 +1,6 @@
 # oh-my-litecode
 
-> AI CLI toolchain manager (OML)
+> AI CLI 工具链管理器（OML）
 
 ## 简介
 

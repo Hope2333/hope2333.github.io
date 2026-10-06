@@ -5,7 +5,7 @@ lang: zh-TW
 
 # oh-my-litecode
 
-> AI CLI toolchain manager (OML)
+> AI CLI 工具鏈管理器（OML）
 
 ## 簡介
 

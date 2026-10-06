@@ -5,11 +5,11 @@ lang: es
 
 # MirrorGuard
 
-> C-based file integrity checker with TUI
+> Verificador de integridad de archivos en C con TUI
 
 ## Introducción
 
-C-based file integrity checker with TUI. MirrorGuard es una herramienta de verificación de integridad de archivos escrita en C, que incorpora una interfaz TUI para consultar cómodamente los resultados de la verificación de forma interactiva.
+Verificador de integridad de archivos en C con TUI. MirrorGuard es una herramienta de verificación de integridad de archivos escrita en C, que incorpora una interfaz TUI para consultar cómodamente los resultados de la verificación de forma interactiva.
 
 ## Instalación
 

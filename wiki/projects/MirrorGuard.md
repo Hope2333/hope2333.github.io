@@ -1,10 +1,10 @@
 # MirrorGuard
 
-> C-based file integrity checker with TUI
+> 基于 C 的文件完整性校验工具，带 TUI 界面
 
 ## 简介
 
-C-based file integrity checker with TUI。项目是一个用 C 实现的文件完整性校验工具，附带 TUI 界面，方便交互式查看校验结果。
+基于 C 的文件完整性校验工具，带 TUI 界面。项目是一个用 C 实现的文件完整性校验工具，附带 TUI 界面，方便交互式查看校验结果。
 
 ## 安装
 

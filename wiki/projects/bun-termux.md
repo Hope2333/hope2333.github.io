@@ -1,10 +1,10 @@
 # bun-termux
 
-> Bun runtime for Termux
+> Termux 版 Bun 运行时
 
 ## 简介
 
-Bun runtime for Termux。项目为 Termux 平台提供 Bun 运行时，方便在 Android 设备上运行 Bun 及其生态工具。
+Termux 版 Bun 运行时。项目为 Termux 平台提供 Bun 运行时，方便在 Android 设备上运行 Bun 及其生态工具。
 
 ## 安装
 

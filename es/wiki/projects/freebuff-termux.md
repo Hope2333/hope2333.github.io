@@ -5,11 +5,11 @@ lang: es
 
 # freebuff-termux
 
-> Freebuff AI coding assistant for Termux
+> Asistente de programación con IA Freebuff para Termux
 
 ## Introducción
 
-Freebuff AI coding assistant for Termux. El proyecto lleva Freebuff, un asistente de programación con IA, a la plataforma Termux para que pueda usarse cómodamente en dispositivos Android.
+Asistente de programación con IA Freebuff para Termux. El proyecto lleva Freebuff, un asistente de programación con IA, a la plataforma Termux para que pueda usarse cómodamente en dispositivos Android.
 
 ## Instalación
 

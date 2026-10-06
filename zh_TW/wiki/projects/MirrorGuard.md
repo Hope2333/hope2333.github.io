@@ -5,11 +5,11 @@ lang: zh-TW
 
 # MirrorGuard
 
-> C-based file integrity checker with TUI
+> 基於 C 的文件完整性校驗工具，帶 TUI 界面
 
 ## 簡介
 
-C-based file integrity checker with TUI。項目是一個用 C 實現的文件完整性校驗工具，附帶 TUI 界面，方便交互式查看校驗結果。
+基於 C 的文件完整性校驗工具，帶 TUI 界面。項目是一個用 C 實現的文件完整性校驗工具，附帶 TUI 界面，方便交互式查看校驗結果。
 
 ## 安裝
 

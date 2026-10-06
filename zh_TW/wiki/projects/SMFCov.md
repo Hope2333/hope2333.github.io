@@ -5,11 +5,11 @@ lang: zh-TW
 
 # SMFCov
 
-> Shell-based media converter
+> 基於 Shell 的媒體轉換工具
 
 ## 簡介
 
-Shell-based media converter。項目是一個基於 Shell 的媒體格式轉換工具，用腳本串聯常見媒體轉換流程。
+基於 Shell 的媒體轉換工具。項目是一個基於 Shell 的媒體格式轉換工具，用腳本串聯常見媒體轉換流程。
 
 ## 安裝
 

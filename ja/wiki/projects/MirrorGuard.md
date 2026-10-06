@@ -5,11 +5,11 @@ lang: ja
 
 # MirrorGuard
 
-> C-based file integrity checker with TUI
+> TUI 付きの C 製ファイル整合性チェッカー
 
 ## 概要
 
-C-based file integrity checker with TUI。C で実装されたファイル整合性チェッカーで、TUI を備えており、検証結果を対話的に確認できます。
+TUI 付きの C 製ファイル整合性チェッカー。C で実装されたファイル整合性チェッカーで、TUI を備えており、検証結果を対話的に確認できます。
 
 ## インストール
 

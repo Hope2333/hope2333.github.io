@@ -5,11 +5,11 @@ lang: es
 
 # codegraph-termux
 
-> Local-first code intelligence for AI agents (MCP)
+> Inteligencia de código local primero para agentes de IA (MCP)
 
 ## Introducción
 
-Local-first code intelligence for AI agents (MCP). El proyecto ofrece capacidades de inteligencia de código con enfoque local-first para agentes de IA: la integración se realiza mediante el protocolo MCP, y tanto la indexación como el análisis del código se ejecutan íntegramente en local.
+Inteligencia de código local primero para agentes de IA (MCP). El proyecto ofrece capacidades de inteligencia de código con enfoque local-first para agentes de IA: la integración se realiza mediante el protocolo MCP, y tanto la indexación como el análisis del código se ejecutan íntegramente en local.
 
 ## Instalación
 

@@ -5,11 +5,11 @@ lang: ja
 
 # oh-my-tmux
 
-> Lightweight Oh My Tmux configuration with performance tweaks
+> 軽量化した Oh My Tmux 設定、パフォーマンスチューニング付き
 
 ## 概要
 
-Lightweight Oh My Tmux configuration with performance tweaks。パフォーマンスチューニングを施した軽量版の Oh My Tmux 設定集で、低スペック端末でも tmux を快適に使えるようにします。
+軽量化した Oh My Tmux 設定、パフォーマンスチューニング付き。パフォーマンスチューニングを施した軽量版の Oh My Tmux 設定集で、低スペック端末でも tmux を快適に使えるようにします。
 
 ## インストール
 

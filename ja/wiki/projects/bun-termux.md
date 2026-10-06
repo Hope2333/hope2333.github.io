@@ -5,11 +5,11 @@ lang: ja
 
 # bun-termux
 
-> Bun runtime for Termux
+> Termux 向け Bun ランタイム
 
 ## 概要
 
-Bun runtime for Termux。Termux プラットフォーム向けに Bun ランタイムを提供し、Android 端末上で Bun とそのエコシステムのツールを手軽に実行できるようにします。
+Termux 向け Bun ランタイム。Termux プラットフォーム向けに Bun ランタイムを提供し、Android 端末上で Bun とそのエコシステムのツールを手軽に実行できるようにします。
 
 ## インストール
 

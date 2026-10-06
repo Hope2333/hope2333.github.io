@@ -5,7 +5,7 @@ lang: ja
 
 # MiMoCode-Termux
 
-> MiMoCode for Termux, based on opencode-termux
+> Termux 向け MiMoCode、opencode-termux ベース
 
 ## 概要
 
