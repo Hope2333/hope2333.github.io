@@ -46,12 +46,9 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get install -y pandoc
-          mkdir -p _site/wiki/guides _site/wiki/projects
-          find wiki -name '*.md' -not -path 'wiki/tpl/*' | while read -r f; do
-            out="_site/${f%.md}.html"
-            mkdir -p "$(dirname "$out")"
-            pandoc "$f" -f gfm -t html5 --template wiki/tpl/doc.html --metadata lang=zh-CN --metadata title="$(basename "$f" .md)" -o "$out"
-          done
+          # 渲染唯一真源 tools/render-one.sh：lang 按目录推断（不再全局硬编码
+          # zh-CN），find 范围含根 wiki/ 与各 <LANG>/ 目录（repo/ 不渲染）。
+          bash tools/render-one.sh --all
 
       - name: Fetch release assets
         env:
