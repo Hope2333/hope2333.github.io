@@ -9,6 +9,7 @@
   --base:#1e1e2e;--mantle:#181825;--crust:#11111b;
   --text:#cdd6f4;--subtext0:#a6adc8;
   --mauve:#cba6f7;--blue:#89b4fa;--green:#a6e3a1;--red:#f38ba8;--peach:#fab387;
+  --pink:#f5c2e7;--teal:#94e2d5;
   --radius:12px;
   --s1:.5rem;--s2:.75rem;--s3:1rem;--s4:1.5rem;--s5:2rem;--s6:3rem;
   --mono:"JetBrains Mono","Fira Code",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -20,12 +21,22 @@
   --base:#ffffff;--mantle:#fafafa;--crust:#f0f0f1;
   --text:#4c4f69;--subtext0:#6c6f85;
   --mauve:#8839ef;--blue:#1e66f5;--green:#40a02b;--red:#d20f39;--peach:#fe640b;
+  --pink:#ea76cb;--teal:#179299;
 }
 
 /* == 重复 Repetition：全局复位与正文基线，统一盒模型消除浏览器差异 == */
 *{box-sizing:border-box;margin:0;padding:0}
 ::selection{background:color-mix(in srgb,var(--red) 32%,transparent)}
 body{background:var(--base);color:var(--text);font-family:var(--sans);line-height:1.6;min-height:100vh;transition:background-color .25s ease,color .25s ease}
+
+/* == 动效：动态背景 —— 两个低透明度辉光斑沉底（z-index:-1、pointer-events:none），
+ * 仅 transform 漂移走合成器路径，不重排不重绘文字；极低速 + 超长周期，克制不抢内容。
+ * 不透明度 ≤ .16，深/浅主题下均不改写正文底色，对比度不受影响。 == */
+body::before,body::after{content:"";position:fixed;z-index:-1;pointer-events:none;width:72vmax;height:72vmax;border-radius:50%;filter:blur(64px);opacity:.14;will-change:transform}
+body::before{top:-26vmax;left:-20vmax;background:radial-gradient(circle closest-side,color-mix(in srgb,var(--mauve) 75%,transparent),transparent);animation:bg-drift-a 68s ease-in-out infinite alternate}
+body::after{bottom:-30vmax;right:-22vmax;background:radial-gradient(circle closest-side,color-mix(in srgb,var(--blue) 75%,transparent),transparent);animation:bg-drift-b 52s ease-in-out infinite alternate}
+@keyframes bg-drift-a{from{transform:translate3d(0,0,0) scale(1.06)}to{transform:translate3d(-9vmax,5vmax,0) scale(.96)}}
+@keyframes bg-drift-b{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(8vmax,-6vmax,0) scale(1.12)}}
 
 /* == 对齐 Alignment：居中主容器，确立全页统一栅格起点与最大行宽 == */
 .wrap{max-width:66rem;margin:0 auto;padding:var(--s6) var(--s4) var(--s5)}
@@ -67,6 +78,16 @@ h1 .accent{color:var(--mauve)}
 
 /* == 亲密 Proximity：分组区块 —— 大间距分隔三大板块，组头与计数成对紧邻 == */
 main{margin-top:var(--s6)}
+/* == 层级 IA：大类（技术类/艺术类）→ 门类 → 项目卡 三层结构 == */
+.category{margin-bottom:var(--s6);animation:rise .5s ease-out both}
+.category:last-child{margin-bottom:0}
+.cat-art{animation-delay:.12s}
+.cat-head{font-family:var(--mono);font-size:1.4rem;font-weight:700;letter-spacing:.06em;display:flex;align-items:center;gap:.55em;padding-bottom:var(--s2);border-bottom:1px solid color-mix(in srgb,var(--text) 14%,transparent);margin-bottom:var(--s4)}
+.cat-head::before{content:"";width:.55em;height:.55em;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--cat-c1,var(--blue)),var(--cat-c2,var(--mauve)))}
+.cat-tech .cat-head{--cat-c1:var(--blue);--cat-c2:var(--green)}
+.cat-art .cat-head{--cat-c1:var(--peach);--cat-c2:var(--pink)}
+.category .group{margin-bottom:var(--s4)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .group{margin-bottom:var(--s6);position:relative}
 .group-head{display:flex;align-items:baseline;gap:var(--s2);cursor:pointer;list-style:none}
 .group-head::-webkit-details-marker{display:none}
@@ -74,13 +95,17 @@ main{margin-top:var(--s6)}
 .group-head:hover h2{opacity:.82}
 .count{font-family:var(--mono);font-size:.75rem;padding:.1rem .55rem;border-radius:999px;border:1px solid}
 
-/* == 对比 Contrast：分类色编码 —— Termux=蓝 / AI=紫 / TA=橙，标题与计数同色呼应 == */
+/* == 对比 Contrast：分类色编码 —— Termux=蓝 / AI=紫 / 系统=橙 / 美术=粉 / 音乐=青，标题与计数同色呼应 == */
 .g-termux h2{color:var(--blue)}
 .g-termux .count{color:var(--blue);border-color:color-mix(in srgb,var(--blue) 45%,transparent)}
 .g-ai h2{color:var(--mauve)}
 .g-ai .count{color:var(--mauve);border-color:color-mix(in srgb,var(--mauve) 45%,transparent)}
-.g-ta h2{color:var(--peach)}
-.g-ta .count{color:var(--peach);border-color:color-mix(in srgb,var(--peach) 45%,transparent)}
+.g-sys h2{color:var(--peach)}
+.g-sys .count{color:var(--peach);border-color:color-mix(in srgb,var(--peach) 45%,transparent)}
+.g-art-visual h2{color:var(--pink)}
+.g-art-visual .count{color:var(--pink);border-color:color-mix(in srgb,var(--pink) 45%,transparent)}
+.g-art-audio h2{color:var(--teal)}
+.g-art-audio .count{color:var(--teal);border-color:color-mix(in srgb,var(--teal) 45%,transparent)}
 
 /* == 亲密 Proximity：卡片网格 —— 网格间距与卡片内边距让同类项目成组；卡片本身为重复组件 == */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:var(--s3);margin-top:var(--s3)}
@@ -88,12 +113,16 @@ main{margin-top:var(--s6)}
 .card:hover{transform:translateY(-2px)}
 .g-termux .card:hover{border-color:var(--blue)}
 .g-ai .card:hover{border-color:var(--mauve)}
-.g-ta .card:hover{border-color:var(--peach)}
+.g-sys .card:hover{border-color:var(--peach)}
+.g-art-visual .card:hover{border-color:var(--pink)}
+.g-art-audio .card:hover{border-color:var(--teal)}
 .card h3{font-family:var(--mono);font-size:.95rem;font-weight:600}
 .card h3 a{color:var(--text);text-decoration:none}
 .g-termux .card h3 a:hover{color:var(--blue)}
 .g-ai .card h3 a:hover{color:var(--mauve)}
-.g-ta .card h3 a:hover{color:var(--peach)}
+.g-sys .card h3 a:hover{color:var(--peach)}
+.g-art-visual .card h3 a:hover{color:var(--pink)}
+.g-art-audio .card h3 a:hover{color:var(--teal)}
 .card p{color:var(--subtext0);font-size:.86rem;margin-top:var(--s1)}
 
 /* == 交互：整卡可点 / ± 指示 / 折叠堆叠条（deck bars）/ 网格淡出 —— C9 首页交互，全部走令牌 == */
@@ -107,7 +136,7 @@ details[open] .group-head::after{content:"−"}
 .group:has(details:not([open]))::after{opacity:.25;transform:scale(.96)}
 .grid{transition:opacity .2s ease-out}
 .grid.is-collapsing{opacity:0}
-@media (prefers-reduced-motion: reduce){.grid,.group::before,.group::after,.group-head::after{transition:none}}
+@media (prefers-reduced-motion: reduce){.grid,.group::before,.group::after,.group-head::after{transition:none}.category{animation:none}body::before,body::after{animation:none}}
 
 /* == 对齐 + 亲密：页脚 —— 分隔线对齐主轴，导航与 colophon 依次聚拢 == */
 footer{border-top:1px solid color-mix(in srgb,var(--text) 9%,transparent);margin-top:var(--s6);padding-top:var(--s4);transition:border-color .25s ease}
@@ -153,3 +182,9 @@ footer nav a:hover{color:var(--green)}
 .lang-menu a:hover{background:color-mix(in srgb,var(--text) 10%,transparent)}
 .lang-menu a[aria-current="true"]{color:var(--mauve);font-weight:600}
 .lang-menu a[aria-current="true"]::after{content:"✓"}
+
+/* == 缺陷修复：「← 返回首页」返回链接（wiki 顶部 nav.wiki-top 与 repo 子页 a.back）此前无样式，
+ * 落到浏览器默认蓝，深色主题下对比度不足（≈2.4:1）。统一改走主题令牌 --blue：
+ * 深（#89b4fa on #1e1e2e）≈7.8:1、浅（#1e66f5 on #ffffff）≈4.9:1，均 ≥ WCAG AA 4.5:1。 == */
+.wiki-top a,a.back{color:var(--blue);text-decoration:none;font-family:var(--mono);font-size:.9rem}
+.wiki-top a:hover,a.back:hover{color:var(--mauve)}
