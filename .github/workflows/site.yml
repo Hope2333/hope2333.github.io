@@ -50,6 +50,13 @@ jobs:
           # zh-CN），find 范围含根 wiki/ 与各 <LANG>/ 目录（repo/ 不渲染）。
           bash tools/render-one.sh --all
 
+      - name: Generate legacy-path redirects
+        run: |
+          set -euo pipefail
+          # 旧 zh_CN 路径的构建期静态跳转页 + 对账 manifest（OQ-2：长期不下线）。
+          # 直产 .html、禁同名 .md；须在渲染循环之后运行（幂等）。
+          bash tools/gen-redirects.sh
+
       - name: Fetch release assets
         env:
           GH_TOKEN: ${{ github.token }}
