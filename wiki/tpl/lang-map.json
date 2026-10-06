@@ -3,7 +3,7 @@
     "title": "Wiki",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/index",
+      "en": "/en/wiki/index",
       "zh_CN": "zh_CN/wiki/index",
       "zh_TW": "zh_TW/wiki/index",
       "ja": "ja/wiki/index",
@@ -14,7 +14,7 @@
     "title": "安装指引",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/guides/install",
+      "en": "/en/wiki/guides/install",
       "zh_CN": "zh_CN/wiki/guides/install",
       "zh_TW": "zh_TW/wiki/guides/install",
       "ja": "ja/wiki/guides/install",
@@ -25,7 +25,7 @@
     "title": "软件源指引",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/guides/software-source",
+      "en": "/en/wiki/guides/software-source",
       "zh_CN": "zh_CN/wiki/guides/software-source",
       "zh_TW": "zh_TW/wiki/guides/software-source",
       "ja": "ja/wiki/guides/software-source",
@@ -36,7 +36,7 @@
     "title": "更新指引",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/guides/update",
+      "en": "/en/wiki/guides/update",
       "zh_CN": "zh_CN/wiki/guides/update",
       "zh_TW": "zh_TW/wiki/guides/update",
       "ja": "ja/wiki/guides/update",
@@ -47,7 +47,7 @@
     "title": "AI-LTC",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/AI-LTC",
+      "en": "/en/wiki/projects/AI-LTC",
       "zh_CN": "zh_CN/wiki/projects/AI-LTC",
       "zh_TW": "zh_TW/wiki/projects/AI-LTC",
       "ja": "ja/wiki/projects/AI-LTC",
@@ -58,7 +58,7 @@
     "title": "MiMoCode-Termux",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/MiMoCode-Termux",
+      "en": "/en/wiki/projects/MiMoCode-Termux",
       "zh_CN": "zh_CN/wiki/projects/MiMoCode-Termux",
       "zh_TW": "zh_TW/wiki/projects/MiMoCode-Termux",
       "ja": "ja/wiki/projects/MiMoCode-Termux",
@@ -69,7 +69,7 @@
     "title": "MirrorGuard",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/MirrorGuard",
+      "en": "/en/wiki/projects/MirrorGuard",
       "zh_CN": "zh_CN/wiki/projects/MirrorGuard",
       "zh_TW": "zh_TW/wiki/projects/MirrorGuard",
       "ja": "ja/wiki/projects/MirrorGuard",
@@ -80,7 +80,7 @@
     "title": "SMFCov",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/SMFCov",
+      "en": "/en/wiki/projects/SMFCov",
       "zh_CN": "zh_CN/wiki/projects/SMFCov",
       "zh_TW": "zh_TW/wiki/projects/SMFCov",
       "ja": "ja/wiki/projects/SMFCov",
@@ -91,7 +91,7 @@
     "title": "bun-termux",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/bun-termux",
+      "en": "/en/wiki/projects/bun-termux",
       "zh_CN": "zh_CN/wiki/projects/bun-termux",
       "zh_TW": "zh_TW/wiki/projects/bun-termux",
       "ja": "ja/wiki/projects/bun-termux",
@@ -102,7 +102,7 @@
     "title": "codebuff-termux",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/codebuff-termux",
+      "en": "/en/wiki/projects/codebuff-termux",
       "zh_CN": "zh_CN/wiki/projects/codebuff-termux",
       "zh_TW": "zh_TW/wiki/projects/codebuff-termux",
       "ja": "ja/wiki/projects/codebuff-termux",
@@ -113,7 +113,7 @@
     "title": "codegraph-termux",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/codegraph-termux",
+      "en": "/en/wiki/projects/codegraph-termux",
       "zh_CN": "zh_CN/wiki/projects/codegraph-termux",
       "zh_TW": "zh_TW/wiki/projects/codegraph-termux",
       "ja": "ja/wiki/projects/codegraph-termux",
@@ -124,7 +124,7 @@
     "title": "enve",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/enve",
+      "en": "/en/wiki/projects/enve",
       "zh_CN": "zh_CN/wiki/projects/enve",
       "zh_TW": "zh_TW/wiki/projects/enve",
       "ja": "ja/wiki/projects/enve",
@@ -135,7 +135,7 @@
     "title": "exagear-obb",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/exagear-obb",
+      "en": "/en/wiki/projects/exagear-obb",
       "zh_CN": "zh_CN/wiki/projects/exagear-obb",
       "zh_TW": "zh_TW/wiki/projects/exagear-obb",
       "ja": "ja/wiki/projects/exagear-obb",
@@ -146,7 +146,7 @@
     "title": "freebuff-termux",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/freebuff-termux",
+      "en": "/en/wiki/projects/freebuff-termux",
       "zh_CN": "zh_CN/wiki/projects/freebuff-termux",
       "zh_TW": "zh_TW/wiki/projects/freebuff-termux",
       "ja": "ja/wiki/projects/freebuff-termux",
@@ -157,7 +157,7 @@
     "title": "oh-my-litecode",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/oh-my-litecode",
+      "en": "/en/wiki/projects/oh-my-litecode",
       "zh_CN": "zh_CN/wiki/projects/oh-my-litecode",
       "zh_TW": "zh_TW/wiki/projects/oh-my-litecode",
       "ja": "ja/wiki/projects/oh-my-litecode",
@@ -168,7 +168,7 @@
     "title": "oh-my-tmux",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/oh-my-tmux",
+      "en": "/en/wiki/projects/oh-my-tmux",
       "zh_CN": "zh_CN/wiki/projects/oh-my-tmux",
       "zh_TW": "zh_TW/wiki/projects/oh-my-tmux",
       "ja": "ja/wiki/projects/oh-my-tmux",
@@ -179,7 +179,7 @@
     "title": "opencode-termux",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/opencode-termux",
+      "en": "/en/wiki/projects/opencode-termux",
       "zh_CN": "zh_CN/wiki/projects/opencode-termux",
       "zh_TW": "zh_TW/wiki/projects/opencode-termux",
       "ja": "ja/wiki/projects/opencode-termux",
@@ -190,7 +190,7 @@
     "title": "tsac-ng",
     "status": "skeleton",
     "alternates": {
-      "en": "/wiki/projects/tsac-ng",
+      "en": "/en/wiki/projects/tsac-ng",
       "zh_CN": "zh_CN/wiki/projects/tsac-ng",
       "zh_TW": "zh_TW/wiki/projects/tsac-ng",
       "ja": "ja/wiki/projects/tsac-ng",
@@ -201,7 +201,7 @@
     "title": "opencode-termux",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/index",
+      "en": "/en/wiki/opencode-termux/index",
       "zh_CN": "zh_CN/wiki/opencode-termux/index",
       "zh_TW": "zh_TW/wiki/opencode-termux/index",
       "ja": "ja/wiki/opencode-termux/index",
@@ -212,7 +212,7 @@
     "title": "Architecture",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/architecture",
+      "en": "/en/wiki/opencode-termux/architecture",
       "zh_CN": "zh_CN/wiki/opencode-termux/architecture",
       "zh_TW": "zh_TW/wiki/opencode-termux/architecture",
       "ja": "ja/wiki/opencode-termux/architecture",
@@ -223,7 +223,7 @@
     "title": "Build opencode-termux",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/build",
+      "en": "/en/wiki/opencode-termux/build",
       "zh_CN": "zh_CN/wiki/opencode-termux/build",
       "zh_TW": "zh_TW/wiki/opencode-termux/build",
       "ja": "ja/wiki/opencode-termux/build",
@@ -234,7 +234,7 @@
     "title": "Install opencode-termux",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/install",
+      "en": "/en/wiki/opencode-termux/install",
       "zh_CN": "zh_CN/wiki/opencode-termux/install",
       "zh_TW": "zh_TW/wiki/opencode-termux/install",
       "ja": "ja/wiki/opencode-termux/install",
@@ -245,7 +245,7 @@
     "title": "Release History",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/release/index",
+      "en": "/en/wiki/opencode-termux/release/index",
       "zh_CN": "zh_CN/wiki/opencode-termux/release/index",
       "zh_TW": "zh_TW/wiki/opencode-termux/release/index",
       "ja": "ja/wiki/opencode-termux/release/index",
@@ -256,7 +256,7 @@
     "title": "Push260903 Release",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/release/Push260903",
+      "en": "/en/wiki/opencode-termux/release/Push260903",
       "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260903",
       "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260903",
       "ja": "ja/wiki/opencode-termux/release/Push260903",
@@ -267,7 +267,7 @@
     "title": "Push260906 Release",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/release/Push260906",
+      "en": "/en/wiki/opencode-termux/release/Push260906",
       "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260906",
       "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260906",
       "ja": "ja/wiki/opencode-termux/release/Push260906",
@@ -278,7 +278,7 @@
     "title": "Push260912 Release",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/release/Push260912",
+      "en": "/en/wiki/opencode-termux/release/Push260912",
       "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260912",
       "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260912",
       "ja": "ja/wiki/opencode-termux/release/Push260912",
@@ -289,7 +289,7 @@
     "title": "Push260914 Release",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/release/Push260914",
+      "en": "/en/wiki/opencode-termux/release/Push260914",
       "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260914",
       "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260914",
       "ja": "ja/wiki/opencode-termux/release/Push260914",
@@ -300,7 +300,7 @@
     "title": "Push260922 Release (RC3)",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/release/Push260922",
+      "en": "/en/wiki/opencode-termux/release/Push260922",
       "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260922",
       "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260922",
       "ja": "ja/wiki/opencode-termux/release/Push260922",
@@ -311,7 +311,7 @@
     "title": "Push260928 Release (RC4)",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/release/Push260928",
+      "en": "/en/wiki/opencode-termux/release/Push260928",
       "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260928",
       "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260928",
       "ja": "ja/wiki/opencode-termux/release/Push260928",
@@ -322,7 +322,7 @@
     "title": "Push260930 Release (RC5)",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/release/Push260930",
+      "en": "/en/wiki/opencode-termux/release/Push260930",
       "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260930",
       "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260930",
       "ja": "ja/wiki/opencode-termux/release/Push260930",
@@ -333,7 +333,7 @@
     "title": "Push261005 Release",
     "status": "full",
     "alternates": {
-      "en": "/wiki/opencode-termux/release/Push261005",
+      "en": "/en/wiki/opencode-termux/release/Push261005",
       "zh_CN": "zh_CN/wiki/opencode-termux/release/Push261005",
       "zh_TW": "zh_TW/wiki/opencode-termux/release/Push261005",
       "ja": "ja/wiki/opencode-termux/release/Push261005",

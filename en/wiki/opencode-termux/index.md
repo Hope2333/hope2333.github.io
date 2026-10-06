@@ -6,4 +6,4 @@ lang: en
 # opencode-termux
 
 > [!NOTE]
-> Content pending translation. The canonical English page lives at the repo root: [wiki/opencode-termux](/wiki/opencode-termux/).
+> **English version pending.** This page has no English translation yet. The original content (Chinese) lives at the site root: [/wiki/opencode-termux/index](/wiki/opencode-termux/index.md).
