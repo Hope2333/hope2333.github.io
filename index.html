@@ -24,6 +24,13 @@
     <a class="gh" href="https://github.com/Hope2333">关于我 / GitHub</a>
     <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换阴阳主题">☯</button>
   </div>
+  <div class="cta" id="lang-entry" aria-label="Language / 语言">
+    <a class="repo" href="/wiki/" data-lang="en">English</a>
+    <a class="repo" href="/zh_CN/wiki/" data-lang="zh_CN">简体中文</a>
+    <a class="repo" href="/zh_TW/wiki/" data-lang="zh_TW">繁體中文</a>
+    <a class="repo" href="/ja/wiki/" data-lang="ja">日本語</a>
+    <a class="repo" href="/es/wiki/" data-lang="es">Español</a>
+  </div>
   <hr class="bar">
   <div class="badges">
     <span class="support-label">支持我 / Support me:</span>
@@ -78,5 +85,18 @@
 </footer>
 </div>
 <script src="/assets/theme.js"></script>
+<script src="/assets/i18n.js"></script>
+<script>
+(function () {
+  var I = window.I18n; if (!I) return;
+  var langs = (navigator.languages && navigator.languages.length) ? navigator.languages
+            : (navigator.language ? [navigator.language] : []);
+  var lang = I.pickLang(langs, I.getStoredLang());
+  var links = document.querySelectorAll('#lang-entry a[data-lang]');
+  for (var i = 0; i < links.length; i++) {
+    if (links[i].getAttribute('data-lang') === lang) links[i].setAttribute('aria-current', 'true');
+  }
+})();
+</script>
 </body>
 </html>

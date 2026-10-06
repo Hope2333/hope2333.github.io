@@ -144,3 +144,7 @@ footer nav a:hover{color:var(--green)}
 .lang-menu button:hover{background:color-mix(in srgb,var(--text) 10%,transparent)}
 .lang-menu button[aria-current="true"]{color:var(--mauve);font-weight:600}
 .lang-menu button[aria-current="true"]::after{content:"✓"}
+
+/* == 亲密 Proximity：首页语言入口（与 🌐 菜单同族：cta 样式复用 + 当前语言 mauve 高亮）== */
+#lang-entry{margin-top:var(--s2)}
+#lang-entry a[aria-current="true"]{color:var(--mauve);border-color:color-mix(in srgb,var(--mauve) 65%,transparent);background:color-mix(in srgb,var(--mauve) 12%,transparent)}
