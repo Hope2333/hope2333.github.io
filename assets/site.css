@@ -86,6 +86,9 @@ main{margin-top:var(--s6)}
 .cat-head::before{content:"";width:.55em;height:.55em;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--cat-c1,var(--blue)),var(--cat-c2,var(--mauve)))}
 .cat-tech .cat-head{--cat-c1:var(--blue);--cat-c2:var(--green)}
 .cat-art .cat-head{--cat-c1:var(--peach);--cat-c2:var(--pink)}
+.subcategory{margin-bottom:var(--s2)}
+.subcategory .group:last-child{margin-bottom:0}
+.cat-subhead{font-family:var(--mono);font-size:1.05rem;font-weight:700;letter-spacing:.06em;color:color-mix(in srgb,var(--text) 72%,transparent);margin:0 0 var(--s3)}
 .category .group{margin-bottom:var(--s4)}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .group{margin-bottom:var(--s6);position:relative}
