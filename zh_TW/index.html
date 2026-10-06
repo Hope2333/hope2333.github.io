@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +10,7 @@
 </head>
 <body>
 <div class="wrap">
+<blockquote><p><strong>說明：</strong>本頁為根路徑首頁的繁體轉換版（字級變體轉換，非翻譯）。簡體原文首頁：<a href="/">/</a>。</p></blockquote>
 <header>
   <div class="head-row">
     <div class="head-txt">
@@ -20,29 +21,29 @@
     <img class="avatar" src="/assets/avatar.png" alt="幽零小喵" width="72" height="72">
   </div>
   <div class="cta" id="top-nav">
-    <a class="repo" href="/repo/">软件源 / Repo</a>
-    <a class="gh" href="https://github.com/Hope2333">关于我 / GitHub</a>
+    <a class="repo" href="/repo/">軟件源 / Repo</a>
+    <a class="gh" href="https://github.com/Hope2333">關於我 / GitHub</a>
     <a class="repo" href="wiki/">Wiki</a>
-    <button id="lang-btn" class="lang-btn" type="button" aria-label="选择语言 / Language" aria-haspopup="true" aria-expanded="false">
+    <button id="lang-btn" class="lang-btn" type="button" aria-label="選擇語言 / Language" aria-haspopup="true" aria-expanded="false">
       <svg class="lang-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><ellipse cx="8" cy="8" rx="2.9" ry="6.2"/><path d="M1.9 8h12.2"/></svg>
     </button>
     <div id="lang-menu" class="lang-menu" hidden>
       <a href="/en/" data-lang="en">English</a>
-      <a href="/zh_CN/" data-lang="zh_CN">简体中文</a>
+      <a href="/zh_CN/" data-lang="zh_CN">簡體中文</a>
       <a href="/zh_TW/" data-lang="zh_TW">繁體中文</a>
       <a href="/ja/" data-lang="ja">日本語</a>
       <a href="/es/" data-lang="es">Español</a>
     </div>
-    <button id="theme-btn" class="lang-btn" type="button" aria-label="选择主题 / Theme" aria-haspopup="true" aria-expanded="false">☯</button>
+    <button id="theme-btn" class="lang-btn" type="button" aria-label="選擇主題 / Theme" aria-haspopup="true" aria-expanded="false">☯</button>
     <div id="theme-menu" class="lang-menu" hidden>
-      <button type="button" data-theme-val="yin-v1.0">☯ 阴（深色）</button>
-      <button type="button" data-theme-val="yang-v1.1">☀ 阳（浅色）</button>
+      <button type="button" data-theme-val="yin-v1.0">☯ 陰（深色）</button>
+      <button type="button" data-theme-val="yang-v1.1">☀ 陽（淺色）</button>
     </div>
   </div>
   <hr class="bar">
   <div class="badges">
     <span class="support-label">支持我 / Support me:</span>
-    <a href="https://ifdian.net/a/hope2333" title="爱发电"><img src="https://img.shields.io/badge/AFDIAN-%E7%88%B1%E5%8F%91%E7%94%B5-946CE6" alt="AFDIAN 爱发电"></a>
+    <a href="https://ifdian.net/a/hope2333" title="愛發電"><img src="https://img.shields.io/badge/AFDIAN-%E7%88%B1%E5%8F%91%E7%94%B5-946CE6" alt="AFDIAN 愛發電"></a>
     <a href="https://ko-fi.com/neko2333" title="Ko-fi"><img src="https://img.shields.io/badge/Ko--fi-%E6%94%AF%E6%8C%81-FF5E5B" alt="Ko-fi 支持"></a>
   </div>
 </header>
@@ -85,11 +86,10 @@
 </main>
 <footer>
   <nav>
-    <a href="/repo/">软件源</a>
+    <a href="/repo/">軟件源</a>
     <a href="wiki/">Wiki</a>
   </nav>
   <p class="colophon">Hope2333 · 幽零小喵 — Technical Artist · Animation Tooling · Linux Engineering</p>
-  <p class="colophon">最后更新：<span id="build-stamp">__BUILD_STAMP__</span>（UTC）</p>
 </footer>
 </div>
 <script src="/assets/theme.js"></script>
@@ -100,7 +100,7 @@
   var langs = (navigator.languages && navigator.languages.length) ? navigator.languages
             : (navigator.language ? [navigator.language] : []);
   var lang = I.pickLang(langs, I.getStoredLang());
-  // 🌐 静态菜单：当前语言高亮 + 点选写入 localStorage 记忆（记忆行为不退化）
+  // 🌐 靜態菜單：當前語言高亮 + 點選寫入 localStorage 記憶（記憶行爲不退化）
   var links = document.querySelectorAll('#lang-menu a[data-lang]');
   for (var i = 0; i < links.length; i++) {
     if (links[i].getAttribute('data-lang') === lang) links[i].setAttribute('aria-current', 'true');
@@ -108,7 +108,7 @@
       a.addEventListener('click', function () { I.setLang(a.getAttribute('data-lang')); });
     })(links[i]);
   }
-  // ☯ 主题菜单：theme.js 机制（site-theme ∈ {yin-v1.0, yang-v1.1}），高亮当前态
+  // ☯ 主題菜單：theme.js 機制（site-theme ∈ {yin-v1.0, yang-v1.1}），高亮當前態
   var tb = document.getElementById('theme-btn'), tm = document.getElementById('theme-menu');
   if (I.attachCollapsible) I.attachCollapsible(tb, tm, document);
   var cur = document.documentElement.dataset.theme;
@@ -118,7 +118,7 @@
     (function (b) {
       b.addEventListener('click', function () {
         var v = b.getAttribute('data-theme-val');
-        try { localStorage.setItem('site-theme', v); } catch (e) { /* 隐私模式：仅本次会话 */ }
+        try { localStorage.setItem('site-theme', v); } catch (e) { /* 隱私模式：僅本次會話 */ }
         document.documentElement.dataset.theme = v;
         for (var k = 0; k < titems.length; k++) titems[k].removeAttribute('aria-current');
         b.setAttribute('aria-current', 'true');

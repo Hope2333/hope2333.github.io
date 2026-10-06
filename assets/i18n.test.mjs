@@ -129,6 +129,19 @@ test('initLangMenu: 缺按钮/菜单容器 → 不接线（返回 false）', () 
 
 // ── Bug A 回归：🌐 菜单 URL 必须站点绝对（子目录页相对解析会双前缀 404）────
 
+test('logicalPathFromUrl: 主页 / 与 /index.html 归一为空键', () => {
+  assert.equal(i18n.logicalPathFromUrl('/'), '');
+  assert.equal(i18n.logicalPathFromUrl('/index.html'), '');
+  assert.equal(i18n.logicalPathFromUrl('/en/'), '');
+});
+
+test('menuUrlFor: 主页 → 各语言首页 /<lang>/（而非 wiki index）', () => {
+  assert.equal(i18n.menuUrlFor(null, '', 'en'), '/en/');
+  assert.equal(i18n.menuUrlFor(null, '', 'zh_CN'), '/zh_CN/');
+  assert.equal(i18n.menuUrlFor(null, '', 'ja'), '/ja/');
+  assert.equal(i18n.menuUrlFor(null, '', 'es'), '/es/');
+});
+
 test('menuUrlFor: 子目录页生成站点绝对路径且无重复 LANG 前缀', () => {
   assert.equal(i18n.menuUrlFor({alternates:{ja:'ja/wiki/guides/install'}}, 'wiki/guides/install', 'ja'),
     '/ja/wiki/guides/install.html');

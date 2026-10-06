@@ -86,7 +86,9 @@
     var p = String(pathname || '').replace(/^\/+/, '').replace(/\.html?$/i, '');
     var segs = p.split('/');
     if (segs.length && SUPPORTED_LANGS.indexOf(segs[0]) !== -1) segs.shift();
-    return segs.join('/');
+    var joined = segs.join('/');
+    if (joined === 'index.html' || joined === 'index') return ''; // 主页（/ 及等价路径）
+    return joined;
   }
 
   var LANG_LABELS = { en: 'English', zh_CN: '简体中文', zh_TW: '繁體中文', ja: '日本語', es: 'Español' };
@@ -96,6 +98,7 @@
   // pathForLang 回退 → 统一站点绝对路径（前导 /）+ .html 后缀。浏览器按当前页
   // 所在目录解析相对路径，子目录页（如 /zh_CN/wiki/...）不绝对化会拼出双前缀 404。
   function menuUrlFor(entry, logicalPath, lang) {
+    if (logicalPath === '') return '/' + lang + '/'; // 主页（/ 及等价路径）：指向各语言首页
     var url = (entry && entry.alternates && entry.alternates[lang]) || pathForLang(logicalPath, lang);
     if (url && url.charAt(0) !== '/') url = '/' + url;
     if (/\.html?$/.test(url) === false) url = url + '.html';
