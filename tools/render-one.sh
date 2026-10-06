@@ -28,10 +28,23 @@ infer_lang() {
 render_one() {
   local f="$1"
   local out="_site/${f%.md}.html"
+  local l nav_home theme_aria
+  l="$(infer_lang "$f")"
+  # 导航 chrome 按页面语言本地化（短文案手工维护，非机翻）
+  case "$l" in
+    zh-CN) nav_home='← 返回首页';        theme_aria='切换阴阳主题' ;;
+    zh-TW) nav_home='← 返回首頁';        theme_aria='切換陰陽主題' ;;
+    en)    nav_home='← Back to home';    theme_aria='Toggle yin/yang theme' ;;
+    ja)    nav_home='← ホームへ戻る';     theme_aria='陰陽テーマを切り替える' ;;
+    es)    nav_home='← Volver al inicio'; theme_aria='Cambiar tema yin/yang' ;;
+    *)     nav_home='← 返回首页';        theme_aria='切换阴阳主题' ;;
+  esac
   mkdir -p "$(dirname "$out")"
   pandoc "$f" -f gfm -t html5 --template wiki/tpl/doc.html \
     --lua-filter=wiki/tpl/md-links.lua \
-    --metadata lang="$(infer_lang "$f")" \
+    --metadata lang="$l" \
+    --metadata nav_home="$nav_home" \
+    --metadata theme_aria="$theme_aria" \
     --metadata title="$(basename "$f" .md)" \
     -o "$out"
   printf '%s\n' "$out"
