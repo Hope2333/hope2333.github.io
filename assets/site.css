@@ -145,6 +145,9 @@ footer nav a:hover{color:var(--green)}
 .lang-menu button[aria-current="true"]{color:var(--mauve);font-weight:600}
 .lang-menu button[aria-current="true"]::after{content:"✓"}
 
-/* == 亲密 Proximity：首页语言入口（与 🌐 菜单同族：cta 样式复用 + 当前语言 mauve 高亮）== */
-#lang-entry{margin-top:var(--s2)}
-#lang-entry a[aria-current="true"]{color:var(--mauve);border-color:color-mix(in srgb,var(--mauve) 65%,transparent);background:color-mix(in srgb,var(--mauve) 12%,transparent)}
+/* == 亲密 Proximity：首页顶部导航折叠菜单（🌐/☯ 与 wiki 页同一套 lang-btn/lang-menu 实现）== */
+.cta{position:relative}
+.lang-menu a{display:flex;width:100%;align-items:center;justify-content:space-between;gap:var(--s3);border:0;background:transparent;color:var(--text);font-family:var(--sans);font-size:.9rem;padding:.4rem .6rem;border-radius:8px;cursor:pointer;text-align:left;text-decoration:none}
+.lang-menu a:hover{background:color-mix(in srgb,var(--text) 10%,transparent)}
+.lang-menu a[aria-current="true"]{color:var(--mauve);font-weight:600}
+.lang-menu a[aria-current="true"]::after{content:"✓"}

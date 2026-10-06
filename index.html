@@ -19,17 +19,25 @@
     </div>
     <img class="avatar" src="/assets/avatar.png" alt="幽零小喵" width="72" height="72">
   </div>
-  <div class="cta">
+  <div class="cta" id="top-nav">
     <a class="repo" href="/repo/">软件源 / Repo</a>
     <a class="gh" href="https://github.com/Hope2333">关于我 / GitHub</a>
-    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换阴阳主题">☯</button>
-  </div>
-  <div class="cta" id="lang-entry" aria-label="Language / 语言">
-    <a class="repo" href="/wiki/" data-lang="en">English</a>
-    <a class="repo" href="/zh_CN/wiki/" data-lang="zh_CN">简体中文</a>
-    <a class="repo" href="/zh_TW/wiki/" data-lang="zh_TW">繁體中文</a>
-    <a class="repo" href="/ja/wiki/" data-lang="ja">日本語</a>
-    <a class="repo" href="/es/wiki/" data-lang="es">Español</a>
+    <a class="repo" href="wiki/">Wiki</a>
+    <button id="lang-btn" class="lang-btn" type="button" aria-label="选择语言 / Language" aria-haspopup="true" aria-expanded="false">
+      <svg class="lang-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><ellipse cx="8" cy="8" rx="2.9" ry="6.2"/><path d="M1.9 8h12.2"/></svg>
+    </button>
+    <div id="lang-menu" class="lang-menu" hidden>
+      <a href="/wiki/" data-lang="en">English</a>
+      <a href="/zh_CN/wiki/" data-lang="zh_CN">简体中文</a>
+      <a href="/zh_TW/wiki/" data-lang="zh_TW">繁體中文</a>
+      <a href="/ja/wiki/" data-lang="ja">日本語</a>
+      <a href="/es/wiki/" data-lang="es">Español</a>
+    </div>
+    <button id="theme-btn" class="lang-btn" type="button" aria-label="选择主题 / Theme" aria-haspopup="true" aria-expanded="false">☯</button>
+    <div id="theme-menu" class="lang-menu" hidden>
+      <button type="button" data-theme-val="yin-v1.0">☯ 阴（深色）</button>
+      <button type="button" data-theme-val="yang-v1.1">☀ 阳（浅色）</button>
+    </div>
   </div>
   <hr class="bar">
   <div class="badges">
@@ -92,9 +100,31 @@
   var langs = (navigator.languages && navigator.languages.length) ? navigator.languages
             : (navigator.language ? [navigator.language] : []);
   var lang = I.pickLang(langs, I.getStoredLang());
-  var links = document.querySelectorAll('#lang-entry a[data-lang]');
+  // 🌐 静态菜单：当前语言高亮 + 点选写入 localStorage 记忆（记忆行为不退化）
+  var links = document.querySelectorAll('#lang-menu a[data-lang]');
   for (var i = 0; i < links.length; i++) {
     if (links[i].getAttribute('data-lang') === lang) links[i].setAttribute('aria-current', 'true');
+    (function (a) {
+      a.addEventListener('click', function () { I.setLang(a.getAttribute('data-lang')); });
+    })(links[i]);
+  }
+  // ☯ 主题菜单：theme.js 机制（site-theme ∈ {yin-v1.0, yang-v1.1}），高亮当前态
+  var tb = document.getElementById('theme-btn'), tm = document.getElementById('theme-menu');
+  if (I.attachCollapsible) I.attachCollapsible(tb, tm, document);
+  var cur = document.documentElement.dataset.theme;
+  var titems = tm ? tm.querySelectorAll('button[data-theme-val]') : [];
+  for (var j = 0; j < titems.length; j++) {
+    if (titems[j].getAttribute('data-theme-val') === cur) titems[j].setAttribute('aria-current', 'true');
+    (function (b) {
+      b.addEventListener('click', function () {
+        var v = b.getAttribute('data-theme-val');
+        try { localStorage.setItem('site-theme', v); } catch (e) { /* 隐私模式：仅本次会话 */ }
+        document.documentElement.dataset.theme = v;
+        for (var k = 0; k < titems.length; k++) titems[k].removeAttribute('aria-current');
+        b.setAttribute('aria-current', 'true');
+        tm.hidden = true; tb.setAttribute('aria-expanded', 'false');
+      });
+    })(titems[j]);
   }
 })();
 </script>

@@ -90,3 +90,39 @@ test('logicalPathFromUrl: 剥 LANG 前缀与 .html 后缀，得 lang-map 键口�
   assert.equal(i18n.logicalPathFromUrl('/en/wiki/index.html'), 'wiki/index');
   assert.equal(i18n.logicalPathFromUrl('/ja/wiki/index'), 'wiki/index');
 });
+
+// ── 首页折叠菜单（🌐）的最小 DOM 断言 ──────────────────────────────────────
+function fakeMenuDoc() {
+  const items = [];
+  const menu = {
+    childElementCount: 0,
+    textContent: '',
+    appendChild(c) { items.push(c); menu.childElementCount = items.length; },
+  };
+  const doc = {
+    createElement() {
+      return { type: '', textContent: '', attrs: {},
+        addEventListener() {},
+        setAttribute(k, v) { this.attrs[k] = v; } };
+    },
+  };
+  return { doc, menu, items };
+}
+
+test('buildMenu: 展开后菜单项数=5 且当前语言 aria-current 高亮', () => {
+  const { doc, menu, items } = fakeMenuDoc();
+  assert.equal(i18n.buildMenu(doc, menu, 'wiki/index', 'zh_CN', () => {}, null), true);
+  assert.equal(menu.childElementCount, 5);
+  const cur = items.filter((it) => it.attrs['aria-current'] === 'true');
+  assert.equal(cur.length, 1);
+  assert.equal(cur[0].textContent, '简体中文');
+});
+
+test('buildMenu: 移除菜单容器 → 断言红（返回 false）', () => {
+  const { doc } = fakeMenuDoc();
+  assert.equal(i18n.buildMenu(doc, null, 'wiki/index', 'en', () => {}, null), false);
+});
+
+test('initLangMenu: 缺按钮/菜单容器 → 不接线（返回 false）', () => {
+  assert.equal(i18n.initLangMenu({ getElementById: () => null }), false);
+});

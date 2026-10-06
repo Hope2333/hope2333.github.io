@@ -114,8 +114,28 @@
     return true;
   }
 
+  // 通用折叠菜单行为（🌐/☯ 等共用，首页与 wiki 页同一实现，避免复制）：
+  // 点击开/关、点击外部关闭、Esc 关闭、aria-expanded 同步。DOM 相关，node 下返回 false。
+  function attachCollapsible(btn, menu, doc) {
+    if (!btn || !menu || !doc || !doc.addEventListener) return false;
+    function close() { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
+    btn.addEventListener('click', function () {
+      if (!menu.hidden) { close(); return; }
+      menu.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+    });
+    doc.addEventListener('click', function (e) {
+      if (!menu.hidden && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) close();
+    });
+    doc.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !menu.hidden) close();
+    });
+    return true;
+  }
+
   // 浏览器侧接线（DOM 相关；node 下无 document 自动跳过）：
   // 点击 🌐 弹菜单；条目点击经 setLang 写 localStorage 并跳到 lang-map 对应 URL。
+  // 菜单已有静态条目时（如首页）不重建，仅复用折叠行为。
   function initLangMenu(doc) {
     if (!doc || !doc.getElementById) return false;
     var btn = doc.getElementById('lang-btn');
@@ -123,27 +143,23 @@
     if (!btn || !menu) return false;
     var current = (doc.documentElement && doc.documentElement.lang) || 'en';
     var logical = logicalPathFromUrl(global.location && global.location.pathname);
-    function close() { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
     function rebuild(map) {
       buildMenu(doc, menu, logical, current, function (lang, url) {
         setLang(lang);
         global.location.href = url;
       }, map);
     }
+    if (!attachCollapsible(btn, menu, doc)) return false;
     btn.addEventListener('click', function () {
-      if (!menu.hidden) { close(); return; }
-      menu.hidden = false;
-      btn.setAttribute('aria-expanded', 'true');
-      rebuild(null);
-      if (typeof global.fetch === 'function') {
-        global.fetch(LANG_MAP_URL)
-          .then(function (r) { return r.ok ? r.json() : null; })
-          .then(rebuild)
-          .catch(function () { /* 保留回落菜单 */ });
+      if (menu.hidden && menu.childElementCount === 0) {
+        rebuild(null);
+        if (typeof global.fetch === 'function') {
+          global.fetch(LANG_MAP_URL)
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(rebuild)
+            .catch(function () { /* 保留回落菜单 */ });
+        }
       }
-    });
-    doc.addEventListener('click', function (e) {
-      if (!menu.hidden && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) close();
     });
     return true;
   }
@@ -159,7 +175,8 @@
     getStoredLang: getStoredLang,
     logicalPathFromUrl: logicalPathFromUrl,
     buildMenu: buildMenu,
-    initLangMenu: initLangMenu
+    initLangMenu: initLangMenu,
+    attachCollapsible: attachCollapsible
   };
 
   if (typeof module !== 'undefined' && module.exports) {
