@@ -1,0 +1,343 @@
+{
+  "wiki/index": {
+    "title": "Wiki",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/index",
+      "zh_CN": "zh_CN/wiki/index",
+      "zh_TW": "zh_TW/wiki/index",
+      "ja": "ja/wiki/index",
+      "es": "es/wiki/index"
+    }
+  },
+  "wiki/guides/install": {
+    "title": "安装指引",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/guides/install",
+      "zh_CN": "zh_CN/wiki/guides/install",
+      "zh_TW": "zh_TW/wiki/guides/install",
+      "ja": "ja/wiki/guides/install",
+      "es": "es/wiki/guides/install"
+    }
+  },
+  "wiki/guides/software-source": {
+    "title": "软件源指引",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/guides/software-source",
+      "zh_CN": "zh_CN/wiki/guides/software-source",
+      "zh_TW": "zh_TW/wiki/guides/software-source",
+      "ja": "ja/wiki/guides/software-source",
+      "es": "es/wiki/guides/software-source"
+    }
+  },
+  "wiki/guides/update": {
+    "title": "更新指引",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/guides/update",
+      "zh_CN": "zh_CN/wiki/guides/update",
+      "zh_TW": "zh_TW/wiki/guides/update",
+      "ja": "ja/wiki/guides/update",
+      "es": "es/wiki/guides/update"
+    }
+  },
+  "wiki/projects/AI-LTC": {
+    "title": "AI-LTC",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/AI-LTC",
+      "zh_CN": "zh_CN/wiki/projects/AI-LTC",
+      "zh_TW": "zh_TW/wiki/projects/AI-LTC",
+      "ja": "ja/wiki/projects/AI-LTC",
+      "es": "es/wiki/projects/AI-LTC"
+    }
+  },
+  "wiki/projects/MiMoCode-Termux": {
+    "title": "MiMoCode-Termux",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/MiMoCode-Termux",
+      "zh_CN": "zh_CN/wiki/projects/MiMoCode-Termux",
+      "zh_TW": "zh_TW/wiki/projects/MiMoCode-Termux",
+      "ja": "ja/wiki/projects/MiMoCode-Termux",
+      "es": "es/wiki/projects/MiMoCode-Termux"
+    }
+  },
+  "wiki/projects/MirrorGuard": {
+    "title": "MirrorGuard",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/MirrorGuard",
+      "zh_CN": "zh_CN/wiki/projects/MirrorGuard",
+      "zh_TW": "zh_TW/wiki/projects/MirrorGuard",
+      "ja": "ja/wiki/projects/MirrorGuard",
+      "es": "es/wiki/projects/MirrorGuard"
+    }
+  },
+  "wiki/projects/SMFCov": {
+    "title": "SMFCov",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/SMFCov",
+      "zh_CN": "zh_CN/wiki/projects/SMFCov",
+      "zh_TW": "zh_TW/wiki/projects/SMFCov",
+      "ja": "ja/wiki/projects/SMFCov",
+      "es": "es/wiki/projects/SMFCov"
+    }
+  },
+  "wiki/projects/bun-termux": {
+    "title": "bun-termux",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/bun-termux",
+      "zh_CN": "zh_CN/wiki/projects/bun-termux",
+      "zh_TW": "zh_TW/wiki/projects/bun-termux",
+      "ja": "ja/wiki/projects/bun-termux",
+      "es": "es/wiki/projects/bun-termux"
+    }
+  },
+  "wiki/projects/codebuff-termux": {
+    "title": "codebuff-termux",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/codebuff-termux",
+      "zh_CN": "zh_CN/wiki/projects/codebuff-termux",
+      "zh_TW": "zh_TW/wiki/projects/codebuff-termux",
+      "ja": "ja/wiki/projects/codebuff-termux",
+      "es": "es/wiki/projects/codebuff-termux"
+    }
+  },
+  "wiki/projects/codegraph-termux": {
+    "title": "codegraph-termux",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/codegraph-termux",
+      "zh_CN": "zh_CN/wiki/projects/codegraph-termux",
+      "zh_TW": "zh_TW/wiki/projects/codegraph-termux",
+      "ja": "ja/wiki/projects/codegraph-termux",
+      "es": "es/wiki/projects/codegraph-termux"
+    }
+  },
+  "wiki/projects/enve": {
+    "title": "enve",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/enve",
+      "zh_CN": "zh_CN/wiki/projects/enve",
+      "zh_TW": "zh_TW/wiki/projects/enve",
+      "ja": "ja/wiki/projects/enve",
+      "es": "es/wiki/projects/enve"
+    }
+  },
+  "wiki/projects/exagear-obb": {
+    "title": "exagear-obb",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/exagear-obb",
+      "zh_CN": "zh_CN/wiki/projects/exagear-obb",
+      "zh_TW": "zh_TW/wiki/projects/exagear-obb",
+      "ja": "ja/wiki/projects/exagear-obb",
+      "es": "es/wiki/projects/exagear-obb"
+    }
+  },
+  "wiki/projects/freebuff-termux": {
+    "title": "freebuff-termux",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/freebuff-termux",
+      "zh_CN": "zh_CN/wiki/projects/freebuff-termux",
+      "zh_TW": "zh_TW/wiki/projects/freebuff-termux",
+      "ja": "ja/wiki/projects/freebuff-termux",
+      "es": "es/wiki/projects/freebuff-termux"
+    }
+  },
+  "wiki/projects/oh-my-litecode": {
+    "title": "oh-my-litecode",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/oh-my-litecode",
+      "zh_CN": "zh_CN/wiki/projects/oh-my-litecode",
+      "zh_TW": "zh_TW/wiki/projects/oh-my-litecode",
+      "ja": "ja/wiki/projects/oh-my-litecode",
+      "es": "es/wiki/projects/oh-my-litecode"
+    }
+  },
+  "wiki/projects/oh-my-tmux": {
+    "title": "oh-my-tmux",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/oh-my-tmux",
+      "zh_CN": "zh_CN/wiki/projects/oh-my-tmux",
+      "zh_TW": "zh_TW/wiki/projects/oh-my-tmux",
+      "ja": "ja/wiki/projects/oh-my-tmux",
+      "es": "es/wiki/projects/oh-my-tmux"
+    }
+  },
+  "wiki/projects/opencode-termux": {
+    "title": "opencode-termux",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/opencode-termux",
+      "zh_CN": "zh_CN/wiki/projects/opencode-termux",
+      "zh_TW": "zh_TW/wiki/projects/opencode-termux",
+      "ja": "ja/wiki/projects/opencode-termux",
+      "es": "es/wiki/projects/opencode-termux"
+    }
+  },
+  "wiki/projects/tsac-ng": {
+    "title": "tsac-ng",
+    "status": "skeleton",
+    "alternates": {
+      "en": "/wiki/projects/tsac-ng",
+      "zh_CN": "zh_CN/wiki/projects/tsac-ng",
+      "zh_TW": "zh_TW/wiki/projects/tsac-ng",
+      "ja": "ja/wiki/projects/tsac-ng",
+      "es": "es/wiki/projects/tsac-ng"
+    }
+  },
+  "wiki/opencode-termux/index": {
+    "title": "opencode-termux",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/index",
+      "zh_CN": "zh_CN/wiki/opencode-termux/index",
+      "zh_TW": "zh_TW/wiki/opencode-termux/index",
+      "ja": "ja/wiki/opencode-termux/index",
+      "es": "es/wiki/opencode-termux/index"
+    }
+  },
+  "wiki/opencode-termux/architecture": {
+    "title": "Architecture",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/architecture",
+      "zh_CN": "zh_CN/wiki/opencode-termux/architecture",
+      "zh_TW": "zh_TW/wiki/opencode-termux/architecture",
+      "ja": "ja/wiki/opencode-termux/architecture",
+      "es": "es/wiki/opencode-termux/architecture"
+    }
+  },
+  "wiki/opencode-termux/build": {
+    "title": "Build opencode-termux",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/build",
+      "zh_CN": "zh_CN/wiki/opencode-termux/build",
+      "zh_TW": "zh_TW/wiki/opencode-termux/build",
+      "ja": "ja/wiki/opencode-termux/build",
+      "es": "es/wiki/opencode-termux/build"
+    }
+  },
+  "wiki/opencode-termux/install": {
+    "title": "Install opencode-termux",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/install",
+      "zh_CN": "zh_CN/wiki/opencode-termux/install",
+      "zh_TW": "zh_TW/wiki/opencode-termux/install",
+      "ja": "ja/wiki/opencode-termux/install",
+      "es": "es/wiki/opencode-termux/install"
+    }
+  },
+  "wiki/opencode-termux/release/index": {
+    "title": "Release History",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/release/index",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/index",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/index",
+      "ja": "ja/wiki/opencode-termux/release/index",
+      "es": "es/wiki/opencode-termux/release/index"
+    }
+  },
+  "wiki/opencode-termux/release/Push260903": {
+    "title": "Push260903 Release",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/release/Push260903",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260903",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260903",
+      "ja": "ja/wiki/opencode-termux/release/Push260903",
+      "es": "es/wiki/opencode-termux/release/Push260903"
+    }
+  },
+  "wiki/opencode-termux/release/Push260906": {
+    "title": "Push260906 Release",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/release/Push260906",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260906",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260906",
+      "ja": "ja/wiki/opencode-termux/release/Push260906",
+      "es": "es/wiki/opencode-termux/release/Push260906"
+    }
+  },
+  "wiki/opencode-termux/release/Push260912": {
+    "title": "Push260912 Release",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/release/Push260912",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260912",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260912",
+      "ja": "ja/wiki/opencode-termux/release/Push260912",
+      "es": "es/wiki/opencode-termux/release/Push260912"
+    }
+  },
+  "wiki/opencode-termux/release/Push260914": {
+    "title": "Push260914 Release",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/release/Push260914",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260914",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260914",
+      "ja": "ja/wiki/opencode-termux/release/Push260914",
+      "es": "es/wiki/opencode-termux/release/Push260914"
+    }
+  },
+  "wiki/opencode-termux/release/Push260922": {
+    "title": "Push260922 Release (RC3)",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/release/Push260922",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260922",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260922",
+      "ja": "ja/wiki/opencode-termux/release/Push260922",
+      "es": "es/wiki/opencode-termux/release/Push260922"
+    }
+  },
+  "wiki/opencode-termux/release/Push260928": {
+    "title": "Push260928 Release (RC4)",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/release/Push260928",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260928",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260928",
+      "ja": "ja/wiki/opencode-termux/release/Push260928",
+      "es": "es/wiki/opencode-termux/release/Push260928"
+    }
+  },
+  "wiki/opencode-termux/release/Push260930": {
+    "title": "Push260930 Release (RC5)",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/release/Push260930",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push260930",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push260930",
+      "ja": "ja/wiki/opencode-termux/release/Push260930",
+      "es": "es/wiki/opencode-termux/release/Push260930"
+    }
+  },
+  "wiki/opencode-termux/release/Push261005": {
+    "title": "Push261005 Release",
+    "status": "full",
+    "alternates": {
+      "en": "/wiki/opencode-termux/release/Push261005",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push261005",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push261005",
+      "ja": "ja/wiki/opencode-termux/release/Push261005",
+      "es": "es/wiki/opencode-termux/release/Push261005"
+    }
+  }
+}
