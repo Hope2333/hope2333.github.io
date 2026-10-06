@@ -101,8 +101,8 @@ function fakeMenuDoc() {
   };
   const doc = {
     createElement() {
-      return { type: '', textContent: '', attrs: {},
-        addEventListener() {},
+      return { type: '', textContent: '', attrs: {}, clickHandler: null,
+        addEventListener(type, fn) { if (type === 'click') this.clickHandler = fn; },
         setAttribute(k, v) { this.attrs[k] = v; } };
     },
   };
@@ -125,4 +125,28 @@ test('buildMenu: 移除菜单容器 → 断言红（返回 false）', () => {
 
 test('initLangMenu: 缺按钮/菜单容器 → 不接线（返回 false）', () => {
   assert.equal(i18n.initLangMenu({ getElementById: () => null }), false);
+});
+
+// ── Bug A 回归：🌐 菜单 URL 必须站点绝对（子目录页相对解析会双前缀 404）────
+
+test('menuUrlFor: 子目录页生成站点绝对路径且无重复 LANG 前缀', () => {
+  assert.equal(i18n.menuUrlFor({alternates:{ja:'ja/wiki/guides/install'}}, 'wiki/guides/install', 'ja'),
+    '/ja/wiki/guides/install.html');
+  assert.equal(i18n.menuUrlFor({alternates:{zh_CN:'zh_CN/wiki/guides/install'}}, 'wiki/guides/install', 'zh_CN'),
+    '/zh_CN/wiki/guides/install.html');
+  assert.equal(i18n.menuUrlFor(null, 'wiki/index', 'en'), '/wiki/index.html'); // pathForLang 回退同为绝对
+});
+
+test('buildMenu: 模拟点击日本語条目 → onPick 收到站点绝对 URL', () => {
+  const { doc, menu, items } = fakeMenuDoc();
+  const picked = [];
+  const map = { 'wiki/guides/install': { alternates: { ja: 'ja/wiki/guides/install' } } };
+  assert.equal(i18n.buildMenu(doc, menu, 'wiki/guides/install', 'zh_CN', (l, u) => picked.push([l, u]), map), true);
+  assert.equal(items.length, 5);
+  const ja = items.find((it) => it.textContent === '日本語');
+  ja.clickHandler();
+  assert.equal(picked.length, 1);
+  assert.equal(picked[0][0], 'ja');
+  assert.ok(picked[0][1].startsWith('/'), 'URL 必须以 / 开头');
+  assert.equal(picked[0][1], '/ja/wiki/guides/install.html');
 });

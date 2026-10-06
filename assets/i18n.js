@@ -92,6 +92,16 @@
   var LANG_LABELS = { en: 'English', zh_CN: '简体中文', zh_TW: '繁體中文', ja: '日本語', es: 'Español' };
   var LANG_MAP_URL = '/wiki/tpl/lang-map.json';
 
+  // 菜单条目 URL：lang-map alternates（既定口径为不带前导斜杠的相对路径）或
+  // pathForLang 回退 → 统一站点绝对路径（前导 /）+ .html 后缀。浏览器按当前页
+  // 所在目录解析相对路径，子目录页（如 /zh_CN/wiki/...）不绝对化会拼出双前缀 404。
+  function menuUrlFor(entry, logicalPath, lang) {
+    var url = (entry && entry.alternates && entry.alternates[lang]) || pathForLang(logicalPath, lang);
+    if (url && url.charAt(0) !== '/') url = '/' + url;
+    if (/\.html?$/.test(url) === false) url = url + '.html';
+    return url;
+  }
+
   // 菜单构建：五语条目 + 当前语言高亮（aria-current）。
   // langMap 传入 wiki/tpl/lang-map.json 的解析结果；不可用时回落 pathForLang（与表同构）。
   function buildMenu(doc, menu, logicalPath, currentLang, onPick, langMap) {
@@ -99,9 +109,7 @@
     menu.textContent = '';
     var entry = (langMap && langMap[logicalPath]) || null;
     SUPPORTED_LANGS.forEach(function (lang) {
-      var url = (entry && entry.alternates && entry.alternates[lang]) || pathForLang(logicalPath, lang);
-      if (url && url.charAt(0) !== '/') url = '/' + url; // 站内绝对化
-      if (/\.html?$/.test(url) === false) url = url + '.html';
+      var url = menuUrlFor(entry, logicalPath, lang);
       var item = doc.createElement('button');
       item.type = 'button';
       item.setAttribute('aria-current', lang === currentLang ? 'true' : 'false');
@@ -174,6 +182,7 @@
     pathForLang: pathForLang,
     getStoredLang: getStoredLang,
     logicalPathFromUrl: logicalPathFromUrl,
+    menuUrlFor: menuUrlFor,
     buildMenu: buildMenu,
     initLangMenu: initLangMenu,
     attachCollapsible: attachCollapsible
