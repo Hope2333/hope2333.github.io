@@ -3,9 +3,6 @@ title: "MiMoCode-Termux"
 lang: zh-CN
 ---
 
-> [!NOTE]
-> **说明**：本页为根路径 canonical 页的原文镜像；该页的独立简体中文译文尚未撰写。原文页：[/wiki/projects/MiMoCode-Termux](/wiki/projects/MiMoCode-Termux.md)。已完整中译的站点内容从 [中文 wiki 索引](/zh_CN/wiki/opencode-termux/) 进入。
-
 # MiMoCode-Termux
 
 > MiMoCode for Termux, based on opencode-termux

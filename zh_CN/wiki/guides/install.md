@@ -3,9 +3,6 @@ title: "安装指引"
 lang: zh-CN
 ---
 
-> [!NOTE]
-> **说明**：本页为根路径 canonical 页的原文镜像；该页的独立简体中文译文尚未撰写。原文页：[/wiki/guides/install](/wiki/guides/install.md)。已完整中译的站点内容从 [中文 wiki 索引](/zh_CN/wiki/opencode-termux/) 进入。
-
 # 安装指引
 
 各项目的安装方式取决于是否已进入 hope2333 软件源。

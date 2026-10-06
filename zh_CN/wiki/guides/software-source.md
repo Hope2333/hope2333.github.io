@@ -3,9 +3,6 @@ title: "软件源指引"
 lang: zh-CN
 ---
 
-> [!NOTE]
-> **说明**：本页为根路径 canonical 页的原文镜像；该页的独立简体中文译文尚未撰写。原文页：[/wiki/guides/software-source](/wiki/guides/software-source.md)。已完整中译的站点内容从 [中文 wiki 索引](/zh_CN/wiki/opencode-termux/) 进入。
-
 # 软件源指引
 
 Hope2333 软件源的入口是 <https://hope2333.github.io/repo/>，当前提供 Termux（aarch64）软件包，支持 pacman 与 apt 两种客户端。

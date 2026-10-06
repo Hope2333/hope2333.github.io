@@ -1,9 +1,30 @@
 ---
-title: "Update"
+title: "アップデートガイド"
 lang: ja
 ---
 
-# Update
+# アップデートガイド
 
-> [!NOTE]
-> **日本語版は未作成です。** このページにはまだ日本語訳がありません。原文（簡体字中国語）はサイトのルートにあります：[/wiki/guides/update](/wiki/guides/update.md).
+## 日常的な更新
+
+pacman クライアント：
+
+```sh
+pacman -Syu
+```
+
+apt クライアント：
+
+```sh
+apt update && apt upgrade
+```
+
+`apt upgrade` は hope2333-mirrorlist も一緒にアップグレードします（ソースリストはパッケージに伴って更新されます）；pacman クライアントも同様です。定期的に実行し、パッケージを最新の状態に保つことをおすすめします。
+
+## リリースの仕組み
+
+各リポジトリは Push タグ形式でリリースしており（例：Push260906）、`releases/latest/download` は常に最新の正式バッチを指します。統一ソースとサイトのパッケージは、site-rebuild フローによってリリース後に自動同期されます。そのためタグ名を気にする必要はなく、`pacman -Syu` / `apt upgrade` で取得できるものが常に最新のビルドです。
+
+## ソース同期
+
+ソースの内容は site-rebuild フローによって同期がトリガーされ、リポジトリの更新は自動的にソースへ反映されます。

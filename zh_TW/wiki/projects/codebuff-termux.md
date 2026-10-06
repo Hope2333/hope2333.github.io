@@ -3,9 +3,6 @@ title: "codebuff-termux"
 lang: zh-TW
 ---
 
-> [!NOTE]
-> **說明**：本頁內容由簡體中文原文機械轉換為繁體（字級變體轉換，非翻譯）。簡體原文：[/wiki/projects/codebuff-termux](/zh_CN/wiki/projects/codebuff-termux.md)；根路徑 canonical：[/wiki/projects/codebuff-termux](/wiki/projects/codebuff-termux.md)。站點已完整中譯的內容從 [繁體 wiki 索引](/zh_TW/wiki/opencode-termux/) 進入。
-
 # codebuff-termux
 
 > Codebuff AI coding assistant for Termux

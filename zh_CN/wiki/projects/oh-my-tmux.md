@@ -3,9 +3,6 @@ title: "oh-my-tmux"
 lang: zh-CN
 ---
 
-> [!NOTE]
-> **说明**：本页为根路径 canonical 页的原文镜像；该页的独立简体中文译文尚未撰写。原文页：[/wiki/projects/oh-my-tmux](/wiki/projects/oh-my-tmux.md)。已完整中译的站点内容从 [中文 wiki 索引](/zh_CN/wiki/opencode-termux/) 进入。
-
 # oh-my-tmux
 
 > Lightweight Oh My Tmux configuration with performance tweaks

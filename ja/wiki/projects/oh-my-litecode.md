@@ -5,5 +5,18 @@ lang: ja
 
 # oh-my-litecode
 
-> [!NOTE]
-> **日本語版は未作成です。** このページにはまだ日本語訳がありません。原文（簡体字中国語）はサイトのルートにあります：[/wiki/projects/oh-my-litecode](/wiki/projects/oh-my-litecode.md).
+> AI CLI toolchain manager (OML)
+
+## 概要
+
+AI CLI toolchain manager（OML）。各種 AI CLI ツールを一元的に管理するためのコマンドラインツールチェーンマネージャーです。
+
+## インストール
+
+このプロジェクトはまだ hope2333 ソフトウェアソースには収録されていません。[GitHub リポジトリ](https://github.com/Hope2333/oh-my-litecode) から入手し、インストール方法はリポジトリの README を参照してください。
+
+## リンク
+
+- GitHub リポジトリ：<https://github.com/Hope2333/oh-my-litecode>
+
+<!-- TODO: 待补充 -->

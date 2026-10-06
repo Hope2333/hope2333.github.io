@@ -5,5 +5,18 @@ lang: en
 
 # AI-LTC
 
-> [!NOTE]
-> **English version pending.** This page has no English translation yet. The original content (Chinese) lives at the site root: [/wiki/projects/AI-LTC](/wiki/projects/AI-LTC.md).
+> Long-term AI coordination framework
+
+## Overview
+
+A long-term AI coordination framework. This project provides a coordination framework for long-horizon collaboration, organizing and managing long-running cooperation between AI agents.
+
+## Installation
+
+This project is not yet in the hope2333 repository. Please get it from the [GitHub repository](https://github.com/Hope2333/AI-LTC); see the repository README for installation instructions.
+
+## Links
+
+- GitHub repository: <https://github.com/Hope2333/AI-LTC>
+
+<!-- TODO: to be expanded -->

@@ -5,5 +5,22 @@ lang: en
 
 # codegraph-termux
 
-> [!NOTE]
-> **English version pending.** This page has no English translation yet. The original content (Chinese) lives at the site root: [/wiki/projects/codegraph-termux](/wiki/projects/codegraph-termux.md).
+> Local-first code intelligence for AI agents (MCP)
+
+## Overview
+
+Local-first code intelligence for AI agents (MCP). This project provides local-first code intelligence for AI agents, integrated via the MCP protocol; code indexing and analysis all happen locally.
+
+## Installation
+
+This project is available in the hope2333 repository. Run the following in Termux:
+
+```sh
+pacman -Sy codegraph
+```
+
+## Links
+
+- GitHub repository: <https://github.com/Hope2333/codegraph-termux>
+
+<!-- TODO: to be expanded -->

@@ -3,9 +3,6 @@ title: "更新指引"
 lang: zh-TW
 ---
 
-> [!NOTE]
-> **說明**：本頁內容由簡體中文原文機械轉換為繁體（字級變體轉換，非翻譯）。簡體原文：[/wiki/guides/update](/zh_CN/wiki/guides/update.md)；根路徑 canonical：[/wiki/guides/update](/wiki/guides/update.md)。站點已完整中譯的內容從 [繁體 wiki 索引](/zh_TW/wiki/opencode-termux/) 進入。
-
 # 更新指引
 
 ## 日常更新

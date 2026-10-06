@@ -3,9 +3,6 @@ title: "安裝指引"
 lang: zh-TW
 ---
 
-> [!NOTE]
-> **說明**：本頁內容由簡體中文原文機械轉換為繁體（字級變體轉換，非翻譯）。簡體原文：[/wiki/guides/install](/zh_CN/wiki/guides/install.md)；根路徑 canonical：[/wiki/guides/install](/wiki/guides/install.md)。站點已完整中譯的內容從 [繁體 wiki 索引](/zh_TW/wiki/opencode-termux/) 進入。
-
 # 安裝指引
 
 各項目的安裝方式取決於是否已進入 hope2333 軟件源。

@@ -3,9 +3,6 @@ title: "架構說明"
 lang: zh-TW
 ---
 
-> [!NOTE]
-> **說明**：本頁內容由簡體中文原文機械轉換為繁體（字級變體轉換，非翻譯）。簡體原文：[/wiki/opencode-termux/architecture](/zh_CN/wiki/opencode-termux/architecture.md)；根路徑 canonical：[/wiki/opencode-termux/architecture](/wiki/opencode-termux/architecture.md)。站點已完整中譯的內容從 [繁體 wiki 索引](/zh_TW/wiki/opencode-termux/) 進入。
-
 # 架構說明
 
 ## 移植管線

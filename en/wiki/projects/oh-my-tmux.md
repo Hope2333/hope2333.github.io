@@ -5,5 +5,18 @@ lang: en
 
 # oh-my-tmux
 
-> [!NOTE]
-> **English version pending.** This page has no English translation yet. The original content (Chinese) lives at the site root: [/wiki/projects/oh-my-tmux](/wiki/projects/oh-my-tmux.md).
+> Lightweight Oh My Tmux configuration with performance tweaks
+
+## Overview
+
+Lightweight Oh My Tmux configuration with performance tweaks. This project offers a lightweight Oh My Tmux configuration with performance tuning, so tmux stays smooth even on low-end devices.
+
+## Installation
+
+This project is not yet in the hope2333 repository. Please get it from the [GitHub repository](https://github.com/Hope2333/oh-my-tmux); see the repository README for installation instructions.
+
+## Links
+
+- GitHub repository: <https://github.com/Hope2333/oh-my-tmux>
+
+<!-- TODO: to be expanded -->

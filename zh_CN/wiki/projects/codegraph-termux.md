@@ -3,9 +3,6 @@ title: "codegraph-termux"
 lang: zh-CN
 ---
 
-> [!NOTE]
-> **说明**：本页为根路径 canonical 页的原文镜像；该页的独立简体中文译文尚未撰写。原文页：[/wiki/projects/codegraph-termux](/wiki/projects/codegraph-termux.md)。已完整中译的站点内容从 [中文 wiki 索引](/zh_CN/wiki/opencode-termux/) 进入。
-
 # codegraph-termux
 
 > Local-first code intelligence for AI agents (MCP)

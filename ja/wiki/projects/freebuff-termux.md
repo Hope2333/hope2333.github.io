@@ -5,5 +5,18 @@ lang: ja
 
 # freebuff-termux
 
-> [!NOTE]
-> **日本語版は未作成です。** このページにはまだ日本語訳がありません。原文（簡体字中国語）はサイトのルートにあります：[/wiki/projects/freebuff-termux](/wiki/projects/freebuff-termux.md).
+> Freebuff AI coding assistant for Termux
+
+## 概要
+
+Freebuff AI coding assistant for Termux。AI コーディングアシスタント「Freebuff」を Termux プラットフォームに移植し、Android 端末上で手軽に使えるようにします。
+
+## インストール
+
+このプロジェクトはまだ hope2333 ソフトウェアソースには収録されていません。[GitHub リポジトリ](https://github.com/Hope2333/freebuff-termux) から入手し、インストール方法はリポジトリの README を参照してください。
+
+## リンク
+
+- GitHub リポジトリ：<https://github.com/Hope2333/freebuff-termux>
+
+<!-- TODO: 待补充 -->

@@ -5,5 +5,18 @@ lang: en
 
 # tsac-ng
 
-> [!NOTE]
-> **English version pending.** This page has no English translation yet. The original content (Chinese) lives at the site root: [/wiki/projects/tsac-ng](/wiki/projects/tsac-ng.md).
+> Multi-backend neural audio codec in C
+
+## Overview
+
+A multi-backend neural audio codec written in C. This project implements a neural audio codec supporting multiple inference backends.
+
+## Installation
+
+This project is not yet in the hope2333 repository. Please get it from the [GitHub repository](https://github.com/Hope2333/tsac-ng); see the repository README for installation instructions.
+
+## Links
+
+- GitHub repository: <https://github.com/Hope2333/tsac-ng>
+
+<!-- TODO: to be expanded -->

@@ -5,5 +5,18 @@ lang: ja
 
 # AI-LTC
 
-> [!NOTE]
-> **日本語版は未作成です。** このページにはまだ日本語訳がありません。原文（簡体字中国語）はサイトのルートにあります：[/wiki/projects/AI-LTC](/wiki/projects/AI-LTC.md).
+> Long-term AI coordination framework
+
+## 概要
+
+Long-term AI coordination framework。AI 同士の長期的な協調を組織・管理するためのフレームワークです。
+
+## インストール
+
+このプロジェクトはまだ hope2333 ソフトウェアソースには収録されていません。[GitHub リポジトリ](https://github.com/Hope2333/AI-LTC) から入手し、インストール方法はリポジトリの README を参照してください。
+
+## リンク
+
+- GitHub リポジトリ：<https://github.com/Hope2333/AI-LTC>
+
+<!-- TODO: 待补充 -->

@@ -3,9 +3,6 @@ title: "opencode-termux"
 lang: zh-TW
 ---
 
-> [!NOTE]
-> **說明**：本頁內容由簡體中文原文機械轉換為繁體（字級變體轉換，非翻譯）。簡體原文：[/wiki/projects/opencode-termux](/zh_CN/wiki/projects/opencode-termux.md)；根路徑 canonical：[/wiki/projects/opencode-termux](/wiki/projects/opencode-termux.md)。站點已完整中譯的內容從 [繁體 wiki 索引](/zh_TW/wiki/opencode-termux/) 進入。
-
 # opencode-termux
 
 > OpenCode on Termux/Android, the flagship project

@@ -5,5 +5,17 @@ lang: es
 
 # exagear-obb
 
-> [!NOTE]
-> **Versión en español pendiente.** Esta página aún no tiene traducción al español. El contenido original (chino) está en la raíz del sitio: [/wiki/projects/exagear-obb](/wiki/projects/exagear-obb.md).
+> ExaGear OBB builder scripts
+
+## Introducción
+
+ExaGear OBB builder scripts. El proyecto ofrece un conjunto de scripts para construir OBB de ExaGear, simplificando el empaquetado de los archivos relacionados con ExaGear.
+
+## Instalación
+
+Este proyecto aún no está en el repositorio de software de hope2333; obténlo desde el [repositorio de GitHub](https://github.com/Hope2333/exagear-obb). Las instrucciones de instalación están en el README del repositorio.
+
+## Enlaces
+
+- Repositorio de GitHub: <https://github.com/Hope2333/exagear-obb>
+
