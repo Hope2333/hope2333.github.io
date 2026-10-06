@@ -30,6 +30,7 @@ render_one() {
   local out="_site/${f%.md}.html"
   mkdir -p "$(dirname "$out")"
   pandoc "$f" -f gfm -t html5 --template wiki/tpl/doc.html \
+    --lua-filter=wiki/tpl/md-links.lua \
     --metadata lang="$(infer_lang "$f")" \
     --metadata title="$(basename "$f" .md)" \
     -o "$out"
