@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Hope2333 软件源 — Termux pacman/APT 软件源一键安装与手动配置指引">
+<meta name="description" content="Repositorio de software de Hope2333 — guía de instalación en un solo paso y configuración manual para los repos pacman/APT de Termux">
 <link rel="icon" type="image/png" href="/assets/avatar.png">
 <link rel="stylesheet" href="/assets/site.css">
-<title>软件源 · Hope2333</title>
+<title>Repositorio de software · Hope2333</title>
 <style>
-/* /repo/ 页面专属布局规则 — 仅补充共享 site.css 未覆盖的部分；颜色全部走 var() 令牌 */
+/* Reglas de layout exclusivas de las páginas /repo/ — solo complementan lo que site.css no cubre; todos los colores usan tokens var() */
 main section{margin-top:var(--s5)}
 main h2{font-family:var(--mono);font-size:1.15rem;font-weight:600}
 main p{color:var(--subtext0);margin-top:var(--s2)}
@@ -21,37 +21,36 @@ footer nav{align-items:center}
 </style>
 </head>
 <body>
-<div style="max-width:46rem;margin:1rem auto;padding:.6rem 1rem;border:1px solid color-mix(in srgb,var(--text) 25%,transparent);border-radius:8px;background:var(--mantle);font-size:.9rem"><strong>Versión en español pendiente.</strong> Esta página refleja la original (chino): <a href="/repo/">/repo/</a>. La estructura y las URL no cambian.</div>
 <div class="wrap">
 <header>
   <p class="kicker">hope2333.github.io</p>
-  <h1>软件源 <span class="accent">Software Repo</span></h1>
+  <h1>Repositorio de software <span class="accent">Software Repo</span></h1>
   <hr class="bar">
 </header>
 <main>
   <section>
-    <h2>配置或升级（引导源 + mirrorlist 包，自动迁移旧配置）</h2>
+    <h2>Configurar o actualizar (repo de arranque + paquete mirrorlist, migra la configuración antigua automáticamente)</h2>
     <pre><code>curl -fsSL https://hope2333.github.io/repo/install.sh | sh</code></pre>
     <ul>
-      <li>自动检测 Termux 环境</li>
-      <li>写入引导源并安装 hope2333-mirrorlist 包（索引 db 在 io，包走 Release CDN，自动迁移旧配置，幂等可重复）</li>
-      <li>手动配置见下方链接</li>
+      <li>Detecta el entorno Termux automáticamente</li>
+      <li>Escribe el repo de arranque e instala el paquete hope2333-mirrorlist (db de índice en este sitio, paquetes servidos vía Release CDN, migra la configuración antigua automáticamente, idempotente y reejecutable)</li>
+      <li>Para la configuración manual, consulte el enlace inferior</li>
     </ul>
   </section>
   <section>
-    <h2>手动配置</h2>
-    <p>适合不想跑脚本、或需要逐行审查每条命令的用户。配置后索引（db）存放于本站，软件包经 GitHub Release CDN 分发。</p>
-    <div class="cta"><a class="repo" href="/repo/Termux/">Termux 手动配置指引</a></div>
+    <h2>Configuración manual</h2>
+    <p>Para quienes prefieren no ejecutar scripts o quieren revisar cada comando línea por línea. Tras la configuración, el índice (db) se aloja en este sitio y los paquetes se distribuyen vía GitHub Release CDN.</p>
+    <div class="cta"><a class="repo" href="/es/repo/Termux/">Guía de configuración manual de Termux</a></div>
   </section>
   <section>
     <h2>Roadmap</h2>
-    <p>未来将引入签名校验（repo-add -s / Release 签名），当前 v1 无签名。</p>
+    <p>La verificación de firmas (repo-add -s / firmas de Release) se introducirá más adelante; la v1 actualmente no está firmada.</p>
   </section>
 </main>
 <footer>
   <nav>
-    <a href="/">← 返回首页</a>
-    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换阴阳主题">☯</button>
+    <a href="/es/">← Volver al inicio</a>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro">☯</button>
   </nav>
   <p class="colophon">Hope2333 · 幽零小喵 — Technical Artist · Animation Tooling · Linux Engineering</p>
 </footer>

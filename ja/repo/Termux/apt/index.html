@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>APT 软件源 · Hope2333</title>
+<title>APT リポジトリ · Hope2333</title>
 <link rel="stylesheet" href="/assets/site.css">
 <style>
-/* 页面专属布局规则 — 颜色全部走 site.css var() 令牌，随阴阳主题自适应 */
+/* ページ固有のレイアウトルール — 色はすべて site.css の var() トークンで管理され、テーマに追従 */
 body{line-height:1.7}
 .wrap{max-width:46rem;margin:0 auto;padding:var(--s6) var(--s4) var(--s5)}
 h1{font-family:var(--mono);font-size:1.7rem;margin-top:var(--s1)}
@@ -25,40 +25,39 @@ summary{cursor:pointer;color:var(--blue);font-family:var(--mono);font-size:.95re
 </style>
 </head>
 <body>
-<div style="max-width:46rem;margin:1rem auto;padding:.6rem 1rem;border:1px solid color-mix(in srgb,var(--text) 25%,transparent);border-radius:8px;background:var(--mantle);font-size:.9rem"><strong>日本語版は未作成です。</strong> このページはオリジナル（簡体字中国語）のミラーです：<a href="/repo/Termux/apt/">/repo/Termux/apt/</a>。URL 構成は変わりません。</div>
 <div class="wrap">
 <header>
-  <button id="theme-toggle" class="theme-toggle" aria-label="切换阴阳主题">☯</button>
+  <button id="theme-toggle" class="theme-toggle" aria-label="テーマを切り替える">☯</button>
   <p class="kicker">hope2333.github.io / repo / Termux / apt</p>
-  <h1>APT 软件源（Termux）</h1>
+  <h1>APT リポジトリ（Termux）</h1>
   <hr class="bar">
-  <p class="lead">通过引导源 + hope2333-mirrorlist 包安装本站发布的 Termux 软件包。</p>
+  <p class="lead">ブートストラップリポジトリ + hope2333-mirrorlist パッケージで、当サイトが公開している Termux パッケージをインストールします。</p>
 </header>
 <main>
-  <h2>推荐流程（引导源 + mirrorlist 包）</h2>
+  <h2>推奨手順（ブートストラップリポジトリ + mirrorlist パッケージ）</h2>
   <ol>
-    <li>将引导行写入 <code>$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list</code>：</li>
+    <li>ブートストラップ行を <code>$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list</code> に書き込みます：</li>
   </ol>
   <pre><code>deb [trusted=yes arch=aarch64] https://hope2333.github.io/repo/Termux/apt/ ./</code></pre>
   <ol start="2">
-    <li>安装 mirrorlist 包：<code>apt update &amp;&amp; apt install hope2333-mirrorlist</code>；</li>
-    <li>包内写入 <code>hope2333.list</code>（5 行 flat，指向各仓 Release latest），此后源变更随包升级生效。</li>
+    <li>mirrorlist パッケージをインストールします：<code>apt update &amp;&amp; apt install hope2333-mirrorlist</code>；</li>
+    <li>パッケージが <code>hope2333.list</code> を書き込みます（各リポジトリの Release latest を指す 5 行の flat 形式）。以降のリポジトリ変更はパッケージ更新時に反映されます。</li>
   </ol>
-  <p>配置完成后即可安装软件包，例如 <code>apt install codegraph</code>。</p>
-  <p class="note">旧 <code>deb .../repo/Termux/apt/ stable main</code> 行已失效（io 不再托管 apt 仓），请移除或替换为引导行。</p>
-  <h2>手动配置（备用）</h2>
+  <p>設定が完了すれば、パッケージをインストールできます。例：<code>apt install codegraph</code>。</p>
+  <p class="note">旧 <code>deb .../repo/Termux/apt/ stable main</code> 行は無効です（io は apt リポジトリをホストしていません）。削除するかブートストラップ行に置き換えてください。</p>
+  <h2>手動設定（予備）</h2>
   <details>
-    <summary>展开 5 行 flat 源（不装 hope2333-mirrorlist 包）</summary>
+    <summary>5 行の flat リポジトリを表示（hope2333-mirrorlist をインストールしない場合）</summary>
     <pre><code>deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codegraph-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/opencode-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/freebuff-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codebuff-termux/releases/latest/download/ ./</code></pre>
-    <p class="note">生效依赖各源仓 release 提供 Packages.gz（termux-asset-update v7.2），落地前 flat 行 404；本站（io）不再托管任何包文件。MiMoCode 为预发布渠道，显式钉 Push260829。</p>
+    <p class="note">この方法が機能するには、各リポジトリの release が Packages.gz（termux-asset-update v7.2）を提供している必要があり、整うまで flat 行は 404 になります。当サイト（io）はパッケージファイルをホストしていません。MiMoCode はプレリリースチャネルで、Push260829 に明示的にピン留めされています。</p>
   </details>
 </main>
 <footer>
-  <nav><a href="../../../">返回首页</a></nav>
+  <nav><a href="/ja/">ホームへ戻る</a></nav>
 </footer>
 </div>
 <script src="/assets/theme.js"></script>

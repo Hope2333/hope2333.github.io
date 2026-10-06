@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Termux 专属手动配置 · Hope2333</title>
+<title>Configuración manual de Termux · Hope2333</title>
 <link rel="stylesheet" href="/assets/site.css">
 <style>
 /* layout rules only — colors come from shared tokens (site.css) */
@@ -47,17 +47,16 @@ summary { cursor: pointer; color: var(--blue); font-size: 14px; }
 </style>
 </head>
 <body>
-<div style="max-width:46rem;margin:1rem auto;padding:.6rem 1rem;border:1px solid color-mix(in srgb,var(--text) 25%,transparent);border-radius:8px;background:var(--mantle);font-size:.9rem"><strong>Versión en español pendiente.</strong> Esta página refleja la original (chino): <a href="/repo/Termux/">/repo/Termux/</a>. La estructura y las URL no cambian.</div>
 <main class="wrap">
-  <button id="theme-toggle" class="theme-toggle" aria-label="切换阴阳主题">☯</button>
+  <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema claro/oscuro">☯</button>
   <p class="kicker">Hope2333 · Termux</p>
-  <h1>Termux 专属手动配置 · <span class="accent">Hope2333</span></h1>
+  <h1>Configuración manual de Termux · <span class="accent">Hope2333</span></h1>
   <hr class="bar">
-  <p class="hint">推荐先用一键脚本：<a href="/repo/">/repo/ install.sh</a>（自动检测 Termux、配置统一源并安装 hope2333-mirrorlist 包、自动迁移旧配置、幂等）。以下为手动配置方式。</p>
+  <p class="hint">Se recomienda probar primero el script de un solo paso: <a href="/es/repo/">/es/repo/ install.sh</a> (detecta Termux automáticamente, configura el repo unificado, instala el paquete hope2333-mirrorlist, migra la configuración antigua, idempotente). A continuación se describe la configuración manual.</p>
 
-  <h2>Pacman 源配置（统一源 + mirrorlist 包）</h2>
+  <h2>Configuración del repo pacman (repo unificado + paquete mirrorlist)</h2>
   <ol>
-    <li>将统一节追加到 <code>$PREFIX/etc/pacman.conf</code> 末尾：</li>
+    <li>Añada la sección unificada al final de <code>$PREFIX/etc/pacman.conf</code>:</li>
   </ol>
   <pre><code>[hope2333]
 Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
@@ -68,20 +67,20 @@ Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
 Server = https://hope2333.github.io/repo/Termux/pacman/
 SigLevel = Optional TrustAll</code></pre>
   <ol start="2">
-    <li>安装 mirrorlist 包：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>（包安装后钩子把手动节替换为 <code>Include = /etc/pacman.d/hope2333-mirrorlist.conf</code> 一行——托管 conf 自带节头与 Server/SigLevel，pacman.conf 内保留同名节会双重注册丢 Server，此后源变更随包升级生效）</li>
+    <li>Instale el paquete mirrorlist: <code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code> (tras la instalación, el hook del paquete sustituye la sección manual por una única línea <code>Include = /etc/pacman.d/hope2333-mirrorlist.conf</code> — el conf gestionado ya incluye su propio encabezado de sección y las líneas Server/SigLevel; conservar una sección con el mismo nombre en pacman.conf la registraría dos veces y se perderían los Server. Los cambios de repo surten efecto a través de las actualizaciones del paquete)</li>
   </ol>
-  <p class="hint">已有旧版 <code>[hope2333-meta]</code> 引导节或旧 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本统一节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
-  <h2>APT 源配置（引导源 + mirrorlist 包）</h2>
+  <p class="hint">Si conserva la sección de arranque antigua <code>[hope2333-meta]</code> o un bloque <code>[hope2333]</code> anterior (con uno o varios Server): sustitúyalo por completo por esta sección unificada, no lo añada — el registro duplicado falla con database already registered; o simplemente vuelva a ejecutar install.sh para migrar automáticamente.</p>
+  <h2>Configuración del repo APT (repo de arranque + paquete mirrorlist)</h2>
   <ol>
-    <li>将引导行写入 <code>$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list</code>：</li>
+    <li>Escriba la línea de arranque en <code>$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list</code>:</li>
   </ol>
   <pre><code>deb [trusted=yes arch=aarch64] https://hope2333.github.io/repo/Termux/apt/ ./</code></pre>
   <ol start="2">
-    <li>安装 mirrorlist 包：<code>apt update &amp;&amp; apt install hope2333-mirrorlist</code>（包内写入 hope2333.list，5 行 flat，指向各仓 Release latest）</li>
+    <li>Instale el paquete mirrorlist: <code>apt update &amp;&amp; apt install hope2333-mirrorlist</code> (el paquete escribe hope2333.list — 5 líneas flat que apuntan al Release latest de cada repo)</li>
   </ol>
-  <p class="hint">旧 <code>deb .../repo/Termux/apt/ stable main</code> 行已失效（io 不再托管 apt 仓），请移除或替换为引导行。</p>
+  <p class="hint">La línea antigua <code>deb .../repo/Termux/apt/ stable main</code> ya no es válida (io ya no aloja el repo apt); elimínela o sustitúyala por la línea de arranque.</p>
   <details>
-    <summary>手动配置（不装 hope2333-mirrorlist 包）</summary>
+    <summary>Configuración manual (sin instalar el paquete hope2333-mirrorlist)</summary>
     <pre><code>deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codegraph-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/opencode-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/ ./
@@ -89,11 +88,11 @@ deb [trusted=yes arch=aarch64] https://github.com/Hope2333/freebuff-termux/relea
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codebuff-termux/releases/latest/download/ ./</code></pre>
   </details>
 
-  <p class="hint">统一源节与 hope2333-mirrorlist 包内容一致；MiMoCode 为预发布渠道，显式钉在 Push260829（GitHub 禁止 prerelease 为 Latest，releases/latest 会 404）。</p>
+  <p class="hint">La sección del repo unificado coincide con el contenido del paquete hope2333-mirrorlist; MiMoCode es un canal de prelanzamiento fijado explícitamente a Push260829 (GitHub no permite que un prerelease sea Latest, por lo que releases/latest daría 404).</p>
 
-  <p class="roadmap">未来将引入签名校验（repo-add -s / Release 签名），当前 v1 无签名。</p>
+  <p class="roadmap">La verificación de firmas (repo-add -s / firmas de Release) se introducirá más adelante; la v1 actualmente no está firmada.</p>
 
-  <a class="back" href="/repo/">← 返回 /repo/ 软件源总览</a>
+  <a class="back" href="/es/repo/">← Volver al resumen del repositorio de software en /es/repo/</a>
 </main>
 <script src="/assets/theme.js"></script>
 </body>

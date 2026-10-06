@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pacman 软件源 · Hope2333</title>
+<title>pacman リポジトリ · Hope2333</title>
 <link rel="stylesheet" href="/assets/site.css">
 <style>
-/* 页面专属布局规则 — 颜色全部走 site.css var() 令牌，随阴阳主题自适应 */
+/* ページ固有のレイアウトルール — 色はすべて site.css の var() トークンで管理され、テーマに追従 */
 body{line-height:1.7}
 .wrap{max-width:46rem;margin:0 auto;padding:var(--s6) var(--s4) var(--s5)}
 h1{font-family:var(--mono);font-size:1.7rem;margin-top:var(--s1)}
@@ -25,19 +25,18 @@ summary{cursor:pointer;color:var(--blue);font-family:var(--mono);font-size:.95re
 </style>
 </head>
 <body>
-<div style="max-width:46rem;margin:1rem auto;padding:.6rem 1rem;border:1px solid color-mix(in srgb,var(--text) 25%,transparent);border-radius:8px;background:var(--mantle);font-size:.9rem"><strong>日本語版は未作成です。</strong> このページはオリジナル（簡体字中国語）のミラーです：<a href="/repo/Termux/pacman/">/repo/Termux/pacman/</a>。URL 構成は変わりません。</div>
 <div class="wrap">
 <header>
-  <button id="theme-toggle" class="theme-toggle" aria-label="切换阴阳主题">☯</button>
+  <button id="theme-toggle" class="theme-toggle" aria-label="テーマを切り替える">☯</button>
   <p class="kicker">hope2333.github.io / repo / Termux / pacman</p>
-  <h1>Pacman 软件源（Termux）</h1>
+  <h1>pacman リポジトリ（Termux）</h1>
   <hr class="bar">
-  <p class="lead">通过统一 [hope2333] 源 + hope2333-mirrorlist 包安装本站发布的 Termux 软件包。</p>
+  <p class="lead">統一 [hope2333] リポジトリ + hope2333-mirrorlist パッケージで、当サイトが公開している Termux パッケージをインストールします。</p>
 </header>
 <main>
-  <h2>推荐流程（统一源 + mirrorlist 包）</h2>
+  <h2>推奨手順（統一リポジトリ + mirrorlist パッケージ）</h2>
   <ol>
-    <li>将统一节追加到 <code>$PREFIX/etc/pacman.conf</code> 末尾：</li>
+    <li>統一セクションを <code>$PREFIX/etc/pacman.conf</code> の末尾に追記します：</li>
   </ol>
   <pre><code>[hope2333]
 Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
@@ -48,15 +47,15 @@ Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
 Server = https://hope2333.github.io/repo/Termux/pacman/
 SigLevel = Optional TrustAll</code></pre>
   <ol start="2">
-    <li>安装 mirrorlist 包：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>；</li>
-    <li>包安装后钩子把手动节替换为 <code>Include = /etc/pacman.d/hope2333-mirrorlist.conf</code> 一行（托管 conf 自带节头与 Server/SigLevel；pacman.conf 内保留同名节会双重注册丢 Server），此后源变更随包升级生效。</li>
+    <li>mirrorlist パッケージをインストールします：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>；</li>
+    <li>インストール後、パッケージのフックが手動セクションを <code>Include = /etc/pacman.d/hope2333-mirrorlist.conf</code> の 1 行に置き換えます（管理対象 conf 自体がセクションヘッダと Server/SigLevel を持つため、pacman.conf 側に同名セクションを残すと二重登録で Server が失われます）。以降のリポジトリ変更はパッケージ更新時に反映されます。</li>
   </ol>
-  <p>配置完成后即可安装软件包，例如 <code>pacman -S codegraph</code>。</p>
-  <p class="note">已有旧版 <code>[hope2333-meta]</code> 引导节或旧 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本统一节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
-  <p class="note">统一 db（hope2333.db.tar.gz）收录五仓全部包 + hope2333-mirrorlist，托管在本站与各 Release CDN；包文件按 Server 顺序逐文件回退，最终从 GitHub Release CDN 下载（302 自动跟随）。MiMoCode 为预发布渠道，显式钉 Push260829。v1 源未签名，Optional TrustAll；后续 repo-add -s 升级。</p>
+  <p>設定が完了すれば、パッケージをインストールできます。例：<code>pacman -S codegraph</code>。</p>
+  <p class="note">旧形式の <code>[hope2333-meta]</code> ブートストラップセクションや旧 <code>[hope2333]</code> ブロック（Server 1 行・複数行を問わず）が残っている場合は、追記せず丸ごとこの統一セクションに置き換えてください — 二重登録すると database already registered エラーになります。あるいは install.sh を再実行すれば自動移行されます。</p>
+  <p class="note">統一 db（hope2333.db.tar.gz）には 5 リポジトリ全パッケージと hope2333-mirrorlist が収録され、当サイトと各 Release CDN にホストされています。パッケージファイルは Server の順に 1 ファイルずつフォールバックし、最終的に GitHub Release CDN からダウンロードされます（302 は自動追従）。MiMoCode はプレリリースチャネルで、Push260829 に明示的にピン留めされています。v1 のリポジトリは未署名のため Optional TrustAll。今後 repo-add -s への移行を予定しています。</p>
 </main>
 <footer>
-  <nav><a href="../../../">返回首页</a></nav>
+  <nav><a href="/ja/">ホームへ戻る</a></nav>
 </footer>
 </div>
 <script src="/assets/theme.js"></script>

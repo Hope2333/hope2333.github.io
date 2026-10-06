@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>APT 软件源 · Hope2333</title>
+<title>APT Repository · Hope2333</title>
 <link rel="stylesheet" href="/assets/site.css">
 <style>
-/* 页面专属布局规则 — 颜色全部走 site.css var() 令牌，随阴阳主题自适应 */
+/* page-specific layout rules — all colors go through site.css var() tokens, adapting to the light/dark theme */
 body{line-height:1.7}
 .wrap{max-width:46rem;margin:0 auto;padding:var(--s6) var(--s4) var(--s5)}
 h1{font-family:var(--mono);font-size:1.7rem;margin-top:var(--s1)}
@@ -25,40 +25,39 @@ summary{cursor:pointer;color:var(--blue);font-family:var(--mono);font-size:.95re
 </style>
 </head>
 <body>
-<div style="max-width:46rem;margin:1rem auto;padding:.6rem 1rem;border:1px solid color-mix(in srgb,var(--text) 25%,transparent);border-radius:8px;background:var(--mantle);font-size:.9rem"><strong>English version pending.</strong> This page mirrors the original (Chinese) repo page: <a href="/repo/Termux/apt/">/repo/Termux/apt/</a>. The repo layout and URLs are unchanged.</div>
 <div class="wrap">
 <header>
-  <button id="theme-toggle" class="theme-toggle" aria-label="切换阴阳主题">☯</button>
+  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark theme">☯</button>
   <p class="kicker">hope2333.github.io / repo / Termux / apt</p>
-  <h1>APT 软件源（Termux）</h1>
+  <h1>APT Repository (Termux)</h1>
   <hr class="bar">
-  <p class="lead">通过引导源 + hope2333-mirrorlist 包安装本站发布的 Termux 软件包。</p>
+  <p class="lead">Install the Termux packages published on this site via the bootstrap repo + hope2333-mirrorlist package.</p>
 </header>
 <main>
-  <h2>推荐流程（引导源 + mirrorlist 包）</h2>
+  <h2>Recommended flow (bootstrap repo + mirrorlist package)</h2>
   <ol>
-    <li>将引导行写入 <code>$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list</code>：</li>
+    <li>Write the bootstrap line to <code>$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list</code>:</li>
   </ol>
   <pre><code>deb [trusted=yes arch=aarch64] https://hope2333.github.io/repo/Termux/apt/ ./</code></pre>
   <ol start="2">
-    <li>安装 mirrorlist 包：<code>apt update &amp;&amp; apt install hope2333-mirrorlist</code>；</li>
-    <li>包内写入 <code>hope2333.list</code>（5 行 flat，指向各仓 Release latest），此后源变更随包升级生效。</li>
+    <li>Install the mirrorlist package: <code>apt update &amp;&amp; apt install hope2333-mirrorlist</code>;</li>
+    <li>The package writes <code>hope2333.list</code> (5 flat lines pointing at each repo's Release latest); repo changes then take effect through package upgrades.</li>
   </ol>
-  <p>配置完成后即可安装软件包，例如 <code>apt install codegraph</code>。</p>
-  <p class="note">旧 <code>deb .../repo/Termux/apt/ stable main</code> 行已失效（io 不再托管 apt 仓），请移除或替换为引导行。</p>
-  <h2>手动配置（备用）</h2>
+  <p>Once configured, you can install packages, e.g. <code>apt install codegraph</code>.</p>
+  <p class="note">The old <code>deb .../repo/Termux/apt/ stable main</code> line is obsolete (the apt repo is no longer hosted on io); remove it or replace it with the bootstrap line.</p>
+  <h2>Manual configuration (fallback)</h2>
   <details>
-    <summary>展开 5 行 flat 源（不装 hope2333-mirrorlist 包）</summary>
+    <summary>Expand the 5-line flat repos (without installing hope2333-mirrorlist)</summary>
     <pre><code>deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codegraph-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/opencode-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/freebuff-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codebuff-termux/releases/latest/download/ ./</code></pre>
-    <p class="note">生效依赖各源仓 release 提供 Packages.gz（termux-asset-update v7.2），落地前 flat 行 404；本站（io）不再托管任何包文件。MiMoCode 为预发布渠道，显式钉 Push260829。</p>
+    <p class="note">This only works if each source repo's release provides Packages.gz (termux-asset-update v7.2); until then the flat lines return 404. This site (io) no longer hosts any package files. MiMoCode is a pre-release channel pinned explicitly to Push260829.</p>
   </details>
 </main>
 <footer>
-  <nav><a href="../../../">返回首页</a></nav>
+  <nav><a href="/en/">Back to home</a></nav>
 </footer>
 </div>
 <script src="/assets/theme.js"></script>

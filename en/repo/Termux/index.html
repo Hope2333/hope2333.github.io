@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Termux 专属手动配置 · Hope2333</title>
+<title>Termux Manual Setup · Hope2333</title>
 <link rel="stylesheet" href="/assets/site.css">
 <style>
 /* layout rules only — colors come from shared tokens (site.css) */
@@ -47,17 +47,16 @@ summary { cursor: pointer; color: var(--blue); font-size: 14px; }
 </style>
 </head>
 <body>
-<div style="max-width:46rem;margin:1rem auto;padding:.6rem 1rem;border:1px solid color-mix(in srgb,var(--text) 25%,transparent);border-radius:8px;background:var(--mantle);font-size:.9rem"><strong>English version pending.</strong> This page mirrors the original (Chinese) repo page: <a href="/repo/Termux/">/repo/Termux/</a>. The repo layout and URLs are unchanged.</div>
 <main class="wrap">
-  <button id="theme-toggle" class="theme-toggle" aria-label="切换阴阳主题">☯</button>
+  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark theme">☯</button>
   <p class="kicker">Hope2333 · Termux</p>
-  <h1>Termux 专属手动配置 · <span class="accent">Hope2333</span></h1>
+  <h1>Termux Manual Setup · <span class="accent">Hope2333</span></h1>
   <hr class="bar">
-  <p class="hint">推荐先用一键脚本：<a href="/repo/">/repo/ install.sh</a>（自动检测 Termux、配置统一源并安装 hope2333-mirrorlist 包、自动迁移旧配置、幂等）。以下为手动配置方式。</p>
+  <p class="hint">Try the one-click script first: <a href="/en/repo/">/en/repo/ install.sh</a> (auto-detects Termux, configures the unified repo, installs the hope2333-mirrorlist package, migrates old config automatically, idempotent). Manual setup instructions follow.</p>
 
-  <h2>Pacman 源配置（统一源 + mirrorlist 包）</h2>
+  <h2>Pacman repo configuration (unified repo + mirrorlist package)</h2>
   <ol>
-    <li>将统一节追加到 <code>$PREFIX/etc/pacman.conf</code> 末尾：</li>
+    <li>Append the unified section to the end of <code>$PREFIX/etc/pacman.conf</code>:</li>
   </ol>
   <pre><code>[hope2333]
 Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
@@ -68,20 +67,20 @@ Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
 Server = https://hope2333.github.io/repo/Termux/pacman/
 SigLevel = Optional TrustAll</code></pre>
   <ol start="2">
-    <li>安装 mirrorlist 包：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>（包安装后钩子把手动节替换为 <code>Include = /etc/pacman.d/hope2333-mirrorlist.conf</code> 一行——托管 conf 自带节头与 Server/SigLevel，pacman.conf 内保留同名节会双重注册丢 Server，此后源变更随包升级生效）</li>
+    <li>Install the mirrorlist package: <code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code> (after installation, the package hook replaces the manual section with a single <code>Include = /etc/pacman.d/hope2333-mirrorlist.conf</code> line — the managed conf carries its own section header and Server/SigLevel lines; keeping a same-named section in pacman.conf would double-register it and lose the Servers. Repo changes then take effect through package upgrades)</li>
   </ol>
-  <p class="hint">已有旧版 <code>[hope2333-meta]</code> 引导节或旧 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本统一节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
-  <h2>APT 源配置（引导源 + mirrorlist 包）</h2>
+  <p class="hint">If you still have the legacy <code>[hope2333-meta]</code> bootstrap section or an old <code>[hope2333]</code> block (single or multiple Server lines): replace it entirely with this unified section — do not append. Duplicate registration fails with database already registered; alternatively, just re-run install.sh to migrate automatically.</p>
+  <h2>APT repo configuration (bootstrap repo + mirrorlist package)</h2>
   <ol>
-    <li>将引导行写入 <code>$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list</code>：</li>
+    <li>Write the bootstrap line to <code>$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list</code>:</li>
   </ol>
   <pre><code>deb [trusted=yes arch=aarch64] https://hope2333.github.io/repo/Termux/apt/ ./</code></pre>
   <ol start="2">
-    <li>安装 mirrorlist 包：<code>apt update &amp;&amp; apt install hope2333-mirrorlist</code>（包内写入 hope2333.list，5 行 flat，指向各仓 Release latest）</li>
+    <li>Install the mirrorlist package: <code>apt update &amp;&amp; apt install hope2333-mirrorlist</code> (the package writes hope2333.list — 5 flat lines pointing at each repo's Release latest)</li>
   </ol>
-  <p class="hint">旧 <code>deb .../repo/Termux/apt/ stable main</code> 行已失效（io 不再托管 apt 仓），请移除或替换为引导行。</p>
+  <p class="hint">The old <code>deb .../repo/Termux/apt/ stable main</code> line is obsolete (the apt repo is no longer hosted on io); remove it or replace it with the bootstrap line.</p>
   <details>
-    <summary>手动配置（不装 hope2333-mirrorlist 包）</summary>
+    <summary>Manual configuration (without installing the hope2333-mirrorlist package)</summary>
     <pre><code>deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codegraph-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/opencode-termux/releases/latest/download/ ./
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/ ./
@@ -89,11 +88,11 @@ deb [trusted=yes arch=aarch64] https://github.com/Hope2333/freebuff-termux/relea
 deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codebuff-termux/releases/latest/download/ ./</code></pre>
   </details>
 
-  <p class="hint">统一源节与 hope2333-mirrorlist 包内容一致；MiMoCode 为预发布渠道，显式钉在 Push260829（GitHub 禁止 prerelease 为 Latest，releases/latest 会 404）。</p>
+  <p class="hint">The unified repo section matches the contents of the hope2333-mirrorlist package; MiMoCode is a pre-release channel pinned explicitly to Push260829 (GitHub does not allow a prerelease to be Latest, so releases/latest would 404).</p>
 
-  <p class="roadmap">未来将引入签名校验（repo-add -s / Release 签名），当前 v1 无签名。</p>
+  <p class="roadmap">Signature verification (repo-add -s / Release signatures) will be introduced later; v1 is currently unsigned.</p>
 
-  <a class="back" href="/repo/">← 返回 /repo/ 软件源总览</a>
+  <a class="back" href="/en/repo/">← Back to the /en/repo/ software repo overview</a>
 </main>
 <script src="/assets/theme.js"></script>
 </body>

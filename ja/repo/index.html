@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Hope2333 软件源 — Termux pacman/APT 软件源一键安装与手动配置指引">
+<meta name="description" content="Hope2333 ソフトウェアリポジトリ — Termux pacman/APT リポジトリのワンクリックセットアップと手動設定ガイド">
 <link rel="icon" type="image/png" href="/assets/avatar.png">
 <link rel="stylesheet" href="/assets/site.css">
-<title>软件源 · Hope2333</title>
+<title>ソフトウェアリポジトリ · Hope2333</title>
 <style>
-/* /repo/ 页面专属布局规则 — 仅补充共享 site.css 未覆盖的部分；颜色全部走 var() 令牌 */
+/* /repo/ ページ専用のレイアウトルール — 共有 site.css が未カバーの部分のみ補完。色はすべて var() トークンで管理 */
 main section{margin-top:var(--s5)}
 main h2{font-family:var(--mono);font-size:1.15rem;font-weight:600}
 main p{color:var(--subtext0);margin-top:var(--s2)}
@@ -21,37 +21,36 @@ footer nav{align-items:center}
 </style>
 </head>
 <body>
-<div style="max-width:46rem;margin:1rem auto;padding:.6rem 1rem;border:1px solid color-mix(in srgb,var(--text) 25%,transparent);border-radius:8px;background:var(--mantle);font-size:.9rem"><strong>日本語版は未作成です。</strong> このページはオリジナル（簡体字中国語）のミラーです：<a href="/repo/">/repo/</a>。URL 構成は変わりません。</div>
 <div class="wrap">
 <header>
   <p class="kicker">hope2333.github.io</p>
-  <h1>软件源 <span class="accent">Software Repo</span></h1>
+  <h1>ソフトウェアリポジトリ <span class="accent">Software Repo</span></h1>
   <hr class="bar">
 </header>
 <main>
   <section>
-    <h2>配置或升级（引导源 + mirrorlist 包，自动迁移旧配置）</h2>
+    <h2>セットアップ・アップグレード（ブートストラップリポジトリ + mirrorlist パッケージ、旧設定は自動移行）</h2>
     <pre><code>curl -fsSL https://hope2333.github.io/repo/install.sh | sh</code></pre>
     <ul>
-      <li>自动检测 Termux 环境</li>
-      <li>写入引导源并安装 hope2333-mirrorlist 包（索引 db 在 io，包走 Release CDN，自动迁移旧配置，幂等可重复）</li>
-      <li>手动配置见下方链接</li>
+      <li>Termux 環境を自動判定</li>
+      <li>ブートストラップリポジトリを書き込み、hope2333-mirrorlist パッケージをインストール（インデックス db は当サイト、パッケージは Release CDN 経由で配信、旧設定を自動移行、冪等で再実行可能）</li>
+      <li>手動設定は下のリンクを参照</li>
     </ul>
   </section>
   <section>
-    <h2>手动配置</h2>
-    <p>适合不想跑脚本、或需要逐行审查每条命令的用户。配置后索引（db）存放于本站，软件包经 GitHub Release CDN 分发。</p>
-    <div class="cta"><a class="repo" href="/repo/Termux/">Termux 手动配置指引</a></div>
+    <h2>手動設定</h2>
+    <p>スクリプトを実行したくない方や、コマンドを 1 行ずつ確認したい方向け。設定後、インデックス（db）は当サイトに置かれ、パッケージは GitHub Release CDN 経由で配信されます。</p>
+    <div class="cta"><a class="repo" href="/ja/repo/Termux/">Termux 手動設定ガイド</a></div>
   </section>
   <section>
     <h2>Roadmap</h2>
-    <p>未来将引入签名校验（repo-add -s / Release 签名），当前 v1 无签名。</p>
+    <p>署名検証（repo-add -s / Release 署名）は今後導入予定です。現状の v1 は未署名です。</p>
   </section>
 </main>
 <footer>
   <nav>
-    <a href="/">← 返回首页</a>
-    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换阴阳主题">☯</button>
+    <a href="/ja/">← ホームへ戻る</a>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="テーマを切り替える">☯</button>
   </nav>
   <p class="colophon">Hope2333 · 幽零小喵 — Technical Artist · Animation Tooling · Linux Engineering</p>
 </footer>
