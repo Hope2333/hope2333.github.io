@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Termux 专属手动配置 · Hope2333</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+/* layout rules only — colors come from shared tokens (site.css) */
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--base); color: var(--text);
+  font-family: var(--sans);
+}
+.wrap { width: min(34rem, calc(100vw - var(--s6))); padding: var(--s5) 0; }
+.kicker { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--subtext0); margin: 0 0 var(--s2); }
+h1 { font-size: 28px; line-height: 1.25; margin: 0 0 var(--s3); }
+h1 .accent { color: var(--mauve); }
+.bar { height: 2px; width: 56px; background: var(--mauve); border: 0; margin: 0 0 var(--s4); }
+.hint {
+  border: 1px solid var(--blue); border-radius: var(--radius);
+  background: var(--mantle); padding: var(--s3) var(--s4);
+  margin: 0 0 var(--s5); font-size: 14px; line-height: 1.7;
+}
+.hint a { color: var(--blue); }
+h2 { font-size: 18px; margin: var(--s5) 0 var(--s2); }
+pre {
+  margin: 0 0 var(--s3); padding: var(--s3) var(--s4);
+  background: var(--crust); border: 1px solid var(--mantle);
+  border-radius: var(--radius); overflow-x: auto;
+}
+code { font-family: var(--mono); font-size: 13px; color: var(--green); }
+ol { margin: 0 0 var(--s3); padding-left: 20px; }
+li { font-size: 14px; line-height: 1.9; color: var(--subtext0); }
+li code { color: var(--peach); }
+.roadmap {
+  font-size: 13px; color: var(--subtext0);
+  border-left: 2px solid var(--peach); padding-left: var(--s3);
+  margin: var(--s5) 0 0;
+}
+.back { display: inline-block; margin-top: var(--s5); font-size: 13px; color: var(--blue); text-decoration: none; }
+.back:hover { text-decoration: underline; }
+details { margin: 0 0 var(--s3); border: 1px solid var(--mantle); border-radius: var(--radius); padding: var(--s2) var(--s3); }
+summary { cursor: pointer; color: var(--blue); font-size: 14px; }
+</style>
+</head>
+<body>
+<div style="max-width:46rem;margin:1rem auto;padding:.6rem 1rem;border:1px solid color-mix(in srgb,var(--text) 25%,transparent);border-radius:8px;background:var(--mantle);font-size:.9rem"><strong>日本語版は未作成です。</strong> このページはオリジナル（簡体字中国語）のミラーです：<a href="/repo//repo/Termux/">/repo//repo/Termux/</a>。URL 構成は変わりません。</div>
+<main class="wrap">
+  <button id="theme-toggle" class="theme-toggle" aria-label="切换阴阳主题">☯</button>
+  <p class="kicker">Hope2333 · Termux</p>
+  <h1>Termux 专属手动配置 · <span class="accent">Hope2333</span></h1>
+  <hr class="bar">
+  <p class="hint">推荐先用一键脚本：<a href="/repo/">/repo/ install.sh</a>（自动检测 Termux、配置统一源并安装 hope2333-mirrorlist 包、自动迁移旧配置、幂等）。以下为手动配置方式。</p>
+
+  <h2>Pacman 源配置（统一源 + mirrorlist 包）</h2>
+  <ol>
+    <li>将统一节追加到 <code>$PREFIX/etc/pacman.conf</code> 末尾：</li>
+  </ol>
+  <pre><code>[hope2333]
+Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/
+Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/
+Server = https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/
+Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/
+Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/
+Server = https://hope2333.github.io/repo/Termux/pacman/
+SigLevel = Optional TrustAll</code></pre>
+  <ol start="2">
+    <li>安装 mirrorlist 包：<code>pacman -Sy &amp;&amp; pacman -S hope2333-mirrorlist</code>（包安装后钩子把手动节替换为 <code>Include = /etc/pacman.d/hope2333-mirrorlist.conf</code> 一行——托管 conf 自带节头与 Server/SigLevel，pacman.conf 内保留同名节会双重注册丢 Server，此后源变更随包升级生效）</li>
+  </ol>
+  <p class="hint">已有旧版 <code>[hope2333-meta]</code> 引导节或旧 <code>[hope2333]</code> 块（单 Server 或多 Server）：整体替换为本统一节，勿追加——重复注册会报 database already registered；或直接重跑 install.sh 自动迁移。</p>
+  <h2>APT 源配置（引导源 + mirrorlist 包）</h2>
+  <ol>
+    <li>将引导行写入 <code>$PREFIX/etc/apt/sources.list.d/hope2333-bootstrap.list</code>：</li>
+  </ol>
+  <pre><code>deb [trusted=yes arch=aarch64] https://hope2333.github.io/repo/Termux/apt/ ./</code></pre>
+  <ol start="2">
+    <li>安装 mirrorlist 包：<code>apt update &amp;&amp; apt install hope2333-mirrorlist</code>（包内写入 hope2333.list，5 行 flat，指向各仓 Release latest）</li>
+  </ol>
+  <p class="hint">旧 <code>deb .../repo/Termux/apt/ stable main</code> 行已失效（io 不再托管 apt 仓），请移除或替换为引导行。</p>
+  <details>
+    <summary>手动配置（不装 hope2333-mirrorlist 包）</summary>
+    <pre><code>deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codegraph-termux/releases/latest/download/ ./
+deb [trusted=yes arch=aarch64] https://github.com/Hope2333/opencode-termux/releases/latest/download/ ./
+deb [trusted=yes arch=aarch64] https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/ ./
+deb [trusted=yes arch=aarch64] https://github.com/Hope2333/freebuff-termux/releases/latest/download/ ./
+deb [trusted=yes arch=aarch64] https://github.com/Hope2333/codebuff-termux/releases/latest/download/ ./</code></pre>
+  </details>
+
+  <p class="hint">统一源节与 hope2333-mirrorlist 包内容一致；MiMoCode 为预发布渠道，显式钉在 Push260829（GitHub 禁止 prerelease 为 Latest，releases/latest 会 404）。</p>
+
+  <p class="roadmap">未来将引入签名校验（repo-add -s / Release 签名），当前 v1 无签名。</p>
+
+  <a class="back" href="/repo/">← 返回 /repo/ 软件源总览</a>
+</main>
+<script src="/assets/theme.js"></script>
+</body>
+</html>
