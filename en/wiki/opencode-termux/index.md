@@ -25,7 +25,7 @@ Five families across two generations, installable side by side (v1 and v2 coexis
 
 Within one generation pick exactly ONE of native / wrapper / compressed; v1 (`opencode1*`) and v2 (`opencode*`) coexist. Legacy names `opencode-glibc`, `opencode-compressed` and `opencode-glibc-standalone` are retired and hard-dropped from the unified `[hope2333]` db.
 
-> **Latest batch (Push261005)**: native families only — fleet B-line rebuild (NDK r27c, not stripped), raw uncompressed packages, rel repacked per the prev-max+1 rule (6/5/1; opencode1 4/1); the compressed family follows on the same tag.
+> **Latest batch (Push261013)**: all families — v2 2.0.23–2.0.27 + v1 1.18.35/1.19.0 (incl. the new 1.19.0 minor line), native/compressed/wrapper all shipped (wrapper deb only), all first releases rel=1; v2 native deps pinned per upstream version (opentui 0.5.14/16/17 + pty 0.2.0).
 
 ## Quick Install
 
