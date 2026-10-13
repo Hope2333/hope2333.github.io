@@ -25,7 +25,7 @@ opencode-termux は、[OpenCode](https://github.com/anomalyco/opencode) をネ�
 
 同一世代内では native / wrapper / compressed のうち**必ず 1 つだけ**を選びます。v1（`opencode1*`）と v2（`opencode*`）は共存可能です。旧名称 `opencode-glibc`、`opencode-compressed`、`opencode-glibc-standalone` は廃止され、統一 `[hope2333]` db からは削除（ハードドロップ）されています。
 
-> **最新バッチ（Push261005）**：native ファミリーのみ — フリート B ライン再ビルド（NDK r27c、strip なし）、raw 非圧縮パッケージ、rel は prev-max+1 ルールで再パック（6/5/1；opencode1 は 4/1）。compressed ファミリーは同じタグで後続提供。
+> **最新バッチ（Push261013）**：全ファミリーバッチ — v2 2.0.23–2.0.27 + v1 1.18.35/1.19.0（新 1.19.0 マイナーライン含む）、native/compressed/wrapper 完全同梱（wrapper は deb のみ）、全て初リリース rel=1。v2 native の依存は上流版ごとにピン留め（opentui 0.5.14/16/17 + pty 0.2.0）。
 
 ## クイックインストール
 

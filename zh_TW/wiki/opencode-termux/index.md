@@ -25,7 +25,7 @@ opencode-termux 將 [OpenCode](https://github.com/anomalyco/opencode) 引入 Ter
 
 同代內 native / wrapper / compressed 三選一；跨代 v1（`opencode1*`）與 v2（`opencode*`）可共存。舊名 `opencode-glibc`、`opencode-compressed`、`opencode-glibc-standalone` 已退役，並從統一 `[hope2333]` 庫中硬性剔除。
 
-> **最新批次（Push261005）**：僅 native 家族 — fleet B 線重建代（NDK r27c、不 strip），raw 未壓縮原包，rel 已按「前最大+1 / 新版=1」規則重打（6/5/1；opencode1 4/1）；compressed 族後續同一 tag 追加。
+> **最新批次（Push261013）**：全家族批次 — v2 2.0.23–2.0.27 + v1 1.18.35/1.19.0（含新 minor 線 1.19.0），native/compressed/wrapper 三族齊發（wrapper 僅 deb），全部首發布 rel=1；v2 native 依賴按上遊逐版釘版（opentui 0.5.14/16/17 + pty 0.2.0）。
 
 ## 快速安裝
 
