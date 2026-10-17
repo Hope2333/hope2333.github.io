@@ -25,7 +25,7 @@ opencode-termux は、[OpenCode](https://github.com/anomalyco/opencode) をネ�
 
 同一世代内では native / wrapper / compressed のうち**必ず 1 つだけ**を選びます。v1（`opencode1*`）と v2（`opencode*`）は共存可能です。旧名称 `opencode-glibc`、`opencode-compressed`、`opencode-glibc-standalone` は廃止され、統一 `[hope2333]` db からは削除（ハードドロップ）されています。
 
-> **最新バッチ（Push261013）**：全ファミリーバッチ — v2 2.0.23–2.0.27 + v1 1.18.35/1.19.0（新 1.19.0 マイナーライン含む）、native/compressed/wrapper 完全同梱（wrapper は deb のみ）、全て初リリース rel=1。v2 native の依存は上流版ごとにピン留め（opentui 0.5.14/16/17 + pty 0.2.0）。
+> **最新批次（Push261016）**：**#36 seccomp 修复**（native 补 crhandler interpose，Android 12 close_range 不再 SIGSYS，受影响版本已重打包）+ 新版本 v2 2.0.28–2.0.31 / v1 1.19.1–1.19.3 三族齐发（wrapper 仅 deb），84 资产，rel=1。
 
 ## クイックインストール
 

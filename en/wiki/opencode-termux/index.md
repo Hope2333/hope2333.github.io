@@ -25,7 +25,7 @@ Five families across two generations, installable side by side (v1 and v2 coexis
 
 Within one generation pick exactly ONE of native / wrapper / compressed; v1 (`opencode1*`) and v2 (`opencode*`) coexist. Legacy names `opencode-glibc`, `opencode-compressed` and `opencode-glibc-standalone` are retired and hard-dropped from the unified `[hope2333]` db.
 
-> **Latest batch (Push261013)**: all families — v2 2.0.23–2.0.27 + v1 1.18.35/1.19.0 (incl. the new 1.19.0 minor line), native/compressed/wrapper all shipped (wrapper deb only), all first releases rel=1; v2 native deps pinned per upstream version (opentui 0.5.14/16/17 + pty 0.2.0).
+> **最新批次（Push261016）**：**#36 seccomp 修复**（native 补 crhandler interpose，Android 12 close_range 不再 SIGSYS，受影响版本已重打包）+ 新版本 v2 2.0.28–2.0.31 / v1 1.19.1–1.19.3 三族齐发（wrapper 仅 deb），84 资产，rel=1。
 
 ## Quick Install
 
