@@ -170,75 +170,6 @@ jobs:
             done
           fi
 
-      - name: Build pacman repo
-        run: |
-          set -euo pipefail
-          shopt -s nullglob
-          # archlinux:base-devel everywhere: one shared image pull per job
-          # (layers cached across steps) and no per-run `pacman -Sy base-devel`
-          # inside the makepkg container — upstream publishes this variant
-          # daily/weekly with the group preinstalled (archlinux/archlinux-docker).
-          mkdir -p _site/repo/Termux/pacman
-          for pool in feed/pacman/*/; do
-            pool="${pool%/}"
-            base="${pool##*/}"
-            # the io-repo pool (mirrorlist tag fetch) only feeds the unified
-            # db + the Pages pkg dir; the mirrorlist pkg is served through the
-            # [hope2333] server list and has no per-pool db of its own
-            if [ "$base" = "hope2333.github.io" ]; then continue; fi
-            docker run --rm -v "$PWD/$pool:/work" archlinux:base-devel bash -c "cd /work && repo-add $base.db.tar.gz *.pkg.tar.*"
-            cp "$pool/$base.db" "$pool/$base.db.tar.gz" _site/repo/Termux/pacman/
-          done
-          # Unified [hope2333] db: latest packages of every feed repo in one pool
-          # (fresh CI workspace => latest-only snapshot, single version cached)
-          mkdir -p feed/pacman-unified
-          cp feed/pacman/*/*.pkg.tar.* feed/pacman-unified/
-          docker run --rm -v "$PWD/feed/pacman-unified:/work" archlinux:base-devel bash -c 'cd /work && repo-add hope2333.db.tar.gz *.pkg.tar.*'
-          # repo-add leaves hope2333.db as a symlink; materialize a real copy
-          # so gh release upload ships content, not the link itself
-          rm feed/pacman-unified/hope2333.db
-          cp feed/pacman-unified/hope2333.db.tar.gz feed/pacman-unified/hope2333.db
-          cp feed/pacman-unified/hope2333.db feed/pacman-unified/hope2333.db.tar.gz _site/repo/Termux/pacman/
-          cp feed/pacman/*/*.pkg.tar.* _site/repo/Termux/pacman/
-
-      - name: Publish unified db to release CDNs
-        env:
-          HOPE_PAT: ${{ secrets.HOPE_PAT }}
-        run: |
-          set -euo pipefail
-          if [ -z "$HOPE_PAT" ]; then
-            echo "HOPE_PAT secret not set — skipping CDN db publish (Pages fallback still serves the db)"
-            exit 0
-          fi
-          export GH_TOKEN="$HOPE_PAT"
-          DB="feed/pacman-unified/hope2333.db.tar.gz"
-          DBRAW="feed/pacman-unified/hope2333.db"
-          [ -f "$DB" ] && [ -f "$DBRAW" ] || { echo "::error::unified db missing"; exit 1; }
-          # mirrorlist pkg rides alongside the db on every server: pacman
-          # fetches pkg files per-server too, so the version the unified db
-          # references must exist on each CDN (Pages serves the same file)
-          MLPKG="$(find feed/pacman-unified -maxdepth 1 -name 'hope2333-mirrorlist-*.pkg.tar.xz' ! -name '*-latest-*' | head -1)"
-          [ -n "$MLPKG" ] || { echo "::error::hope2333-mirrorlist pkg missing from unified pool"; exit 1; }
-          MLALIAS="feed/pacman-unified/hope2333-mirrorlist-latest-1-any.pkg.tar.xz"
-          cp "$MLPKG" "$MLALIAS"
-          fail=0
-          publish() {
-            # both names: pacman fetches <repo>.db (uncompressed name); shipping
-            # only the .tar.gz name made every github CDN 404 on -Sy and fall
-            # through to the Pages fallback
-            if gh release upload "$2" -R "$1" "$DB" "$DBRAW" "$MLPKG" "$MLALIAS" --clobber >/dev/null 2>&1; then
-              echo "published hope2333.db{,.tar.gz} + mirrorlist pkg -> $1@$2"
-            else
-              echo "::warning ::db publish failed for $1@$2"; fail=1
-            fi
-          }
-          publish Hope2333/codegraph-termux   "$(gh api repos/Hope2333/codegraph-termux/releases/latest --jq .tag_name)"
-          publish Hope2333/opencode-termux    "$(gh api repos/Hope2333/opencode-termux/releases/latest --jq .tag_name)"
-          publish Hope2333/MiMoCode-Termux    Push260829
-          publish Hope2333/freebuff-termux    "$(gh api repos/Hope2333/freebuff-termux/releases/latest --jq .tag_name)"
-          publish Hope2333/codebuff-termux    "$(gh api repos/Hope2333/codebuff-termux/releases/latest --jq .tag_name)"
-          [ "$fail" -eq 0 ] || echo "::notice ::some db publishes failed; Pages fallback still serves the db"
-
       - name: Build mirrorlist package
         run: |
           set -euo pipefail
@@ -258,7 +189,7 @@ jobs:
           # mirrorlist servers must keep pointing at latest (they mirror the
           # unified hope2333.db, which the publish step uploads to latest).
           declare -A APT_REPO_PIN=( [opencode-termux]=Push260912 )
-          mkdir -p build/mirrorlist build/mirrorlist-deb/DEBIAN build/mirrorlist-deb/etc/apt/sources.list.d _site/repo/Termux/apt
+          mkdir -p build/mirrorlist build/mirrorlist-deb/DEBIAN build/mirrorlist-deb/etc/apt/sources.list.d _site/repo/Termux/apt _site/repo/Termux/pacman
           # v11: ship the incident NOTICE + the offline auto-repair script
           cp NOTICE.md build/mirrorlist/NOTICE
           cp scripts/repair-doubled.sh build/mirrorlist/repair-doubled.sh
@@ -388,6 +319,13 @@ jobs:
           PKG="$(find build/mirrorlist -maxdepth 1 -name 'hope2333-mirrorlist-*.pkg.tar.xz' | head -1)"
           [ -n "$PKG" ] || { echo "::error::mirrorlist pkg not found on host after makepkg"; ls -la build/mirrorlist || true; exit 1; }
           echo "mirrorlist pkg resolved: $PKG"
+          # Feed the freshly built pkg into the feed pool, REPLACING the tag-
+          # fetched copy (previous run's bytes): the unified db's repo-add runs
+          # later (Build pacman repo) and must checksum THESE bytes — the same
+          # file that goes to _site (Pages), the CDNs and the mirrorlist tag.
+          mkdir -p feed/pacman/hope2333.github.io
+          rm -f feed/pacman/hope2333.github.io/hope2333-mirrorlist-*.pkg.tar.xz
+          cp "$PKG" feed/pacman/hope2333.github.io/
           # alias lives in _site (host-writable): build/mirrorlist is docker-
           # owned (makepkg uid) and refuses writes from the runner user
           cp "$PKG" _site/repo/Termux/pacman/
@@ -419,6 +357,75 @@ jobs:
           # g. apt flat bootstrap on io
           cp "hope2333-mirrorlist_${FULLVER}_aarch64.deb" _site/repo/Termux/apt/
           ( cd _site/repo/Termux/apt && dpkg-scanpackages . /dev/null > Packages && gzip -9kc Packages > Packages.gz && apt-ftparchive release . > Release )
+
+      - name: Build pacman repo
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          # archlinux:base-devel everywhere: one shared image pull per job
+          # (layers cached across steps) and no per-run `pacman -Sy base-devel`
+          # inside the makepkg container — upstream publishes this variant
+          # daily/weekly with the group preinstalled (archlinux/archlinux-docker).
+          mkdir -p _site/repo/Termux/pacman
+          for pool in feed/pacman/*/; do
+            pool="${pool%/}"
+            base="${pool##*/}"
+            # the io-repo pool (mirrorlist tag fetch) only feeds the unified
+            # db + the Pages pkg dir; the mirrorlist pkg is served through the
+            # [hope2333] server list and has no per-pool db of its own
+            if [ "$base" = "hope2333.github.io" ]; then continue; fi
+            docker run --rm -v "$PWD/$pool:/work" archlinux:base-devel bash -c "cd /work && repo-add $base.db.tar.gz *.pkg.tar.*"
+            cp "$pool/$base.db" "$pool/$base.db.tar.gz" _site/repo/Termux/pacman/
+          done
+          # Unified [hope2333] db: latest packages of every feed repo in one pool
+          # (fresh CI workspace => latest-only snapshot, single version cached)
+          mkdir -p feed/pacman-unified
+          cp feed/pacman/*/*.pkg.tar.* feed/pacman-unified/
+          docker run --rm -v "$PWD/feed/pacman-unified:/work" archlinux:base-devel bash -c 'cd /work && repo-add hope2333.db.tar.gz *.pkg.tar.*'
+          # repo-add leaves hope2333.db as a symlink; materialize a real copy
+          # so gh release upload ships content, not the link itself
+          rm feed/pacman-unified/hope2333.db
+          cp feed/pacman-unified/hope2333.db.tar.gz feed/pacman-unified/hope2333.db
+          cp feed/pacman-unified/hope2333.db feed/pacman-unified/hope2333.db.tar.gz _site/repo/Termux/pacman/
+          cp feed/pacman/*/*.pkg.tar.* _site/repo/Termux/pacman/
+
+      - name: Publish unified db to release CDNs
+        env:
+          HOPE_PAT: ${{ secrets.HOPE_PAT }}
+        run: |
+          set -euo pipefail
+          if [ -z "$HOPE_PAT" ]; then
+            echo "HOPE_PAT secret not set — skipping CDN db publish (Pages fallback still serves the db)"
+            exit 0
+          fi
+          export GH_TOKEN="$HOPE_PAT"
+          DB="feed/pacman-unified/hope2333.db.tar.gz"
+          DBRAW="feed/pacman-unified/hope2333.db"
+          [ -f "$DB" ] && [ -f "$DBRAW" ] || { echo "::error::unified db missing"; exit 1; }
+          # mirrorlist pkg rides alongside the db on every server: pacman
+          # fetches pkg files per-server too, so the version the unified db
+          # references must exist on each CDN (Pages serves the same file)
+          MLPKG="$(find feed/pacman-unified -maxdepth 1 -name 'hope2333-mirrorlist-*.pkg.tar.xz' ! -name '*-latest-*' | head -1)"
+          [ -n "$MLPKG" ] || { echo "::error::hope2333-mirrorlist pkg missing from unified pool"; exit 1; }
+          MLALIAS="feed/pacman-unified/hope2333-mirrorlist-latest-1-any.pkg.tar.xz"
+          cp "$MLPKG" "$MLALIAS"
+          fail=0
+          publish() {
+            # both names: pacman fetches <repo>.db (uncompressed name); shipping
+            # only the .tar.gz name made every github CDN 404 on -Sy and fall
+            # through to the Pages fallback
+            if gh release upload "$2" -R "$1" "$DB" "$DBRAW" "$MLPKG" "$MLALIAS" --clobber >/dev/null 2>&1; then
+              echo "published hope2333.db{,.tar.gz} + mirrorlist pkg -> $1@$2"
+            else
+              echo "::warning ::db publish failed for $1@$2"; fail=1
+            fi
+          }
+          publish Hope2333/codegraph-termux   "$(gh api repos/Hope2333/codegraph-termux/releases/latest --jq .tag_name)"
+          publish Hope2333/opencode-termux    "$(gh api repos/Hope2333/opencode-termux/releases/latest --jq .tag_name)"
+          publish Hope2333/MiMoCode-Termux    Push260829
+          publish Hope2333/freebuff-termux    "$(gh api repos/Hope2333/freebuff-termux/releases/latest --jq .tag_name)"
+          publish Hope2333/codebuff-termux    "$(gh api repos/Hope2333/codebuff-termux/releases/latest --jq .tag_name)"
+          [ "$fail" -eq 0 ] || echo "::notice ::some db publishes failed; Pages fallback still serves the db"
 
       - name: Upload mirrorlist release
         env:

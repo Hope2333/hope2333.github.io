@@ -340,6 +340,28 @@
       "es": "es/wiki/opencode-termux/release/Push261005"
     }
   },
+  "wiki/opencode-termux/release/Push261013": {
+    "title": "Push261013 Release (stable)",
+    "status": "full",
+    "alternates": {
+      "en": "en/wiki/opencode-termux/release/Push261013",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push261013",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push261013",
+      "ja": "ja/wiki/opencode-termux/release/Push261013",
+      "es": "es/wiki/opencode-termux/release/Push261013"
+    }
+  },
+  "wiki/opencode-termux/release/Push261016": {
+    "title": "Push261016 Release (stable)",
+    "status": "full",
+    "alternates": {
+      "en": "en/wiki/opencode-termux/release/Push261016",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push261016",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push261016",
+      "ja": "ja/wiki/opencode-termux/release/Push261016",
+      "es": "es/wiki/opencode-termux/release/Push261016"
+    }
+  },
   "wiki/docs": {
     "title": "Docs",
     "status": "full",

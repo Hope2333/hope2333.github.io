@@ -290,7 +290,14 @@ inhope { next }
 { print }
 ' "$PACMAN_CONF" > "$PACMAN_CONF.tmp" && mv "$PACMAN_CONF.tmp" "$PACMAN_CONF"
   if ! grep -q 'pacman.d/hope2333-mirrorlist.conf' "$PACMAN_CONF"; then
-    printf '\n[hope2333]\nServer = https://hope2333.github.io/repo/Termux/pacman/\nSigLevel = Optional TrustAll\n' >> "$PACMAN_CONF"
+    { printf '\n[hope2333]\n'
+      printf 'Server = https://github.com/Hope2333/codegraph-termux/releases/latest/download/\n'
+      printf 'Server = https://github.com/Hope2333/opencode-termux/releases/latest/download/\n'
+      printf 'Server = https://github.com/Hope2333/MiMoCode-Termux/releases/download/Push260829/\n'
+      printf 'Server = https://github.com/Hope2333/freebuff-termux/releases/latest/download/\n'
+      printf 'Server = https://github.com/Hope2333/codebuff-termux/releases/latest/download/\n'
+      printf 'Server = https://hope2333.github.io/repo/Termux/pacman/\n'
+      printf 'SigLevel = Optional TrustAll\n'; } >> "$PACMAN_CONF"
   fi
 
   # ── C. 刷新源 ─────────────────────────────────────────────────────────
