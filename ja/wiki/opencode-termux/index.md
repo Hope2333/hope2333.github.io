@@ -25,7 +25,7 @@ opencode-termux は、[OpenCode](https://github.com/anomalyco/opencode) をネ�
 
 同一世代内では native / wrapper / compressed のうち**必ず 1 つだけ**を選びます。v1（`opencode1*`）と v2（`opencode*`）は共存可能です。旧名称 `opencode-glibc`、`opencode-compressed`、`opencode-glibc-standalone` は廃止され、統一 `[hope2333]` db からは削除（ハードドロップ）されています。
 
-> **最新批次（Push261016）**：**#36 seccomp 修复**（native 补 crhandler interpose，Android 12 close_range 不再 SIGSYS，受影响版本已重打包）+ 新版本 v2 2.0.28–2.0.31 / v1 1.19.1–1.19.3 三族齐发（wrapper 仅 deb），84 资产，rel=1。古いカーネル（< 4.x）向けの注意：opencode 1.18.35 以降（v1）およびすべての v2 では起動時に TUI がクラッシュ（SIGSEGV）します。CLI は影響を受けません。古いカーネルでは 1.18.34 以前にとどめるか、1.19.3 native ハイブリッドパッケージ（`--force-tui` で TUI 復活、指定なしならランチャーが CLI に自動フォールバック）を使用してください。詳細は [Push261016 リリースページの「既知の問題」](release/Push261016.md)。
+> **最新批次（Push261026）**：v2 **2.1.4** + **2.0.32** native 发布（deb + pacman）— 2.1.4 修复 OpenTUI 0.6.8 ABI 错配（首版 TUI 报 `ot_scene_set_hooks not found`），构建改为按 `OPENTUI_VER` 选渲染库、未知版本硬失败；两版本在 Android 9 / kernel 3.18.140 实测 TUI 完整可用。本批仅 native；v1 仍为 1.19.3（1.19.4 待源码重建）。详见 [Push261026 发布页](release/Push261026.md)。
 
 ## クイックインストール
 
