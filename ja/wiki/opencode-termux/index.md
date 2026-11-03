@@ -25,7 +25,7 @@ opencode-termux は、[OpenCode](https://github.com/anomalyco/opencode) をネ�
 
 同一世代内では native / wrapper / compressed のうち**必ず 1 つだけ**を選びます。v1（`opencode1*`）と v2（`opencode*`）は共存可能です。旧名称 `opencode-glibc`、`opencode-compressed`、`opencode-glibc-standalone` は廃止され、統一 `[hope2333]` db からは削除（ハードドロップ）されています。
 
-> **最新批次（Push261026）**：v2 **2.1.4** + **2.0.32** native 发布（deb + pacman）— 2.1.4 修复 OpenTUI 0.6.8 ABI 错配（首版 TUI 报 `ot_scene_set_hooks not found`），构建改为按 `OPENTUI_VER` 选渲染库、未知版本硬失败；两版本在 Android 9 / kernel 3.18.140 实测 TUI 完整可用。本批仅 native；v1 仍为 1.19.3（1.19.4 待源码重建）。详见 [Push261026 发布页](release/Push261026.md)。
+> **最新批次（Push261103）**：v2 **2.0.32–2.2.5**（12 版）与 v1 **1.18.33–1.19.4**（8 版）native 全量发布（deb + pacman，共 40 包）— 一次补齐区间内每个已验收版本；2.2.x 走 opentui 0.7.0→0.8.0，2.2.2 上游删除 pty、2.2.3 以 `@opencode/pty` 回归；全部版本在 Android 9 / kernel 3.18.140 实测 TUI 可用。详见 [Push261103 发布页](release/Push261103.md)。
 
 ## クイックインストール
 

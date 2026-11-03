@@ -383,5 +383,16 @@
       "ja": "ja/wiki/opencode-termux/release/Push261026",
       "es": "es/wiki/opencode-termux/release/Push261026"
     }
+  },
+  "wiki/opencode-termux/release/Push261103": {
+    "title": "Push261103 Release (stable)",
+    "status": "full",
+    "alternates": {
+      "en": "en/wiki/opencode-termux/release/Push261103",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push261103",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push261103",
+      "ja": "ja/wiki/opencode-termux/release/Push261103",
+      "es": "es/wiki/opencode-termux/release/Push261103"
+    }
   }
 }
