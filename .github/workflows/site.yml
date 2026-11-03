@@ -380,14 +380,31 @@ jobs:
           # Unified [hope2333] db: latest packages of every feed repo in one pool
           # (fresh CI workspace => latest-only snapshot, single version cached)
           mkdir -p feed/pacman-unified
-          cp feed/pacman/*/*.pkg.tar.* feed/pacman-unified/
+          # De-dup by basename: two feed repos can carry the same package (the
+          # mirrorlist pkg is built once and mirrored into each pool), and a
+          # single `cp` invocation with repeated names aborts the job with
+          # "will not overwrite just-created". Copy-first-wins + warn on
+          # divergence keeps the step deterministic.
+          find feed/pacman -mindepth 2 -maxdepth 2 -name '*.pkg.tar.*' -print0 |
+            while IFS= read -r -d '' f; do
+              d="feed/pacman-unified/$(basename "$f")"
+              if [ -e "$d" ]; then
+                cmp -s "$f" "$d" || echo "::warning::duplicate package differs, keeping first: $(basename "$f")"
+              else
+                cp "$f" "$d"
+              fi
+            done
           docker run --rm -v "$PWD/feed/pacman-unified:/work" archlinux:base-devel bash -c 'cd /work && repo-add hope2333.db.tar.gz *.pkg.tar.*'
           # repo-add leaves hope2333.db as a symlink; materialize a real copy
           # so gh release upload ships content, not the link itself
           rm feed/pacman-unified/hope2333.db
           cp feed/pacman-unified/hope2333.db.tar.gz feed/pacman-unified/hope2333.db
           cp feed/pacman-unified/hope2333.db feed/pacman-unified/hope2333.db.tar.gz _site/repo/Termux/pacman/
-          cp feed/pacman/*/*.pkg.tar.* _site/repo/Termux/pacman/
+          find feed/pacman -mindepth 2 -maxdepth 2 -name '*.pkg.tar.*' -print0 |
+            while IFS= read -r -d '' f; do
+              d="_site/repo/Termux/pacman/$(basename "$f")"
+              [ -e "$d" ] || cp "$f" "$d"
+            done
 
       - name: Publish unified db to release CDNs
         env:
