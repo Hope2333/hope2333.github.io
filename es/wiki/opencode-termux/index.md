@@ -25,7 +25,7 @@ Cinco familias repartidas en dos generaciones, instalables en paralelo (v1 y v2 
 
 Dentro de una misma generación elige exactamente UNO entre nativo / wrapper / comprimido; la v1 (`opencode1*`) y la v2 (`opencode*`) coexisten. Los nombres antiguos `opencode-glibc`, `opencode-compressed` y `opencode-glibc-standalone` están retirados y se eliminaron en firme de la base de datos unificada `[hope2333]`.
 
-> **最新批次（Push261103）**：v2 **2.0.32–2.2.5**（12 版）与 v1 **1.18.33–1.19.4**（8 版）native 全量发布（deb + pacman，共 40 包）— 一次补齐区间内每个已验收版本；2.2.x 走 opentui 0.7.0→0.8.0，2.2.2 上游删除 pty、2.2.3 以 `@opencode/pty` 回归；全部版本在 Android 9 / kernel 3.18.140 实测 TUI 可用。详见 [Push261103 发布页](release/Push261103.md)。
+> **Último lote (Push261104)**: correcciones de terminal + wrapper completo — v2 native **2.2.5-2** (PTY) y v1 native **1.19.4-2** (entrada de TUI), wrapper hasta v2 **2.0.0–2.2.5** (43 versiones) y v1 **1.18.30–1.19.5** (12 versiones), **116 assets**. Ver la [página de Push261104](release/Push261104.md).
 
 ## Instalación rápida
 
