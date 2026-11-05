@@ -405,5 +405,16 @@
       "ja": "ja/wiki/opencode-termux/release/Push261104",
       "es": "es/wiki/opencode-termux/release/Push261104"
     }
+  },
+  "wiki/opencode-termux/release/Push261105": {
+    "title": "Push261105 Release (v2 web UI archive + v1 1.19.5 native)",
+    "status": "full",
+    "alternates": {
+      "en": "en/wiki/opencode-termux/release/Push261105",
+      "zh_CN": "zh_CN/wiki/opencode-termux/release/Push261105",
+      "zh_TW": "zh_TW/wiki/opencode-termux/release/Push261105",
+      "ja": "ja/wiki/opencode-termux/release/Push261105",
+      "es": "es/wiki/opencode-termux/release/Push261105"
+    }
   }
 }
