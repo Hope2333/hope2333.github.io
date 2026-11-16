@@ -189,7 +189,12 @@ jobs:
           # mirrorlist servers must keep pointing at latest (they mirror the
           # unified hope2333.db, which the publish step uploads to latest).
           declare -A APT_REPO_PIN=( [opencode-termux]=Push260912 )
-          mkdir -p build/mirrorlist build/mirrorlist-deb/DEBIAN build/mirrorlist-deb/etc/apt/sources.list.d _site/repo/Termux/apt _site/repo/Termux/pacman
+          # Termux dpkg unpacks with RootDir=/ , so payload files must be carried
+          # under the absolute prefix. A relative ./etc/apt made dpkg try to
+          # create /etc/apt on a read-only filesystem (issue #49: APT users
+          # could not install the mirrorlist at all).
+          DEB_DATA="data/data/com.termux/files/usr"
+          mkdir -p build/mirrorlist build/mirrorlist-deb/DEBIAN "build/mirrorlist-deb/$DEB_DATA/etc/apt/sources.list.d" _site/repo/Termux/apt _site/repo/Termux/pacman
           # v11: ship the incident NOTICE + the offline auto-repair script
           cp NOTICE.md build/mirrorlist/NOTICE
           cp scripts/repair-doubled.sh build/mirrorlist/repair-doubled.sh
@@ -346,12 +351,12 @@ jobs:
             printf 'test -f "$PREFIX/etc/apt/sources.list.d/hope2333.list" && chmod 0644 "$PREFIX/etc/apt/sources.list.d/hope2333.list" || true\n'
           } > build/mirrorlist-deb/DEBIAN/postinst
           chmod 0755 build/mirrorlist-deb/DEBIAN/postinst
-          : > build/mirrorlist-deb/etc/apt/sources.list.d/hope2333.list
+          : > "build/mirrorlist-deb/$DEB_DATA/etc/apt/sources.list.d/hope2333.list"
           for r in "${REPOS[@]}"; do
             apt_base="https://github.com/Hope2333/$r/releases/latest/download/"
             [ -z "${REPO_PIN[$r]:-}" ] || apt_base="https://github.com/Hope2333/$r/releases/download/${REPO_PIN[$r]}/"
             [ -z "${APT_REPO_PIN[$r]:-}" ] || apt_base="https://github.com/Hope2333/$r/releases/download/${APT_REPO_PIN[$r]}/"
-            printf 'deb [trusted=yes arch=aarch64] %s ./\n' "$apt_base" >> build/mirrorlist-deb/etc/apt/sources.list.d/hope2333.list
+            printf 'deb [trusted=yes arch=aarch64] %s ./\n' "$apt_base" >> "build/mirrorlist-deb/$DEB_DATA/etc/apt/sources.list.d/hope2333.list"
           done
           dpkg-deb --build --root-owner-group build/mirrorlist-deb "hope2333-mirrorlist_${FULLVER}_aarch64.deb"
           # g. apt flat bootstrap on io
